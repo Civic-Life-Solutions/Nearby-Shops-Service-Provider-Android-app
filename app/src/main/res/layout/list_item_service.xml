@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#22000000"
+    android:layout_marginBottom="10dp"
+    android:layout_marginRight="10dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/service_id"
+            android:text="ID : 2434278989879"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:layout_alignBottom="@id/service_id"
+            android:layout_alignTop="@id/service_id"
+            android:text="Nickname"
+            android:id="@+id/nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+        <LinearLayout
+            android:id="@+id/border_id"
+            android:layout_toLeftOf="@id/nickname"
+            android:orientation="vertical"
+            android:background="#88000000"
+            android:layout_width="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignTop="@id/service_id"
+            android:layout_alignBottom="@id/service_id"
+            android:layout_height="100dp"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/border_one"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/service_id"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+        <TextView
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/border_one"
+            android:id="@+id/service_name"
+            android:text="Nearby Shops Global"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/service_name"
+            android:text="Hyderabad, India"
+            android:id="@+id/service_city_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:background="#22000000"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/service_city_country"
+            android:id="@+id/service_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+        
+        
+        
+        <TextView
+            android:id="@+id/service_rating"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/service_image"
+            android:layout_below="@id/service_city_country"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/gplus_color_1"
+            android:text="4.2"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+
+        <ImageView
+            android:scaleType="centerCrop"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/service_image"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:src="@drawable/ic_more_vert_black_48px"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+
+        <TextView
+            android:id="@+id/service_range"
+            android:layout_alignTop="@id/service_image"
+            android:textSize="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/service_city_country"
+            android:layout_toRightOf="@id/service_image"
+            android:text="Coverage : 100 km"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/service_image"
+            android:text="Distance : 25 km"
+            android:layout_below="@id/service_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:gravity="right"
+            android:layout_below="@id/service_image"
+            android:text="Nonprofit | City"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#ffffff"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:padding="5dp"
+            android:background="@color/phonographyBlue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        
+
+</RelativeLayout>
