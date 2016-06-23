@@ -55,13 +55,31 @@
             android:layout_height="1dp"/>
 
 
+
         <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/service_rating"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/border_one"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/gplus_color_1"
+            android:textSize="17sp"
+            android:text="4.2"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+
+        <TextView
+            android:gravity="left"
             android:textSize="20sp"
             android:layout_marginTop="10dp"
             android:layout_below="@id/border_one"
             android:id="@+id/service_name"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/service_rating"
             android:text="Nearby Shops Global"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
 
@@ -76,6 +94,7 @@
 
 
         <ImageView
+            android:scaleType="centerCrop"
             android:background="#22000000"
             android:layout_marginTop="5dp"
             android:layout_below="@id/service_city_country"
@@ -84,21 +103,10 @@
             android:layout_height="100dp" />
         
         
-        
-        <TextView
-            android:id="@+id/service_rating"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/service_image"
-            android:layout_below="@id/service_city_country"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:background="@color/gplus_color_1"
-            android:text="4.2"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
 
 
         <ImageView
+            android:id="@+id/more_options"
             android:scaleType="centerCrop"
             android:layout_alignParentRight="true"
             android:layout_alignBottom="@id/service_image"
@@ -106,7 +114,7 @@
             android:gravity="center"
             android:src="@drawable/ic_more_vert_black_48px"
             android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_height="30dp" />
 
 
         <TextView
@@ -121,6 +129,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/service_distance"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/service_image"
@@ -130,6 +139,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/service_type_badge"
             android:gravity="right"
             android:layout_below="@id/service_image"
             android:text="Nonprofit | City"

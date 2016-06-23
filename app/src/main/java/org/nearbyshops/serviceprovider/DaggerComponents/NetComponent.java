@@ -3,6 +3,8 @@ package org.nearbyshops.serviceprovider.DaggerComponents;
 
 import org.nearbyshops.serviceprovider.DaggerModules.AppModule;
 import org.nearbyshops.serviceprovider.DaggerModules.NetModule;
+import org.nearbyshops.serviceprovider.SavedConfigurations.AddService;
+import org.nearbyshops.serviceprovider.SavedConfigurations.EditItem;
 import org.nearbyshops.serviceprovider.SavedConfigurations.ServiceConfigurationActivity;
 
 import javax.inject.Singleton;
@@ -19,4 +21,8 @@ public interface NetComponent {
 
 
     void Inject(ServiceConfigurationActivity serviceConfigurationActivity);
+
+    void Inject(AddService addService);
+
+    void Inject(EditItem editItem);
 }

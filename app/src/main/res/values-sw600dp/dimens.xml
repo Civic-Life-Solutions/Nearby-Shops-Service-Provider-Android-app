@@ -9,5 +9,7 @@
 
     <dimen name="button_height">25sp</dimen>
 
+    <dimen name="image_view_height">350dp</dimen>
+
 
 </resources>

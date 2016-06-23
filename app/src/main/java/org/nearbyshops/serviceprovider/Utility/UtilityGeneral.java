@@ -86,4 +86,10 @@ public class UtilityGeneral {
     {
         return UtilityGeneral.getServiceURL(context) + "/api/Images";
     }
+
+
+    public static String getConfigImageEndpointURL(Context context)
+    {
+        return UtilityGeneral.getServiceURL(context) + "/api/ServiceConfigImages";
+    }
 }

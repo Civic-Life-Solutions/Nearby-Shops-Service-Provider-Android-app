@@ -12,4 +12,6 @@
     <dimen name="appbar_label_size">15sp</dimen>
     <dimen name="button_height">20sp</dimen>
 
+    <dimen name="image_view_height">200dp</dimen>
+
 </resources>

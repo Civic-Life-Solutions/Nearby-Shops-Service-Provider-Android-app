@@ -158,7 +158,7 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
     void makeNetworkCall()
     {
 
-        Call<List<Service>> call = configurationService.getServices(0,0,0,0,null,0,0);
+        Call<List<Service>> call = configurationService.getServices(0,0,null,null,null,0,0);
 
         call.enqueue(this);
     }
@@ -218,6 +218,12 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
 //
 //                break;
 
+            case R.id.addConfiguration:
+
+                addNewAddressClick(v);
+
+                break;
+
             default:
                 break;
         }
@@ -232,6 +238,9 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
 
 //        Intent intent = new Intent(this,AddVehicleSelfActivity.class);
 //        startActivity(intent);
+
+        Intent addIntent = new Intent(this,AddService.class);
+        this.startActivity(addIntent);
 
     }
 

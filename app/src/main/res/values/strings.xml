@@ -11,4 +11,21 @@
     <string name="preference_service_url_key">service_url</string>
     <string name="preference_distributor_id_key">distributor_id_key</string>
     <string name="title_activity_login">Login</string>
+
+
+    <string-array name="service_level">
+        <item>City</item>
+        <item>State</item>
+        <item>Country</item>
+        <item>Global</item>
+    </string-array>
+
+
+    <string-array name="service_type">
+        <item>Nonprofit</item>
+        <item>Government</item>
+        <item>Commertial</item>
+    </string-array>
+
+
 </resources>

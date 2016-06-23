@@ -23,8 +23,8 @@ public interface ServiceConfigurationService {
     @GET("/api/Service")
     Call<List<Service>> getServices(@Query("ServiceLevel") int serviceLevel,
                                     @Query("ServiceType") int serviceType,
-                                    @Query("LatCenter") int latCenter,
-                                    @Query("LonCenter") double lonCenter,
+                                    @Query("LatCenter") Double latCenter,
+                                    @Query("LonCenter") Double lonCenter,
                                     @Query("SortBy") String sortBy,
                                     @Query("Limit") int limit, @Query("Offset") int offset);
 

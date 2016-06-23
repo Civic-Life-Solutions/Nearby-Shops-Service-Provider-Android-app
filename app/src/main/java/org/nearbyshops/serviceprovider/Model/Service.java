@@ -1,11 +1,14 @@
 package org.nearbyshops.serviceprovider.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.sql.Timestamp;
 
 /**
  * Created by sumeet on 19/6/16.
  */
-public class Service {
+public class Service implements Parcelable{
 
     int serviceID;
     String imagePath;
@@ -17,7 +20,7 @@ public class Service {
 
     String address;
     String city;
-    Long pincode;
+    long pincode;
 
     String landmark;
     String state;
@@ -25,21 +28,21 @@ public class Service {
 
     String ISOCountryCode;
     String ISOLanguageCode;
-    Integer serviceType;
+    int serviceType;
 
-    Integer serviceLevel;
-    Double latCenter;
-    Double lonCenter;
+    int serviceLevel;
+    double latCenter;
+    double lonCenter;
 
-    Integer serviceRange;
-    Boolean isEthicalServiceProvider;
-    Boolean isVerified;
+    int serviceRange;
+    boolean isEthicalServiceProvider;
+    boolean isVerified;
 
-    Double latMax;
-    Double lonMax;
-    Double latMin;
+    double latMax;
+    double lonMax;
+    double latMin;
 
-    Double lonMin;
+    double lonMin;
     String configurationNickname;
     String serviceURL;
 
@@ -51,61 +54,95 @@ public class Service {
     Double rt_distance;
 
 
-    public Timestamp getCreated() {
-        return created;
+    public Service() {
     }
 
-    public void setCreated(Timestamp created) {
-        this.created = created;
+
+    protected Service(Parcel in) {
+        serviceID = in.readInt();
+        imagePath = in.readString();
+        logoImagePath = in.readString();
+
+        backdropImagePath = in.readString();
+        serviceName = in.readString();
+        helplineNumber = in.readString();
+
+        address = in.readString();
+        city = in.readString();
+        pincode = in.readLong();
+
+        landmark = in.readString();
+        state = in.readString();
+        country = in.readString();
+
+        ISOCountryCode = in.readString();
+        ISOLanguageCode = in.readString();
+        serviceType = in.readInt();
+
+        serviceLevel = in.readInt();
+        latCenter = in.readDouble();
+        lonCenter = in.readDouble();
+
+        serviceRange = in.readInt();
+        isEthicalServiceProvider = in.readByte() != 0;
+        isVerified = in.readByte() != 0;
+
+        latMax = in.readDouble();
+        lonMax = in.readDouble();
+        latMin = in.readDouble();
+
+        lonMin = in.readDouble();
+        configurationNickname = in.readString();
+        serviceURL = in.readString();
     }
 
-    public Timestamp getUpdated() {
-        return updated;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(serviceID);
+        dest.writeString(imagePath);
+        dest.writeString(logoImagePath);
+        dest.writeString(backdropImagePath);
+        dest.writeString(serviceName);
+        dest.writeString(helplineNumber);
+        dest.writeString(address);
+        dest.writeString(city);
+        dest.writeLong(pincode);
+        dest.writeString(landmark);
+        dest.writeString(state);
+        dest.writeString(country);
+        dest.writeString(ISOCountryCode);
+        dest.writeString(ISOLanguageCode);
+        dest.writeInt(serviceType);
+        dest.writeInt(serviceLevel);
+        dest.writeDouble(latCenter);
+        dest.writeDouble(lonCenter);
+        dest.writeInt(serviceRange);
+        dest.writeByte((byte) (isEthicalServiceProvider ? 1 : 0));
+        dest.writeByte((byte) (isVerified ? 1 : 0));
+        dest.writeDouble(latMax);
+        dest.writeDouble(lonMax);
+        dest.writeDouble(latMin);
+        dest.writeDouble(lonMin);
+        dest.writeString(configurationNickname);
+        dest.writeString(serviceURL);
     }
 
-    public void setUpdated(Timestamp updated) {
-        this.updated = updated;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public Double getRt_distance() {
-        return rt_distance;
-    }
+    public static final Creator<Service> CREATOR = new Creator<Service>() {
+        @Override
+        public Service createFromParcel(Parcel in) {
+            return new Service(in);
+        }
 
-    public void setRt_distance(Double rt_distance) {
-        this.rt_distance = rt_distance;
-    }
-
-    public String getConfigurationNickname() {
-        return configurationNickname;
-    }
-
-    public void setConfigurationNickname(String configurationNickname) {
-        this.configurationNickname = configurationNickname;
-    }
-
-    public String getServiceURL() {
-        return serviceURL;
-    }
-
-    public void setServiceURL(String serviceURL) {
-        this.serviceURL = serviceURL;
-    }
-
-    public String getISOCountryCode() {
-        return ISOCountryCode;
-    }
-
-    public void setISOCountryCode(String ISOCountryCode) {
-        this.ISOCountryCode = ISOCountryCode;
-    }
-
-    public String getISOLanguageCode() {
-        return ISOLanguageCode;
-    }
-
-    public void setISOLanguageCode(String ISOLanguageCode) {
-        this.ISOLanguageCode = ISOLanguageCode;
-    }
+        @Override
+        public Service[] newArray(int size) {
+            return new Service[size];
+        }
+    };
 
     public int getServiceID() {
         return serviceID;
@@ -171,11 +208,11 @@ public class Service {
         this.city = city;
     }
 
-    public Long getPincode() {
+    public long getPincode() {
         return pincode;
     }
 
-    public void setPincode(Long pincode) {
+    public void setPincode(long pincode) {
         this.pincode = pincode;
     }
 
@@ -203,92 +240,147 @@ public class Service {
         this.country = country;
     }
 
+    public String getISOCountryCode() {
+        return ISOCountryCode;
+    }
 
-    public Integer getServiceType() {
+    public void setISOCountryCode(String ISOCountryCode) {
+        this.ISOCountryCode = ISOCountryCode;
+    }
+
+    public String getISOLanguageCode() {
+        return ISOLanguageCode;
+    }
+
+    public void setISOLanguageCode(String ISOLanguageCode) {
+        this.ISOLanguageCode = ISOLanguageCode;
+    }
+
+    public int getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(Integer serviceType) {
+    public void setServiceType(int serviceType) {
         this.serviceType = serviceType;
     }
 
-    public Integer getServiceLevel() {
+    public int getServiceLevel() {
         return serviceLevel;
     }
 
-    public void setServiceLevel(Integer serviceLevel) {
+    public void setServiceLevel(int serviceLevel) {
         this.serviceLevel = serviceLevel;
     }
 
-    public Double getLatCenter() {
+    public double getLatCenter() {
         return latCenter;
     }
 
-    public void setLatCenter(Double latCenter) {
+    public void setLatCenter(double latCenter) {
         this.latCenter = latCenter;
     }
 
-    public Double getLonCenter() {
+    public double getLonCenter() {
         return lonCenter;
     }
 
-    public void setLonCenter(Double lonCenter) {
+    public void setLonCenter(double lonCenter) {
         this.lonCenter = lonCenter;
     }
 
-    public Integer getServiceRange() {
+    public int getServiceRange() {
         return serviceRange;
     }
 
-    public void setServiceRange(Integer serviceRange) {
+    public void setServiceRange(int serviceRange) {
         this.serviceRange = serviceRange;
     }
 
-    public Boolean getEthicalServiceProvider() {
+    public boolean isEthicalServiceProvider() {
         return isEthicalServiceProvider;
     }
 
-    public void setEthicalServiceProvider(Boolean ethicalServiceProvider) {
+    public void setEthicalServiceProvider(boolean ethicalServiceProvider) {
         isEthicalServiceProvider = ethicalServiceProvider;
     }
 
-    public Boolean getVerified() {
+    public boolean isVerified() {
         return isVerified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(boolean verified) {
         isVerified = verified;
     }
 
-    public Double getLatMax() {
+    public double getLatMax() {
         return latMax;
     }
 
-    public void setLatMax(Double latMax) {
+    public void setLatMax(double latMax) {
         this.latMax = latMax;
     }
 
-    public Double getLonMax() {
+    public double getLonMax() {
         return lonMax;
     }
 
-    public void setLonMax(Double lonMax) {
+    public void setLonMax(double lonMax) {
         this.lonMax = lonMax;
     }
 
-    public Double getLatMin() {
+    public double getLatMin() {
         return latMin;
     }
 
-    public void setLatMin(Double latMin) {
+    public void setLatMin(double latMin) {
         this.latMin = latMin;
     }
 
-    public Double getLonMin() {
+    public double getLonMin() {
         return lonMin;
     }
 
-    public void setLonMin(Double lonMin) {
+    public void setLonMin(double lonMin) {
         this.lonMin = lonMin;
+    }
+
+    public String getConfigurationNickname() {
+        return configurationNickname;
+    }
+
+    public void setConfigurationNickname(String configurationNickname) {
+        this.configurationNickname = configurationNickname;
+    }
+
+    public String getServiceURL() {
+        return serviceURL;
+    }
+
+    public void setServiceURL(String serviceURL) {
+        this.serviceURL = serviceURL;
+    }
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+    public Timestamp getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Timestamp updated) {
+        this.updated = updated;
+    }
+
+    public Double getRt_distance() {
+        return rt_distance;
+    }
+
+    public void setRt_distance(Double rt_distance) {
+        this.rt_distance = rt_distance;
     }
 }
