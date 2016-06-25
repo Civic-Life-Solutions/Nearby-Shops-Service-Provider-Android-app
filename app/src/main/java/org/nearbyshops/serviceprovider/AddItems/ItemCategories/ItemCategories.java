@@ -1,6 +1,7 @@
 package org.nearbyshops.serviceprovider.AddItems.ItemCategories;
 
 import android.animation.LayoutTransition;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -27,6 +28,7 @@ import org.nearbyshops.serviceprovider.Login;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
+import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,10 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ItemCategories extends AppCompatActivity
         implements  ItemCategoriesAdapter.requestSubCategory{
@@ -451,6 +455,9 @@ public class ItemCategories extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
+        // clear the selected items when back button is pressed
+        listAdapter.selectedItems.clear();
+
         if(currentCategory!=null)
         {
 
@@ -484,6 +491,145 @@ public class ItemCategories extends AppCompatActivity
         {
             super.onBackPressed();
         }
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                ItemCategory parentCategory = data.getParcelableExtra("result");
+
+                if(parentCategory!=null)
+                {
+                    showToastMessage("Parent : " + String.valueOf(parentCategory.getItemCategoryID()));
+                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
+
+                    makeUpdateRequest(listAdapter.getRequestedChangeParent());
+                }
+            }
+        }
+
+        if(requestCode == 2)
+        {
+            if(resultCode == Activity.RESULT_OK)
+            {
+                ItemCategory parentCategory = data.getParcelableExtra("result");
+
+                if(parentCategory!=null)
+                {
+                    showToastMessage("Parent : " + String.valueOf(parentCategory.getItemCategoryID()));
+
+
+                    for(ItemCategory itemCategory : listAdapter.selectedItems)
+                    {
+                        itemCategory.setParentCategoryID(parentCategory.getItemCategoryID());
+                    }
+
+                    makeRequestBulk(listAdapter.selectedItems);
+                }
+
+            }
+        }
+    }
+
+
+
+    void makeUpdateRequest(ItemCategory itemCategory)
+    {
+        Call<ResponseBody> call = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if(response.code() == 200)
+                {
+                    showToastMessage("Change Parent Successful !");
+
+                    makeRequestRetrofit();
+
+                }else
+                {
+                    showToastMessage("Change Parent Failed !");
+                }
+
+                listAdapter.setRequestedChangeParent(null);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                showToastMessage("Network request failed. Please check your connection !");
+
+                listAdapter.setRequestedChangeParent(null);
+            }
+        });
+    }
+
+
+    @OnClick(R.id.changeParentBulk)
+    void changeParentBulk()
+    {
+
+        if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }
+
+        Intent intentParent = new Intent(this, ItemCategoriesParent.class);
+        startActivityForResult(intentParent,2,null);
+
+    }
+
+
+    void makeRequestBulk(List<ItemCategory> list)
+    {
+        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(list);
+
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.code() == 200)
+                {
+                    showToastMessage("Update Successful !");
+                }else if (response.code() == 206)
+                {
+                    showToastMessage("Partially Updated. Check data changes !");
+
+                }else if(response.code() == 304)
+                {
+
+                    showToastMessage("Not Updated. No item updated !");
+
+                }else
+                {
+                    showToastMessage("Unknown server error or response !");
+                }
+
+                makeRequestRetrofit();
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+
+                showToastMessage("Network Request failed. Check your internet / network connection !");
+
+            }
+        });
 
     }
 

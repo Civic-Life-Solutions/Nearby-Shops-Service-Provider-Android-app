@@ -117,6 +117,7 @@
                 android:layout_height="match_parent" />
 
             <TextView
+                android:id="@+id/changeParentBulk"
                 android:gravity="right|bottom"
                 android:padding="10dp"
                 android:textColor="@color/white"

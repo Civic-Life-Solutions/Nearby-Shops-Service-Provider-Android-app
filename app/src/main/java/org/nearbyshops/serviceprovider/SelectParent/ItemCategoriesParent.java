@@ -2,6 +2,8 @@ package org.nearbyshops.serviceprovider.SelectParent;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class ItemCategoriesParent extends AppCompatActivity
-        implements  ItemCategoriesParentAdapter.requestSubCategory{
+        implements  ItemCategoriesParentAdapter.requestSubCategory, ItemCategoriesParentAdapter.NotificationReceiver{
 
     List<ItemCategory> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
@@ -52,7 +54,7 @@ public class ItemCategoriesParent extends AppCompatActivity
     @Bind(R.id.appbar)AppBarLayout appBarLayout;
     @Bind(R.id.assign_parent) TextView assignParent;
 
-    boolean menuVisible = false;
+    boolean menuVisible = true;
 
     boolean instructionsVisible = false;
 
@@ -128,7 +130,7 @@ public class ItemCategoriesParent extends AppCompatActivity
 
     void setupRecyclerView()
     {
-        listAdapter = new ItemCategoriesParentAdapter(dataset,this,this);
+        listAdapter = new ItemCategoriesParentAdapter(dataset,this,this,this);
 
         itemCategoriesList.setAdapter(listAdapter);
 
@@ -142,14 +144,14 @@ public class ItemCategoriesParent extends AppCompatActivity
         layoutManager.setSpanCount(metrics.widthPixels/350);
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
-                {
-                    if(menuVisible)
-                    {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//
+//                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
+//                {
+//                    if(menuVisible)
+//                    {
 
 
 //                        appBarLayout.setVisibility(View.GONE);
@@ -183,9 +185,9 @@ public class ItemCategoriesParent extends AppCompatActivity
 */
 
 //                        menuVisible = false;
-                    }
-                    else
-                    {
+//                    }
+//                    else
+//                    {
 //                        appBarLayout.setVisibility(View.VISIBLE);
 //                        assignParent.setVisibility(View.VISIBLE);
 
@@ -216,17 +218,17 @@ public class ItemCategoriesParent extends AppCompatActivity
 */
 
 //                        menuVisible = true;
-                    }
-
-
-                }
-            }
+//                    }
+//
+//
+//                }
+//            }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if(dy>20)
+                if(dy < -20)
                 {
 
                     boolean previous = menuVisible;
@@ -247,7 +249,7 @@ public class ItemCategoriesParent extends AppCompatActivity
 
                     }
 
-                }else if(dy < -20)
+                }else if(dy > 20)
                 {
 
                     boolean previous = menuVisible;
@@ -264,11 +266,8 @@ public class ItemCategoriesParent extends AppCompatActivity
                         Log.d("scrolllog","hide");
 
 
-
-
                         appBarLayout.setVisibility(View.GONE);
                         assignParent.setVisibility(View.GONE);
-
                     }
                 }
 
@@ -466,4 +465,33 @@ public class ItemCategoriesParent extends AppCompatActivity
 
         ButterKnife.unbind(this);
     }
+
+    @Override
+    public void notifyItemSelected() {
+
+        assignParent.setVisibility(View.VISIBLE);
+    }
+
+
+
+    @OnClick(R.id.assign_parent)
+    void assignParentClick()
+    {
+        if(listAdapter.getSelection()==null)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+            return;
+        }
+
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result",listAdapter.getSelection());
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+
+//        showToastMessage("Assigned !" + " : " + String.valueOf(listAdapter.getSelection().getItemCategoryID()));
+    }
+
+
+
 }

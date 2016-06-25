@@ -48,15 +48,19 @@ import retrofit2.Response;
 public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAdapter.ViewHolder>{
 
 
+    List<ItemCategory> selectedItems = new ArrayList<>();
+
 
     @Inject
     ItemCategoryService itemCategoryService;
 
-
     List<ItemCategory> dataset;
 
     Context context;
-    ItemCategories itemCategories;
+    ItemCategories activity;
+
+
+    ItemCategory requestedChangeParent = null;
 
 
 
@@ -70,7 +74,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
         this.dataset = dataset;
         this.context = context;
-        this.itemCategories = activity;
+        this.activity = activity;
 
         if(this.dataset == null)
         {
@@ -93,6 +97,16 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
         holder.categoryName.setText(dataset.get(position).getCategoryName());
         holder.categoryDescription.setText(dataset.get(position).getCategoryDescription());
+
+        if(selectedItems.contains(dataset.get(position)))
+        {
+            holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.gplus_color_2));
+        }
+        else
+        {
+            holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.white));
+        }
+
 
 
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
@@ -145,7 +159,22 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         public boolean listItemLongClick()
         {
 
-            showToastMessage("Long Click !");
+//            showToastMessage("Long Click !");
+
+
+            if(selectedItems.contains(dataset.get(getLayoutPosition())))
+            {
+                selectedItems.remove(dataset.get(getLayoutPosition()));
+
+            }else
+            {
+                selectedItems.add(dataset.get(getLayoutPosition()));
+            }
+
+
+            notifyItemChanged(getLayoutPosition());
+
+//            showToastMessage(String.valueOf(selectedItems.size()));
 
 
 //            itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.cyan900));
@@ -180,11 +209,9 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
             }
             else
             {
-
-                itemCategories.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+                activity.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+                selectedItems.clear();
             }
-
-
         }
 
 
@@ -205,6 +232,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
                     {
                         notifyDelete();
 
+                        showToastMessage("Removed !");
+
                     }else if(response.code()==304)
                     {
                         showToastMessage("Delete failed !");
@@ -213,8 +242,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
                     {
                         showToastMessage("Server Error !");
                     }
-
-
                 }
 
                 @Override
@@ -293,7 +320,10 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
                     Intent intentParent = new Intent(context, ItemCategoriesParent.class);
 
-                    context.startActivity(intentParent);
+                    activity.startActivityForResult(intentParent,1,null);
+
+
+                    requestedChangeParent = dataset.get(getLayoutPosition());
 
 
 
@@ -326,7 +356,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
     public void notifyDelete()
     {
-        itemCategories.notifyDelete();
+        activity.notifyDelete();
 
     }
 
@@ -335,8 +365,15 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     {
         // method for notifying the list object to request sub category
         public void notifyRequestSubCategory(ItemCategory itemCategory);
+
     }
 
 
+    public void setRequestedChangeParent(ItemCategory requestedChangeParent) {
+        this.requestedChangeParent = requestedChangeParent;
+    }
 
+    public ItemCategory getRequestedChangeParent() {
+        return requestedChangeParent;
+    }
 }

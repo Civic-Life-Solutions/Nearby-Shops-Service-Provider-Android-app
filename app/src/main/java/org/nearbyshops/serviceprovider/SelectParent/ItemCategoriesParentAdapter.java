@@ -62,15 +62,19 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
     Integer selectedPosition = null;
 
 
+    NotificationReceiver notificationReceiver;
+
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
 
-    public ItemCategoriesParentAdapter(List<ItemCategory> dataset, Context context, ItemCategoriesParent activity) {
+    public ItemCategoriesParentAdapter(List<ItemCategory> dataset, Context context, ItemCategoriesParent activity
+                            ,NotificationReceiver notificationReceiver) {
 
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
 
+        this.notificationReceiver = notificationReceiver;
         this.dataset = dataset;
         this.context = context;
         this.itemCategoriesParent = activity;
@@ -97,9 +101,15 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
         holder.categoryName.setText(dataset.get(position).getCategoryName());
         holder.categoryDescription.setText(dataset.get(position).getCategoryDescription());
 
-        if(selectedPosition!=null&&selectedPosition==position)
+        if(selectedPosition!=null)
         {
-            holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.blueGrey800));
+            if(selectedPosition==position){
+
+                holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.gplus_color_2));
+
+                notificationReceiver.notifyItemSelected();
+
+            }
 
 //            holder.itemCategoryListItem.animate().rotation(90);
         }else
@@ -172,7 +182,9 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 //
             if(previousPosition!=selectedPosition)
             {
+
                 notifyItemChanged(previousPosition);
+                notifyItemChanged(selectedPosition);
 
                 // item Selected
 
@@ -190,7 +202,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
             }
 
-            notifyDataSetChanged();
+//            notifyDataSetChanged();
+
 
 
 //            itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.cyan900));
@@ -277,7 +290,7 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
         {
             PopupMenu popup = new PopupMenu(context, v);
             MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.item_category_item_overflow, popup.getMenu());
+            inflater.inflate(R.menu.item_category_item_overflow_parent_selection, popup.getMenu());
             popup.setOnMenuItemClickListener(this);
             popup.show();
         }
@@ -319,24 +332,6 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
                     Intent intent = new Intent(context,EditItemCategory.class);
                     intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
                     context.startActivity(intent);
-
-                    break;
-
-
-
-                case R.id.action_detach:
-
-
-                    showToastMessage("Detach");
-
-
-                    break;
-
-                case R.id.action_change_parent:
-
-
-                    showToastMessage("Change parent !");
-
 
                     break;
 
@@ -386,4 +381,25 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
         selectedPosition = null;
     }
+
+
+
+    public ItemCategory getSelection()
+    {
+        if(selectedPosition!=null)
+        {
+            return dataset.get(selectedPosition);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    interface NotificationReceiver{
+
+        void notifyItemSelected();
+    }
+
 }

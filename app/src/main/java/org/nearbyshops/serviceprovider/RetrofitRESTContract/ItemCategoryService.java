@@ -36,6 +36,10 @@ public interface ItemCategoryService {
     @PUT("/api/ItemCategory/{id}")
     Call<ResponseBody> updateItemCategory(@Body ItemCategory itemCategory, @Path("id") int id);
 
+
+    @PUT("/api/ItemCategory/")
+    Call<ResponseBody> updateItemCategoryBulk(@Body List<ItemCategory> itemCategoryList);
+
     @DELETE("/api/ItemCategory/{id}")
     Call<ResponseBody> deleteItemCategory(@Path("id") int id);
 
