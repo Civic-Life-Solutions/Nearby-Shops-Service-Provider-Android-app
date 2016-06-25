@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
+import org.nearbyshops.serviceprovider.AddItems.ItemCategories.ItemCategories;
 import org.nearbyshops.serviceprovider.SavedConfigurations.ServiceConfigurationActivity;
 
 import butterknife.Bind;
@@ -67,6 +68,15 @@ public class Home extends AppCompatActivity
 //            }
 //        });
 //    }
+
+
+
+    @OnClick(R.id.option_service_stats)
+    void optionServiceStatsClick()
+    {
+        startActivity(new Intent(this,MapsActivity.class));
+
+    }
 
 
 
@@ -136,6 +146,17 @@ public class Home extends AppCompatActivity
     void savedConfigurationClick(View view)
     {
         Intent intent = new Intent(this, ServiceConfigurationActivity.class);
+
+        startActivity(intent);
+
+    }
+
+
+    @OnClick(R.id.option_add_items)
+    void itemCategoriesClick(View view)
+    {
+
+        Intent intent = new Intent(this, ItemCategories.class);
 
         startActivity(intent);
 

@@ -24,7 +24,6 @@ import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -87,6 +86,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
             Picasso.with(context).load(UtilityGeneral
                     .getConfigImageEndpointURL(context) + service.getImagePath())
                     .into(holder.serviceImage);
+
 
 
 
@@ -164,7 +164,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
         {
             PopupMenu popup = new PopupMenu(context, v);
             MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.item_category_item_overflow, popup.getMenu());
+            inflater.inflate(R.menu.saved_configuration_item_overflow, popup.getMenu());
             popup.setOnMenuItemClickListener(this);
             popup.show();
         }

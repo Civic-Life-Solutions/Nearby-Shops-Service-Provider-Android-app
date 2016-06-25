@@ -3,6 +3,7 @@ package org.nearbyshops.serviceprovider.ApplicationState;
 import android.util.Log;
 
 
+import org.nearbyshops.serviceprovider.Model.Shop;
 import org.nearbyshops.serviceprovider.MyApplication;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 public class ApplicationState {
 
     static ApplicationState instance = null;
-
 
 
     MyApplication myApplication;

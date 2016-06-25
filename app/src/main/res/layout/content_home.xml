@@ -49,6 +49,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                 android:layout_height="@dimen/menu_item_width">
 
                 <ImageView
+                    app:srcCompat="@drawable/ic_nature_people_white_48px"
                     android:tint="#ffffff"
                     android:padding="10dp"
                     android:layout_above="@+id/text_add_items"

@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.nearbyshops.serviceprovider.MyApplication;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
@@ -110,6 +111,15 @@ public class NetModule {
     ServiceConfigurationService provideConfigurationService(Retrofit retrofit)
     {
         ServiceConfigurationService service = retrofit.create(ServiceConfigurationService.class);
+
+        return service;
+    }
+
+
+    @Provides
+    ItemCategoryService provideItemCategoryService(Retrofit retrofit)
+    {
+        ItemCategoryService service = retrofit.create((ItemCategoryService.class));
 
         return service;
     }

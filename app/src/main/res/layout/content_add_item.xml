@@ -58,7 +58,7 @@
                 android:foregroundGravity="right"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:src="@drawable/ic_nature_people_white_48px"
+                app:srcCompat="@drawable/ic_nature_people_white_48px"
                 android:id="@+id/changePicture"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
