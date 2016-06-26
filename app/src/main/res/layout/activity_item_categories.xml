@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:animateLayoutChanges="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:animateLayoutChanges="true"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#22000000">
 
     <android.support.design.widget.AppBarLayout
+        android:animateLayoutChanges="true"
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            app:layout_scrollFlags = "scroll|enterAlways"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+
         <!--app:layout_scrollFlags = "scroll|enterAlways"-->
-
-
         <!-- android:text="//Groceries\n\n- Rice \n- Basmati"-->
-
-
-
 
 
         <android.support.design.widget.TabLayout
             android:visibility="gone"
+            android:layout_below="@id/appbar"
+            app:tabTextColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
             app:layout_scrollFlags = "scroll|enterAlways"
             android:background="@color/buttonColorDark"
             android:id="@+id/tablayout"
@@ -47,51 +48,15 @@
     </android.support.design.widget.AppBarLayout>
 
 
+
+
+
     <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
 
-    <android.support.v7.widget.RecyclerView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/recyclerViewItemCategories"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="2dp"/>
-
-    <!--
-            <Button
-                android:visibility="gone"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-
-                android:id="@+id/addItemCategory"
-                android:textColor="@color/white"
-                android:background="@color/blueGrey800"
-                android:text="Add Item Category"
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:visibility="gone"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:textColor="@color/white"
-                android:background="@color/buttonColor"
-                android:id="@+id/addFromGlobal"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:text="Add Item Category from Global Database "
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-    -->
 
     <RelativeLayout
         android:layout_alignParentBottom="true"
-        android:animateLayoutChanges="true"
         android:id="@+id/options"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -168,21 +133,15 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-
     </RelativeLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_above="@id/options"
+        android:layout_below="@id/appbar"
+        android:id="@+id/recyclerViewItemCategories"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"/>
 
 
-
-    <android.support.design.widget.FloatingActionButton
-
-        android:visibility="gone"
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white_24dp" />
-
-
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

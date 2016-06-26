@@ -27,7 +27,9 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -48,7 +50,7 @@ import retrofit2.Response;
 public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAdapter.ViewHolder>{
 
 
-    List<ItemCategory> selectedItems = new ArrayList<>();
+    Map<Integer,ItemCategory> selectedItems = new HashMap<>();
 
 
     @Inject
@@ -63,15 +65,19 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     ItemCategory requestedChangeParent = null;
 
 
+    NotificationReceiver notificationReceiver;
+
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
 
-    public ItemCategoriesAdapter(List<ItemCategory> dataset, Context context, ItemCategories activity) {
+    public ItemCategoriesAdapter(List<ItemCategory> dataset, Context context, ItemCategories activity, ItemCategoriesAdapter.NotificationReceiver notificationReceiver) {
 
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
 
+
+        this.notificationReceiver = notificationReceiver;
         this.dataset = dataset;
         this.context = context;
         this.activity = activity;
@@ -98,7 +104,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         holder.categoryName.setText(dataset.get(position).getCategoryName());
         holder.categoryDescription.setText(dataset.get(position).getCategoryDescription());
 
-        if(selectedItems.contains(dataset.get(position)))
+        if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
         {
             holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.gplus_color_2));
         }
@@ -162,13 +168,21 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 //            showToastMessage("Long Click !");
 
 
-            if(selectedItems.contains(dataset.get(getLayoutPosition())))
+            if(selectedItems.containsKey(
+                    dataset.get(getLayoutPosition())
+                            .getItemCategoryID()
+            )
+                    )
+
             {
-                selectedItems.remove(dataset.get(getLayoutPosition()));
+                selectedItems.remove(dataset.get(getLayoutPosition()).getItemCategoryID());
 
             }else
             {
-                selectedItems.add(dataset.get(getLayoutPosition()));
+
+                selectedItems.put(dataset.get(getLayoutPosition()).getItemCategoryID(),dataset.get(getLayoutPosition()));
+
+                notificationReceiver.notifyItemCategorySelected();
             }
 
 
@@ -209,7 +223,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
             }
             else
             {
-                activity.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+                notificationReceiver.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+
                 selectedItems.clear();
             }
         }
@@ -320,11 +335,18 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
                     Intent intentParent = new Intent(context, ItemCategoriesParent.class);
 
-                    activity.startActivityForResult(intentParent,1,null);
-
-
                     requestedChangeParent = dataset.get(getLayoutPosition());
 
+                    // add the selected item category in the exclude list so that it does not get showed up as an option.
+                    // This is required to prevent an item category to assign itself or its children as its parent.
+                    // This should not happen because it would be erratic.
+
+                    ItemCategoriesParent.clearExcludeList(); // it is a safe to clear the list before adding any items in it.
+                    ItemCategoriesParent.excludeList
+                            .put(requestedChangeParent.getItemCategoryID(),requestedChangeParent);
+
+
+                    activity.startActivityForResult(intentParent,1,null);
 
 
                     break;
@@ -361,10 +383,12 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     }
 
 
-    public interface requestSubCategory
+    public interface NotificationReceiver
     {
         // method for notifying the list object to request sub category
         public void notifyRequestSubCategory(ItemCategory itemCategory);
+
+        public void notifyItemCategorySelected();
 
     }
 
@@ -376,4 +400,9 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public ItemCategory getRequestedChangeParent() {
         return requestedChangeParent;
     }
+
+
+
+
+
 }

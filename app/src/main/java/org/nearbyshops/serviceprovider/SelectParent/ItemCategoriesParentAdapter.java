@@ -262,7 +262,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
                     if(response.code()==200)
                     {
-                        notifyDelete();
+//                        notifyDelete();
+                        notificationReceiver.notifyItemDeleted();
 
                     }else if(response.code()==304)
                     {
@@ -362,7 +363,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
     public void notifyDelete()
     {
-        itemCategoriesParent.notifyDelete();
+
+//        itemCategoriesParent.notifyDelete();
 
     }
 
@@ -400,6 +402,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
     interface NotificationReceiver{
 
         void notifyItemSelected();
+
+        void notifyItemDeleted();
     }
 
 }

@@ -19,6 +19,7 @@
     -->
 
     <android.support.design.widget.AppBarLayout
+        android:animateLayoutChanges="true"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:fitsSystemWindows="true"
         android:id="@+id/appbar"
@@ -33,24 +34,26 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" />
 
+
+        <android.support.design.widget.TabLayout
+            android:layout_below="@id/appbar"
+            android:visibility="gone"
+            android:background="@color/buttonColorDark"
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/white"
+            app:tabIndicatorHeight="2dp"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabBackground="@color/buttonColorDark" />
+
         <!-- android:text="//Groceries\n\n- Rice \n- Basmati"-->
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.design.widget.TabLayout
-        android:layout_below="@id/appbar"
-        android:visibility="gone"
-        android:background="@color/buttonColorDark"
-        android:id="@+id/tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabGravity="fill"
-        app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/white"
-        app:tabIndicatorHeight="2dp"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabBackground="@color/buttonColorDark" />
 
         <TextView
             android:textColor="@color/white"
@@ -60,7 +63,7 @@
             android:layout_marginRight="5dp"
             android:padding="5dp"
             android:id="@+id/show_hide_instructions"
-            android:layout_below="@id/tablayout"
+            android:layout_below="@id/appbar"
             android:text="Show / Hide Usage Instructions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

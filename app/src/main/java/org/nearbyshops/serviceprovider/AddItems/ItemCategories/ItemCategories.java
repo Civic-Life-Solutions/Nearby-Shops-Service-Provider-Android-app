@@ -32,6 +32,7 @@ import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -44,7 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemCategories extends AppCompatActivity
-        implements  ItemCategoriesAdapter.requestSubCategory{
+        implements  ItemCategoriesAdapter.NotificationReceiver{
 
     List<ItemCategory> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
@@ -56,7 +57,7 @@ public class ItemCategories extends AppCompatActivity
 //    ItemCategoryDataRouter dataRouter;
 
 
-    boolean show = false;
+    boolean show = true;
     boolean isDragged = false;
 
     @Inject
@@ -65,12 +66,18 @@ public class ItemCategories extends AppCompatActivity
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
 
-
-    @Bind(R.id.fab)
-    FloatingActionButton fab;
-
     @Bind(R.id.options)
     RelativeLayout options;
+
+    @Bind(R.id.appbar)
+    AppBarLayout appBar;
+
+
+
+    int currentCategoryID = 1; // the ID of root category is always supposed to be 1
+    ItemCategory currentCategory = null;
+
+
 
 
     public ItemCategories() {
@@ -111,7 +118,7 @@ public class ItemCategories extends AppCompatActivity
 
 
         itemCategoriesList = (RecyclerView) findViewById(R.id.recyclerViewItemCategories);
-        listAdapter = new ItemCategoriesAdapter(dataset,this,this);
+        listAdapter = new ItemCategoriesAdapter(dataset,this,this,this);
 
         itemCategoriesList.setAdapter(listAdapter);
 
@@ -124,139 +131,42 @@ public class ItemCategories extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
-
-/*
-        itemCategoriesList.setOnTouchListener(new OnSwipeTouchListener(this){
-
-
-            @Override
-            public void onSwipeUp() {
-                super.onSwipeUp();
-
-                Log.d("scrolllog","swipeUp");
-
-                options.animate().translationY(200);
-            }
-
-            @Override
-            public void onSwipeDown() {
-                super.onSwipeDown();
-
-                Log.d("scrolllog","swipeDown");
-
-                options.animate().translationY(0);
-            }
-
-            @Override
-            public void onSwipeRight() {
-                super.onSwipeRight();
-                options.animate().translationY(0);
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                super.onSwipeLeft();
-
-                options.animate().translationY(200);
-            }
-        });
-*/
-
-
+        layoutManager.setSpanCount(metrics.widthPixels/350);
+        //layoutManager.setSpanCount();
 
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if(newState== RecyclerView.SCROLL_STATE_SETTLING)
-                {
-//                    Log.d("scrolllog","Settling");
-                }
-
-                if(newState == RecyclerView.SCROLL_STATE_IDLE)
-                {
-//                    Log.d("scrolllog","Idle");
-                }
-
-
-
-                if(newState== RecyclerView.SCROLL_STATE_DRAGGING && dataset.size() <= getMaxChildCount(layoutManager.getSpanCount(),metrics.heightPixels))
-                {
-
-
-                    Log.d("scrolllog","Child COunt :" + String.valueOf(recyclerView.getChildCount()));
-
-                    Log.d("scrolllog","Max Child COunt : " + getMaxChildCount(layoutManager.getSpanCount(),metrics.heightPixels));
-
-                    Log.d("scrolllog","Dataset size :" + String.valueOf(dataset.size()));
-
-                    Log.d("scrolllog","drag");
-
-                    if(!isDragged) {
-
-
-
-//                        options.animate().translationY(200);
-
-                        boolean previous = isDragged;
-
-                        isDragged = true;
-
-                        if(isDragged!=previous)
-                        {
-//
-
-                        }
-
-                    }else
-                    {
-
-//                        options.animate().translationY(0);
-
-                        isDragged = false;
-
-                    }
-
-                }
-
-
-
-            }
-
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
 
-
-                if(dy>5)
+                if(dy > 20)
                 {
 
                     boolean previous = show;
 
-                    show= true;
+                    show = false ;
 
                     if(show!=previous)
                     {
                         // changed
-//                        options.setVisibility(View.INVISIBLE);
-//                        Log.d("scrolllog","show");
+                        Log.d("scrolllog","show");
+
 //                        options.animate().translationX(metrics.widthPixels-10);
 //                        options.animate().translationY(200);
+
                         options.setVisibility(View.GONE);
+                        appBar.setVisibility(View.GONE);
                     }
 
-                }else if(dy < -5)
+                }else if(dy < -20)
                 {
 
                     boolean previous = show;
 
-                    show = false;
+                    show = true;
 
 
 
@@ -265,10 +175,11 @@ public class ItemCategories extends AppCompatActivity
                         // changed
 //                        options.setVisibility(View.VISIBLE);
 //                        options.animate().translationX(0);
-//                        Log.d("scrolllog","hide");
+                        Log.d("scrolllog","hide");
 
 //                        options.animate().translationY(0);
                         options.setVisibility(View.VISIBLE);
+                        appBar.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -282,8 +193,6 @@ public class ItemCategories extends AppCompatActivity
         //itemCategoriesList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
 
 
-        layoutManager.setSpanCount(metrics.widthPixels/350);
-        //layoutManager.setSpanCount();
 
 
         Log.d("applog",String.valueOf(metrics.widthPixels/250));
@@ -298,28 +207,6 @@ public class ItemCategories extends AppCompatActivity
         }
 
     }
-
-
-    int currentCategoryID = 1; // the ID of root category is always supposed to be 1
-    ItemCategory currentCategory = null;
-
-
-
-
-
-    @OnClick(R.id.addItemCategory)
-    public void fabClick()
-    {
-        Intent addCategoryIntent = new Intent(ItemCategories.this,AddItemCategory.class);
-
-        addCategoryIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-
-        startActivity(addCategoryIntent);
-    }
-
-
-
-
 
 
 
@@ -448,8 +335,11 @@ public class ItemCategories extends AppCompatActivity
             boolean isFirst = true;
         }
 
+        options.setVisibility(View.VISIBLE);
+        appBar.setVisibility(View.VISIBLE);
         makeRequestRetrofit();
     }
+
 
 
     @Override
@@ -483,6 +373,8 @@ public class ItemCategories extends AppCompatActivity
 
             if(currentCategoryID!=-1)
             {
+                options.setVisibility(View.VISIBLE);
+                appBar.setVisibility(View.VISIBLE);
                 makeRequestRetrofit();
             }
         }
@@ -507,7 +399,7 @@ public class ItemCategories extends AppCompatActivity
 
                 if(parentCategory!=null)
                 {
-                    showToastMessage("Parent : " + String.valueOf(parentCategory.getItemCategoryID()));
+
                     listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
 
                     makeUpdateRequest(listAdapter.getRequestedChangeParent());
@@ -523,15 +415,16 @@ public class ItemCategories extends AppCompatActivity
 
                 if(parentCategory!=null)
                 {
-                    showToastMessage("Parent : " + String.valueOf(parentCategory.getItemCategoryID()));
 
+                    List<ItemCategory> tempList = new ArrayList<>();
 
-                    for(ItemCategory itemCategory : listAdapter.selectedItems)
+                    for(Map.Entry<Integer,ItemCategory> entry : listAdapter.selectedItems.entrySet())
                     {
-                        itemCategory.setParentCategoryID(parentCategory.getItemCategoryID());
+                        entry.getValue().setParentCategoryID(parentCategory.getItemCategoryID());
+                        tempList.add(entry.getValue());
                     }
 
-                    makeRequestBulk(listAdapter.selectedItems);
+                    makeRequestBulk(tempList);
                 }
 
             }
@@ -584,13 +477,18 @@ public class ItemCategories extends AppCompatActivity
             return;
         }
 
+        // make an exclude list. Put selected items to an exclude list. This is done to preven a category to make itself or its
+        // children its parent. This is logically incorrect and should not happen.
+
+        ItemCategoriesParent.clearExcludeList();
+        ItemCategoriesParent.excludeList.putAll(listAdapter.selectedItems);
+
         Intent intentParent = new Intent(this, ItemCategoriesParent.class);
         startActivityForResult(intentParent,2,null);
-
     }
 
 
-    void makeRequestBulk(List<ItemCategory> list)
+    void makeRequestBulk(final List<ItemCategory> list)
     {
         Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(list);
 
@@ -601,25 +499,28 @@ public class ItemCategories extends AppCompatActivity
                 if(response.code() == 200)
                 {
                     showToastMessage("Update Successful !");
+
+                    clearSelectedItems();
+
                 }else if (response.code() == 206)
                 {
                     showToastMessage("Partially Updated. Check data changes !");
 
+                    clearSelectedItems();
+
                 }else if(response.code() == 304)
                 {
 
-                    showToastMessage("Not Updated. No item updated !");
+                    showToastMessage("No item updated !");
 
                 }else
                 {
                     showToastMessage("Unknown server error or response !");
                 }
 
+
+
                 makeRequestRetrofit();
-
-
-
-
             }
 
             @Override
@@ -634,6 +535,20 @@ public class ItemCategories extends AppCompatActivity
     }
 
 
+    void clearSelectedItems()
+    {
+        // clear the selected items
+        listAdapter.selectedItems.clear();
+    }
+
+
+    @Override
+    public void notifyItemCategorySelected() {
+
+        options.setVisibility(View.VISIBLE);
+    }
+
+
 
     @Override
     protected void onDestroy() {
@@ -641,4 +556,83 @@ public class ItemCategories extends AppCompatActivity
 
         ButterKnife.unbind(this);
     }
+
+
+    @OnClick(R.id.addItemCategory)
+    void addItemCategoryClick()
+    {
+        Intent addIntent = new Intent(this, AddItemCategory.class);
+
+        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
+
+        startActivity(addIntent);
+    }
+
+
+
 }
+
+
+
+// commented out sections
+
+
+            /*@Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(newState== RecyclerView.SCROLL_STATE_SETTLING)
+                {
+//                    Log.d("scrolllog","Settling");
+                }
+
+                if(newState == RecyclerView.SCROLL_STATE_IDLE)
+                {
+//                    Log.d("scrolllog","Idle");
+                }
+
+
+
+                if(newState== RecyclerView.SCROLL_STATE_DRAGGING && dataset.size() <= getMaxChildCount(layoutManager.getSpanCount(),metrics.heightPixels))
+                {
+
+
+                    Log.d("scrolllog","Child COunt :" + String.valueOf(recyclerView.getChildCount()));
+
+                    Log.d("scrolllog","Max Child COunt : " + getMaxChildCount(layoutManager.getSpanCount(),metrics.heightPixels));
+
+                    Log.d("scrolllog","Dataset size :" + String.valueOf(dataset.size()));
+
+                    Log.d("scrolllog","drag");
+
+                    if(!isDragged) {
+
+
+
+//                        options.animate().translationY(200);
+
+                        boolean previous = isDragged;
+
+                        isDragged = true;
+
+                        if(isDragged!=previous)
+                        {
+//
+
+                        }
+
+                    }else
+                    {
+
+//                        options.animate().translationY(0);
+
+                        isDragged = false;
+
+                    }
+
+                }
+
+
+
+            }
+*/
