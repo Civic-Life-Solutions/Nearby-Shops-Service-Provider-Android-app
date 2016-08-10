@@ -8,10 +8,12 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +41,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class AddItemCategory extends AppCompatActivity implements Callback<Image> {
+public class AddItemCategory extends AppCompatActivity implements Callback<Image>, View.OnClickListener {
 
     @Bind(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
@@ -72,6 +74,27 @@ public class AddItemCategory extends AppCompatActivity implements Callback<Image
     ItemCategory itemCategory = new ItemCategory();
 
 
+    // recently added
+
+    @Bind(R.id.descriptionShort)
+    EditText descriptionShort;
+
+    @Bind(R.id.isAbstractNode)
+    CheckBox isAbstractNode;
+
+    boolean isLeafExplainationOpen= false;
+    boolean isAbstractExplainationOpen = false;
+
+    TextView what_is_leaf_node;
+    TextView leaf_node_explaination;
+    TextView what_is_abstract_node;
+    ScrollView abstract_node_explaination;
+
+
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -79,6 +102,12 @@ public class AddItemCategory extends AppCompatActivity implements Callback<Image
 
         setContentView(R.layout.activity_add_item_category);
         ButterKnife.bind(this);
+
+        what_is_leaf_node = (TextView) findViewById(R.id.whatleaf);
+        leaf_node_explaination = (TextView) findViewById(R.id.leaf_node_explaination);
+        what_is_abstract_node = (TextView) findViewById(R.id.what_is_abstract_node);
+        abstract_node_explaination = (ScrollView) findViewById(R.id.scrollview_abstract_node_explanation);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -88,6 +117,58 @@ public class AddItemCategory extends AppCompatActivity implements Callback<Image
         parentCategory = getIntent().getParcelableExtra(ADD_ITEM_CATEGORY_INTENT_KEY);
 
     }
+
+
+
+
+    @OnClick(R.id.whatleaf)
+    void whatLeafNodeClick()
+    {
+        if(!isLeafExplainationOpen)
+        {
+            leaf_node_explaination.setVisibility(View.VISIBLE);
+
+            isLeafExplainationOpen = true;
+        }
+        else
+        {
+            leaf_node_explaination.setVisibility(View.GONE);
+
+            isLeafExplainationOpen = false;
+        }
+    }
+
+    @OnClick(R.id.what_is_abstract_node)
+    void whatAbstractNodeClick() {
+
+        if (!isAbstractExplainationOpen) {
+
+            abstract_node_explaination.setVisibility(View.VISIBLE);
+
+            isAbstractExplainationOpen = true;
+        }
+        else
+        {
+            abstract_node_explaination.setVisibility(View.GONE);
+            isAbstractExplainationOpen = false;
+
+        }
+    }
+
+
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId())
+        {
+
+        }
+
+    }
+
+
 
 
     void loadImage(String imagePath) {
@@ -103,6 +184,10 @@ public class AddItemCategory extends AppCompatActivity implements Callback<Image
         itemCategory.setCategoryName(itemCategoryName.getText().toString());
         itemCategory.setCategoryDescription(itemCategoryDescription.getText().toString());
         itemCategory.setIsLeafNode(isLeafNode.isChecked());
+
+
+        itemCategory.setAbstractNode(isAbstractNode.isChecked());
+        itemCategory.setDescriptionShort(descriptionShort.getText().toString());
 
     }
 
@@ -356,7 +441,6 @@ public class AddItemCategory extends AppCompatActivity implements Callback<Image
         itemCategory.setImagePath(null);
         makeRetrofitRequest();
     }
-
 
 
 }

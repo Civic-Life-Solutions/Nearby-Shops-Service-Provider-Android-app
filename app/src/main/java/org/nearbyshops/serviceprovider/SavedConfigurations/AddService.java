@@ -35,7 +35,6 @@ import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -143,7 +142,7 @@ public class AddService extends AppCompatActivity implements Callback<Image>, Ad
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.activity_add_service);
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -41,7 +41,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:id="@+id/option_add_items"
                 android:background="@color/phonographyBlue"
@@ -94,7 +94,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:layout_below="@id/borderOne"
-                android:id="@+id/option_add_stock"
+                android:id="@+id/option_detached"
                 android:background="@color/gplus_color_1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/menu_item_width">
@@ -109,14 +109,15 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
                 <TextView
+                    android:gravity="right"
                     android:padding="10dp"
                     android:id="@+id/text_add_stock"
                     android:textSize="@dimen/menu_item_text_size"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="Detached Items"
-                    android:layout_width="wrap_content"
+                    android:text="Detached Items and Item Categories"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
 
@@ -124,6 +125,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
             <RelativeLayout
+                android:visibility="invisible"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/shop_home_quick_stock_editor"
                 android:background="@color/gplus_color_2"

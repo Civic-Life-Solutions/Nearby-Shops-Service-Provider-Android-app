@@ -256,9 +256,9 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
 //                    Toast.makeText(context,"Real Edit !",Toast.LENGTH_SHORT).show();
 
-                    Intent editIntent = new Intent(context,EditItem.class);
+                    Intent editIntent = new Intent(context,EditService.class);
 
-                    editIntent.putExtra(EditItem.SERVICE_CONFIG_INTENT_KEY,dataset.get(getLayoutPosition()));
+                    editIntent.putExtra(EditService.SERVICE_CONFIG_INTENT_KEY,dataset.get(getLayoutPosition()));
                     context.startActivity(editIntent);
 
                     break;

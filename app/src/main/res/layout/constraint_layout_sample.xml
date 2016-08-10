@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:appCompat="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayout">
+
+
+
+    <RelativeLayout
+        android:id="@+id/option_shop_home"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        appCompat:layout_constraintTop_toTopOf="@id/constraintLayout"
+        appCompat:layout_constraintLeft_toLeftOf="@id/constraintLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:gravity="right"
+            android:padding="10dp"
+            android:background="@color/buttonColorDark"
+            android:id="@+id/text_option"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/white"
+            android:text="Shop Home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:layout_above="@id/text_option"
+            android:background="@color/blueGrey800"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        appCompat:layout_constraintTop_toTopOf="@id/constraintLayout"
+        appCompat:layout_constraintLeft_toRightOf="@id/option_shop_home"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp">
+
+
+        <TextView
+            android:id="@+id/text_option_two"
+            android:gravity="right"
+            android:padding="10dp"
+            android:background="@color/buttonColorDark"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/white"
+            android:text="Billing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <ImageView
+            android:layout_above="@id/text_option_two"
+            android:background="@color/blueGrey800"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>

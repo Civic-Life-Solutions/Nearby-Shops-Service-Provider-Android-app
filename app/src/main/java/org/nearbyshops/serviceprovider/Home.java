@@ -2,8 +2,6 @@ package org.nearbyshops.serviceprovider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
-import org.nearbyshops.serviceprovider.AddItems.ItemCategories.ItemCategories;
+import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.SavedConfigurations.ServiceConfigurationActivity;
 
 import butterknife.Bind;
@@ -78,6 +78,12 @@ public class Home extends AppCompatActivity
 
     }
 
+
+    @OnClick(R.id.option_detached)
+    void optionDetachedClick()
+    {
+        startActivity(new Intent(this, DetachedTabs.class));
+    }
 
 
 
@@ -156,7 +162,7 @@ public class Home extends AppCompatActivity
     void itemCategoriesClick(View view)
     {
 
-        Intent intent = new Intent(this, ItemCategories.class);
+        Intent intent = new Intent(this, ItemCategoriesTabs.class);
 
         startActivity(intent);
 

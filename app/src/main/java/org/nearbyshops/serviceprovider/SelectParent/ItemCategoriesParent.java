@@ -1,12 +1,9 @@
 package org.nearbyshops.serviceprovider.SelectParent;
 
-import android.animation.Animator;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import org.nearbyshops.serviceprovider.AddItems.ItemCategories.AddItemCategory;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
+import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 
@@ -36,8 +33,11 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.Icepick;
+import icepick.State;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ItemCategoriesParent extends AppCompatActivity
         implements  ItemCategoriesParentAdapter.requestSubCategory, ItemCategoriesParentAdapter.NotificationReceiver{
@@ -45,14 +45,15 @@ public class ItemCategoriesParent extends AppCompatActivity
 
     // data
     public static Map<Integer,ItemCategory> excludeList = new HashMap<>();
-    List<ItemCategory> dataset = new ArrayList<>();
+    ArrayList<ItemCategory> dataset = new ArrayList<>();
 
-    boolean menuVisible = true;
-    boolean instructionsVisible = false;
+    @State boolean menuVisible = true;
+    @State boolean instructionsVisible = false;
 
     @Inject
     ItemCategoryService itemCategoryService;
 
+    @State
     ItemCategory currentCategory = null;
 
 
@@ -88,7 +89,10 @@ public class ItemCategoriesParent extends AppCompatActivity
 
 
 
-
+    // for scrolling
+    private int limit = 10;
+    @State int offset = 0;
+    @State int item_count = 0;
 
 
     public ItemCategoriesParent() {
@@ -119,6 +123,12 @@ public class ItemCategoriesParent extends AppCompatActivity
 
         itemCategoriesList = (RecyclerView) findViewById(R.id.recyclerViewItemCategories);
         setupRecyclerView();
+
+
+        if(savedInstanceState==null)
+        {
+            makeRequestRetrofit();
+        }
     }
 
 
@@ -159,85 +169,26 @@ public class ItemCategoriesParent extends AppCompatActivity
         layoutManager.setSpanCount(metrics.widthPixels/350);
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//
-//                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
-//                {
-//                    if(menuVisible)
-//                    {
 
 
-//                        appBarLayout.setVisibility(View.GONE);
-//                        assignParent.setVisibility(View.GONE);
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
 
-                        /*appBarLayout.animate()
-                                .y(-appBarLayout.getHeight())
-                                .setListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
+                if(layoutManager.findLastVisibleItemPosition()==dataset.size()-1)
+                {
+                    // trigger fetch next page
 
-                            }
+                    if((offset+limit)<=item_count)
+                    {
+                        offset = offset + limit;
+                        makeRequestRetrofit();
+                    }
 
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-
-                                appBarLayout.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
-                            }
-
-                        });
-*/
-
-//                        menuVisible = false;
-//                    }
-//                    else
-//                    {
-//                        appBarLayout.setVisibility(View.VISIBLE);
-//                        assignParent.setVisibility(View.VISIBLE);
-
-                       /* appBarLayout.animate().translationY(0)
-                                .setListener(new Animator.AnimatorListener() {
-
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
+                }
+            }
 
 
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
-                            }
-                        });
-*/
-
-//                        menuVisible = true;
-//                    }
-//
-//
-//                }
-//            }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
@@ -301,29 +252,31 @@ public class ItemCategoriesParent extends AppCompatActivity
     public void makeRequestRetrofit()
     {
 
-        Call<List<ItemCategory>> itemCategoryCall = itemCategoryService
-                .getItemCategories(currentCategory.getItemCategoryID());
+//        Call<List<ItemCategory>> itemCategoryCall = itemCategoryService
+//                .getItemCategories(currentCategory.getItemCategoryID());
 
 
-        itemCategoryCall.enqueue(new Callback<List<ItemCategory>>() {
+        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
+                null,currentCategory.getItemCategoryID(),
+                null,null,null,null,null,null,"id",limit,offset,null);
 
 
+        endPointCall.enqueue(new Callback<ItemCategoryEndPoint>() {
             @Override
-            public void onResponse(Call<List<ItemCategory>> call, retrofit2.Response<List<ItemCategory>> response) {
+            public void onResponse(Call<ItemCategoryEndPoint> call, Response<ItemCategoryEndPoint> response) {
 
-
-
-                dataset.clear();
-
-                if(response.body()!=null) {
-
-                    if(currentCategory.getItemCategoryID()==1)
+                if(response.body()!=null)
+                {
+                    if(currentCategory.getItemCategoryID()==1 && offset == 0)
                     {
                         dataset.add(0,currentCategory);
                     }
 
+
+                    item_count = response.body().getItemCount();
+
                     // the entities in the exclude list should not be added into the dataset
-                    for(ItemCategory itemCategory : response.body())
+                    for(ItemCategory itemCategory : response.body().getResults())
                     {
                         // if item does not exist in the exclude list then only add it.
                         if(!excludeList.containsKey(itemCategory.getItemCategoryID()))
@@ -336,13 +289,13 @@ public class ItemCategoriesParent extends AppCompatActivity
 
                 listAdapter.notifyDataSetChanged();
 
+
             }
 
             @Override
-            public void onFailure(Call<List<ItemCategory>> call, Throwable t) {
+            public void onFailure(Call<ItemCategoryEndPoint> call, Throwable t) {
 
                 showToastMessage("Network request failed. Please check your connection !");
-
             }
         });
 
@@ -362,7 +315,7 @@ public class ItemCategoriesParent extends AppCompatActivity
 
         super.onResume();
 
-        makeRequestRetrofit();
+//        makeRequestRetrofit();
 
         Log.d("applog","curent category ID " + currentCategory.getItemCategoryID());
     }
@@ -430,7 +383,11 @@ public class ItemCategoriesParent extends AppCompatActivity
 //            boolean isFirst = true;
 //        }
 
+        offset = 0; // reset the offset
+        dataset.clear();
         makeRequestRetrofit();
+
+
         appBarLayout.setVisibility(View.VISIBLE);
         assignParent.setVisibility(View.VISIBLE);
 
@@ -467,7 +424,14 @@ public class ItemCategoriesParent extends AppCompatActivity
 
             if(currentCategoryID!=-1)
             {
+
+
+                dataset.clear();
+                offset = 0; // reset the offset
                 makeRequestRetrofit();
+
+
+
                 appBarLayout.setVisibility(View.VISIBLE);
                 assignParent.setVisibility(View.VISIBLE);
 
@@ -500,6 +464,8 @@ public class ItemCategoriesParent extends AppCompatActivity
     @Override
     public void notifyItemDeleted() {
 
+        offset = 0; // reset the offset
+        dataset.clear();
         makeRequestRetrofit();
     }
 
@@ -536,5 +502,32 @@ public class ItemCategoriesParent extends AppCompatActivity
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+        Icepick.saveInstanceState(this, outState);
+        outState.putParcelableArrayList("dataset",dataset);
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+
+        if (savedInstanceState != null) {
+
+            Icepick.restoreInstanceState(this, savedInstanceState);
+
+            ArrayList<ItemCategory> tempList = savedInstanceState.getParcelableArrayList("dataset");
+
+            dataset.clear();
+            dataset.addAll(tempList);
+
+            listAdapter.notifyDataSetChanged();
+        }
+
+
+    }
 }

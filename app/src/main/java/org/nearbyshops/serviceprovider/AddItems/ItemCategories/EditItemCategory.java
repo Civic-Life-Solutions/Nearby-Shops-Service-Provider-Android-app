@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +56,8 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
     @Bind(R.id.itemCategoryID) EditText itemCategoryID;
 
-    @Bind(R.id.itemCategoryName) EditText itemCategoryName;
+    @Bind(R.id.itemCategoryName)
+    TextInputEditText itemCategoryName;
 
     @Bind(R.id.itemCategoryDescription) EditText itemCategoryDescription;
 
@@ -80,11 +84,30 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
     ItemCategory itemCategoryForEdit;
 
 
+
+    // recently added
+
+    @Bind(R.id.descriptionShort)
+    EditText descriptionShort;
+
+    @Bind(R.id.isAbstractNode)
+    CheckBox isAbstractNode;
+
+    boolean isLeafExplainationOpen= false;
+    boolean isAbstractExplainationOpen = false;
+
+    TextView what_is_leaf_node;
+    TextView leaf_node_explaination;
+    TextView what_is_abstract_node;
+    ScrollView abstract_node_explaination;
+
+
+
+
     public EditItemCategory() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
-
     }
 
     @Override
@@ -97,8 +120,10 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
         itemCategoryForEdit = getIntent().getParcelableExtra(ITEM_CATEGORY_INTENT_KEY);
 
 
-
-
+        what_is_leaf_node = (TextView) findViewById(R.id.whatleaf);
+        leaf_node_explaination = (TextView) findViewById(R.id.leaf_node_explaination);
+        what_is_abstract_node = (TextView) findViewById(R.id.what_is_abstract_node);
+        abstract_node_explaination = (ScrollView) findViewById(R.id.scrollview_abstract_node_explanation);
 
 
         if(savedInstanceState==null) {
@@ -127,6 +152,43 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
 
 
+    @OnClick(R.id.whatleaf)
+    void whatLeafNodeClick()
+    {
+        if(!isLeafExplainationOpen)
+        {
+            leaf_node_explaination.setVisibility(View.VISIBLE);
+
+            isLeafExplainationOpen = true;
+        }
+        else
+        {
+            leaf_node_explaination.setVisibility(View.GONE);
+
+            isLeafExplainationOpen = false;
+        }
+    }
+
+    @OnClick(R.id.what_is_abstract_node)
+    void whatAbstractNodeClick() {
+
+        if (!isAbstractExplainationOpen) {
+
+            abstract_node_explaination.setVisibility(View.VISIBLE);
+
+            isAbstractExplainationOpen = true;
+        }
+        else
+        {
+            abstract_node_explaination.setVisibility(View.GONE);
+            isAbstractExplainationOpen = false;
+
+        }
+    }
+
+
+
+
     void loadImage(String imagePath) {
 
         Picasso.with(this)
@@ -146,6 +208,9 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
             itemCategoryDescription.setText(itemCategoryForEdit.getCategoryDescription());
 
             isLeafNode.setChecked(itemCategoryForEdit.getIsLeafNode());
+
+            isAbstractNode.setChecked(itemCategoryForEdit.getAbstractNode());
+            descriptionShort.setText(itemCategoryForEdit.getDescriptionShort());
         }
     }
 
@@ -158,6 +223,9 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
             itemCategory.setCategoryName(itemCategoryName.getText().toString());
             itemCategory.setCategoryDescription(itemCategoryDescription.getText().toString());
             itemCategory.setIsLeafNode(isLeafNode.isChecked());
+
+            itemCategory.setAbstractNode(isAbstractNode.isChecked());
+            itemCategory.setDescriptionShort(descriptionShort.getText().toString());
         }
 
     }

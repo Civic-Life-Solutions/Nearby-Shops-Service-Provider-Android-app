@@ -29,7 +29,6 @@ import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCropUtility;
-import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import java.io.File;
@@ -47,7 +46,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class EditItem extends AppCompatActivity implements Callback<Image>, AdapterView.OnItemSelectedListener {
+public class EditService extends AppCompatActivity implements Callback<Image>, AdapterView.OnItemSelectedListener {
 
 
     @Inject
@@ -127,7 +126,7 @@ public class EditItem extends AppCompatActivity implements Callback<Image>, Adap
     Service serviceForEdit;
 
 
-    public EditItem() {
+    public EditService() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
@@ -136,7 +135,7 @@ public class EditItem extends AppCompatActivity implements Callback<Image>, Adap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_item);
+        setContentView(R.layout.activity_edit_service);
 
         ButterKnife.bind(this);
 
@@ -375,7 +374,7 @@ public class EditItem extends AppCompatActivity implements Callback<Image>, Adap
 
                 if (response.code() == 200)
                 {
-                    Toast.makeText(EditItem.this,"Update Successful !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditService.this,"Update Successful !",Toast.LENGTH_SHORT).show();
                 }
             }
 

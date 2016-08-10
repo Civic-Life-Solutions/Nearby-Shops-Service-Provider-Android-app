@@ -1,6 +1,8 @@
 package org.nearbyshops.serviceprovider.RetrofitRESTContract;
 
 import org.nearbyshops.serviceprovider.Model.Item;
+import org.nearbyshops.serviceprovider.Model.ItemCategory;
+import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 
 import java.util.List;
 
@@ -20,22 +22,40 @@ import retrofit2.http.Query;
 public interface ItemService
 {
 
-    @GET("/api/Item")
+    @GET("/api/v1/Item/Depricated")
     Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID, @Query("ShopID") int shopID);
 
-    @GET("/api/Item")
+    @GET("/api/v1/Item/Depricated")
     Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID);
 
-    @GET("/api/Item/{id}")
+
+    @GET("/api/v1/Item")
+    Call<ItemEndPoint> getItems(
+            @Query("ItemCategoryID")Integer itemCategoryID,
+            @Query("ShopID")Integer shopID,
+            @Query("latCenter") Double latCenter, @Query("lonCenter") Double lonCenter,
+            @Query("deliveryRangeMax")Double deliveryRangeMax,
+            @Query("deliveryRangeMin")Double deliveryRangeMin,
+            @Query("proximity")Double proximity,
+            @Query("SortBy") String sortBy,
+            @Query("Limit")Integer limit, @Query("Offset")Integer offset,
+            @Query("metadata_only")Boolean metaonly
+    );
+
+
+    @GET("/api/v1/Item/{id}")
     Call<Item> getItem(@Path("id") int ItemID);
 
-    @POST("/api/Item")
+    @POST("/api/v1/Item")
     Call<Item> insertItem(@Body Item item);
 
-    @PUT("/api/Item/{id}")
+    @PUT("/api/v1/Item/{id}")
     Call<ResponseBody> updateItem(@Body Item item, @Path("id") int id);
 
-    @DELETE("/api/Item/{id}")
+    @PUT("/api/v1/Item/")
+    Call<ResponseBody> updateItemBulk(@Body List<Item> itemList);
+
+    @DELETE("/api/v1/Item/{id}")
     Call<ResponseBody> deleteItem(@Path("id") int id);
 
 }

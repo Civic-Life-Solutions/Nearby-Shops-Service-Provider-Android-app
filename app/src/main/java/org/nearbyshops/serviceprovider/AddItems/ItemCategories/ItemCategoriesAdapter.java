@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
+import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     List<ItemCategory> dataset;
 
     Context context;
-    ItemCategories activity;
+    ItemCategoriesFragment activity;
 
 
     ItemCategory requestedChangeParent = null;
@@ -70,7 +70,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
 
-    public ItemCategoriesAdapter(List<ItemCategory> dataset, Context context, ItemCategories activity, ItemCategoriesAdapter.NotificationReceiver notificationReceiver) {
+    public ItemCategoriesAdapter(List<ItemCategory> dataset, Context context, ItemCategoriesFragment activity, ItemCategoriesAdapter.NotificationReceiver notificationReceiver) {
 
 
         DaggerComponentBuilder.getInstance()
@@ -102,7 +102,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public void onBindViewHolder(ItemCategoriesAdapter.ViewHolder holder, final int position) {
 
         holder.categoryName.setText(dataset.get(position).getCategoryName());
-        holder.categoryDescription.setText(dataset.get(position).getCategoryDescription());
+        holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
 
         if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
         {

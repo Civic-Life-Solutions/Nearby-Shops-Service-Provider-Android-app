@@ -186,7 +186,7 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
 
                 }
 
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
             }
         });
 

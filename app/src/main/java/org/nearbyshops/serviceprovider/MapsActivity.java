@@ -85,8 +85,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         mMap.addMarker(new MarkerOptions().position(new LatLng(17.4500,78.4400)).title("Second point"));
-
-
-
     }
+
+
+
 }

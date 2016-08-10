@@ -1,30 +1,25 @@
 package org.nearbyshops.serviceprovider.AddItems.ItemCategories;
 
-import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
-import org.nearbyshops.serviceprovider.AddItems.OnSwipeTouchListener;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.Login;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
@@ -44,8 +39,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ItemCategories extends AppCompatActivity
-        implements  ItemCategoriesAdapter.NotificationReceiver{
+public class ItemCategoriesFragment extends Fragment
+        implements  ItemCategoriesAdapter.NotificationReceiver, SwipeRefreshLayout.OnRefreshListener, ItemCategoriesTabs.ReceiveNotificationFromTabsForItemCat {
 
     List<ItemCategory> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
@@ -80,7 +75,7 @@ public class ItemCategories extends AppCompatActivity
 
 
 
-    public ItemCategories() {
+    public ItemCategoriesFragment() {
         super();
 
         // Inject the dependencies using Dependency Injection
@@ -101,38 +96,51 @@ public class ItemCategories extends AppCompatActivity
     }
 
 
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_categories);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        ButterKnife.bind(this);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        super.onCreateView(inflater, container, savedInstanceState);
 
 
+        View rootView = inflater.inflate(R.layout.fragment_item_categories, container, false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ButterKnife.bind(this,rootView);
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        itemCategoriesList = (RecyclerView)rootView.findViewById(R.id.recyclerViewItemCategories);
+
+        setupRecyclerView();
+        setupSwipeContainer();
 
 
-        itemCategoriesList = (RecyclerView) findViewById(R.id.recyclerViewItemCategories);
-        listAdapter = new ItemCategoriesAdapter(dataset,this,this,this);
+        return  rootView;
+
+    }
+
+
+
+    void setupRecyclerView()
+    {
+
+
+        listAdapter = new ItemCategoriesAdapter(dataset,getActivity(),this,this);
 
         itemCategoriesList.setAdapter(listAdapter);
 
-        layoutManager = new GridLayoutManager(this,1);
+        layoutManager = new GridLayoutManager(getActivity(),1);
         itemCategoriesList.setLayoutManager(layoutManager);
 
 
 
         final DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
         layoutManager.setSpanCount(metrics.widthPixels/350);
-        //layoutManager.setSpanCount();
 
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -188,22 +196,21 @@ public class ItemCategories extends AppCompatActivity
 
         });
 
+    }
 
+    @Bind(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
 
-        //itemCategoriesList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
+    void setupSwipeContainer()
+    {
 
+        if(swipeContainer!=null) {
 
-
-
-        Log.d("applog",String.valueOf(metrics.widthPixels/250));
-
-
-        if (metrics.widthPixels >= 600 && (
-                getResources().getConfiguration().orientation
-                        == Configuration.ORIENTATION_PORTRAIT))
-        {
-            // in case of larger width of tables set the column count to 3
-            //layoutManager.setSpanCount(3);
+            swipeContainer.setOnRefreshListener(this);
+            swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
         }
 
     }
@@ -223,7 +230,7 @@ public class ItemCategories extends AppCompatActivity
 
 
             @Override
-            public void onResponse(Call<List<ItemCategory>> call, retrofit2.Response<List<ItemCategory>> response) {
+            public void onResponse(Call<List<ItemCategory>> call, Response<List<ItemCategory>> response) {
 
 
 
@@ -234,6 +241,7 @@ public class ItemCategories extends AppCompatActivity
                     dataset.addAll(response.body());
                 }
 
+                swipeContainer.setRefreshing(false);
                 listAdapter.notifyDataSetChanged();
 
             }
@@ -242,6 +250,8 @@ public class ItemCategories extends AppCompatActivity
             public void onFailure(Call<List<ItemCategory>> call, Throwable t) {
 
                 showToastMessage("Network request failed. Please check your connection !");
+
+                swipeContainer.setRefreshing(false);
 
             }
         });
@@ -252,7 +262,10 @@ public class ItemCategories extends AppCompatActivity
 
     private void showToastMessage(String message)
     {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+        if(getActivity()!=null)
+        {
+            Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -262,16 +275,31 @@ public class ItemCategories extends AppCompatActivity
         makeRequestRetrofit();
     }
 
-    @Override
-    protected void onResume() {
 
+    @Override
+    public void onResume() {
         super.onResume();
 
-        makeRequestRetrofit();
+
+        swipeContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeContainer.setRefreshing(true);
+
+                try {
+
+                    makeRequestRetrofit();
+
+                } catch (IllegalArgumentException ex)
+                {
+                    ex.printStackTrace();
+
+                }
+
+//                adapter.notifyDataSetChanged();
+            }
+        });
     }
-
-
-
 
 
     private boolean isRootCategory = true;
@@ -342,53 +370,14 @@ public class ItemCategories extends AppCompatActivity
 
 
 
-    @Override
-    public void onBackPressed() {
-
-        // clear the selected items when back button is pressed
-        listAdapter.selectedItems.clear();
-
-        if(currentCategory!=null)
-        {
-
-            if(categoryTree.size()>0) {
-
-                categoryTree.remove(categoryTree.size() - 1);
-                removeLastTab();
-            }
 
 
-            if(currentCategory.getParentCategory()!= null) {
-
-                currentCategory = currentCategory.getParentCategory();
-
-                currentCategoryID = currentCategory.getItemCategoryID();
-
-            }
-            else
-            {
-                currentCategoryID = currentCategory.getParentCategoryID();
-            }
 
 
-            if(currentCategoryID!=-1)
-            {
-                options.setVisibility(View.VISIBLE);
-                appBar.setVisibility(View.VISIBLE);
-                makeRequestRetrofit();
-            }
-        }
-
-        if(currentCategoryID == -1)
-        {
-            super.onBackPressed();
-        }
-
-    }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1)
@@ -483,7 +472,7 @@ public class ItemCategories extends AppCompatActivity
         ItemCategoriesParent.clearExcludeList();
         ItemCategoriesParent.excludeList.putAll(listAdapter.selectedItems);
 
-        Intent intentParent = new Intent(this, ItemCategoriesParent.class);
+        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
         startActivityForResult(intentParent,2,null);
     }
 
@@ -551,7 +540,7 @@ public class ItemCategories extends AppCompatActivity
 
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         ButterKnife.unbind(this);
@@ -561,7 +550,7 @@ public class ItemCategories extends AppCompatActivity
     @OnClick(R.id.addItemCategory)
     void addItemCategoryClick()
     {
-        Intent addIntent = new Intent(this, AddItemCategory.class);
+        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
 
         addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
 
@@ -569,6 +558,61 @@ public class ItemCategories extends AppCompatActivity
     }
 
 
+    @Override
+    public void onRefresh() {
+
+        makeRequestRetrofit();
+    }
+
+
+    @Override
+    public boolean backPressed() {
+
+        // clear the selected items when back button is pressed
+        listAdapter.selectedItems.clear();
+
+        if(currentCategory!=null)
+        {
+
+            if(categoryTree.size()>0) {
+
+                categoryTree.remove(categoryTree.size() - 1);
+                removeLastTab();
+            }
+
+
+            if(currentCategory.getParentCategory()!= null) {
+
+                currentCategory = currentCategory.getParentCategory();
+
+                currentCategoryID = currentCategory.getItemCategoryID();
+
+            }
+            else
+            {
+                currentCategoryID = currentCategory.getParentCategoryID();
+            }
+
+
+            if(currentCategoryID!=-1)
+            {
+                options.setVisibility(View.VISIBLE);
+                appBar.setVisibility(View.VISIBLE);
+                makeRequestRetrofit();
+            }
+        }
+
+        if(currentCategoryID == -1)
+        {
+//            super.onBackPressed();
+
+            return  true;
+        }else
+        {
+            return  false;
+        }
+
+    }
 
 }
 

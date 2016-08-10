@@ -26,7 +26,7 @@
         <activity
             android:name=".Home"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SavedConfigurations.ServiceConfigurationActivity"
             android:label="Saved Configurations"
@@ -52,7 +52,7 @@
                 android:value=".SavedConfigurations.ServiceConfigurationActivity" />
         </activity>
         <activity
-            android:name=".SavedConfigurations.EditItem"
+            android:name=".SavedConfigurations.EditService"
             android:label="Edit Service"
             android:parentActivityName=".SavedConfigurations.ServiceConfigurationActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -60,17 +60,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SavedConfigurations.ServiceConfigurationActivity" />
         </activity>
+
+
         <activity
-            android:name=".AddItems.ItemCategories.ItemCategories"
-            android:label="Item Categories"
-            android:parentActivityName=".Home"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Home" />
-        </activity>
-        <activity
-            android:name=".AddItems.ItemCategories.AddItemCategory"
+            android:name=".ItemCategoriesTabs.ItemCategories.AddItemCategory"
             android:label="Add Item Category"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -79,7 +72,7 @@
                 android:value=".Home" />
         </activity>
         <activity
-            android:name=".AddItems.ItemCategories.EditItemCategory"
+            android:name=".ItemCategoriesTabs.ItemCategories.EditItemCategory"
             android:label="Edit Item Category"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -90,7 +83,7 @@
         <activity
             android:name=".SelectParent.ItemCategoriesParent"
             android:label="Select Parent Category"
-            android:parentActivityName=".AddItems.ItemCategories.ItemCategories"
+            android:parentActivityName=".ItemCategoriesTabs.ItemCategoriesTabs"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -116,6 +109,48 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
+        <activity
+            android:name=".ItemCategoriesTabs.ItemCategoriesTabs"
+            android:label="@string/title_activity_item_categories_tabs"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+
+        <activity
+            android:name=".DetachedTabs.DetachedTabs"
+            android:label="@string/title_activity_item_categories_tabs"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+
+        <activity
+            android:name=".ItemCategoriesTabs.Items.AddItem"
+            android:label="Add Item"
+            android:parentActivityName=".ItemCategoriesTabs.ItemCategoriesTabs"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs" />
+        </activity>
+
+
+        <activity
+            android:name=".ItemCategoriesTabs.Items.EditItem"
+            android:label="Edit Item"
+            android:parentActivityName=".ItemCategoriesTabs.ItemCategoriesTabs"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs" />
+        </activity>
+
+
     </application>
 
 </manifest>

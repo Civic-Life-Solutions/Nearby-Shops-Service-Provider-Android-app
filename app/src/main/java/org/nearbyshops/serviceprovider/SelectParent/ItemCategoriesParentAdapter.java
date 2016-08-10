@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.AddItems.ItemCategories.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
@@ -227,21 +227,24 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
                 return;
             }
 
-            if (dataset.get(getLayoutPosition()).getIsLeafNode()) {
+
+
+            selectedPosition = null;
+            itemCategoriesParent.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+
+
+//            if (dataset.get(getLayoutPosition()).getIsLeafNode()) {
 
 //                Intent intent = new Intent(context, Items.class);
 //
 //                intent.putExtra(Items.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //
 //                context.startActivity(intent);
-            }
-            else
-            {
-
-                selectedPosition = null;
-
-                itemCategoriesParent.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
-            }
+//            }
+//            else
+//            {
+//
+//            }
 
 
         }
@@ -252,7 +255,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
         {
 
 
-            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
+            Call<ResponseBody> call = itemCategoryService
+                    .deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
 
             call.enqueue(new Callback<ResponseBody>() {
 
