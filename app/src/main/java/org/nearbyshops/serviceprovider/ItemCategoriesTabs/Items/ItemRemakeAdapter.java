@@ -117,11 +117,7 @@ public class ItemRemakeAdapter extends RecyclerView.Adapter<ItemRemakeAdapter.Vi
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
                 + dataset.get(position).getItemImageURL();
 
-        if(!dataset.get(position).getItemImageURL().equals(""))
-        {
-            Picasso.with(context).load(imagePath).into(holder.categoryImage);
-        }
-
+        Picasso.with(context).load(imagePath).into(holder.categoryImage);
 
 //        Log.d("applog",imagePath);
 

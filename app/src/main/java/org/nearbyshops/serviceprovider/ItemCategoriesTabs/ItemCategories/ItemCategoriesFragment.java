@@ -51,12 +51,9 @@ public class ItemCategoriesFragment extends Fragment
 
 
     ArrayList<ItemCategory> dataset = new ArrayList<>();
-
     RecyclerView itemCategoriesList;
     ItemCategoriesAdapter listAdapter;
-
     GridLayoutManager layoutManager;
-
 
     @State boolean show = false;
 
@@ -75,11 +72,6 @@ public class ItemCategoriesFragment extends Fragment
 
     FragmentsNotificationReceiver notificationReceiverFragment;
     NotifyPagerAdapter notifyPagerAdapter;
-
-
-
-    int currentCategoryID = 1; // the ID of root category is always supposed to be 1
-
 
     @State
     ItemCategory currentCategory = null;
@@ -189,7 +181,6 @@ public class ItemCategoriesFragment extends Fragment
 
     private int limit = 30;
     @State int offset = 0;
-
     @State int item_count = 0;
 
 
@@ -722,7 +713,7 @@ public class ItemCategoriesFragment extends Fragment
 
 //    private boolean isRootCategory = true;
 //
-    private ArrayList<String> categoryTree = new ArrayList<>();
+//    private ArrayList<String> categoryTree = new ArrayList<>();
 
 
 
@@ -730,22 +721,16 @@ public class ItemCategoriesFragment extends Fragment
     public void notifyRequestSubCategory(ItemCategory itemCategory) {
 
         ItemCategory temp = currentCategory;
-
         currentCategory = itemCategory;
-
-        currentCategoryID = itemCategory.getItemCategoryID();
-
         currentCategory.setParentCategory(temp);
 
-
-        categoryTree.add(currentCategory.getCategoryName());
+//        currentCategoryID = itemCategory.getItemCategoryID();
+//        categoryTree.add(currentCategory.getCategoryName());
 
         if(notificationReceiverFragment!=null)
         {
             notificationReceiverFragment.insertTab(currentCategory.getCategoryName());
         }
-
-
 
 
 //        if(isRootCategory) {
@@ -787,25 +772,25 @@ public class ItemCategoriesFragment extends Fragment
     @Override
     public boolean backPressed() {
 
+        int currentCategoryID = 1; // the ID of root category is always supposed to be 1
+
         // clear the selected items when back button is pressed
         listAdapter.selectedItems.clear();
 
         if(currentCategory!=null) {
 
-            if (categoryTree.size() > 0) {
+            /*if (categoryTree.size() > 0) {
 
-                categoryTree.remove(categoryTree.size() - 1);
+                categoryTree.remove(categoryTree.size() - 1)2;
+            }*/
 
-                if (notificationReceiverFragment != null) {
-                    notificationReceiverFragment.removeLastTab();
-                }
+            if (notificationReceiverFragment != null) {
+                notificationReceiverFragment.removeLastTab();
             }
-
 
             if (currentCategory.getParentCategory() != null) {
 
                 currentCategory = currentCategory.getParentCategory();
-
                 currentCategoryID = currentCategory.getItemCategoryID();
 
             } else {
@@ -814,9 +799,6 @@ public class ItemCategoriesFragment extends Fragment
 
 
             if (currentCategoryID != -1) {
-
-
-
 //                options.setVisibility(View.VISIBLE);
 //                appBar.setVisibility(View.VISIBLE);
 //                notificationReceiverFragment.showAppBar();
@@ -847,13 +829,9 @@ public class ItemCategoriesFragment extends Fragment
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-
         Icepick.saveInstanceState(this, outState);
-
-
         outState.putParcelableArrayList("dataset",dataset);
 //        outState.putParcelable("currentCat",currentCategory);
-
     }
 
 

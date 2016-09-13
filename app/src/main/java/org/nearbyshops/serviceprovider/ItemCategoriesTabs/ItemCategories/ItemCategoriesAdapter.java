@@ -119,10 +119,9 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
                 + dataset.get(position).getImagePath();
 
-        if(!dataset.get(position).getImagePath().equals(""))
-        {
+
             Picasso.with(context).load(imagePath).into(holder.categoryImage);
-        }
+
 
 
 //        Log.d("applog",imagePath);

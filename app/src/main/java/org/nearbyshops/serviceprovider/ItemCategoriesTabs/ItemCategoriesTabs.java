@@ -50,8 +50,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
 
         tabLayoutPager.setupWithViewPager(mViewPager);
 
-
-
     }
 
 
@@ -120,14 +118,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
 
 
 
-    public ReceiveNotificationFromTabsForItemCat getNotificationReceiver() {
-        return notificationReceiver;
-    }
-
-    public void setNotificationReceiver(ReceiveNotificationFromTabsForItemCat notificationReceiver) {
-        this.notificationReceiver = notificationReceiver;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -184,6 +174,10 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
     @Override
     public void removeLastTab() {
 
+        if(tabLayout.getTabCount()==0)
+        {
+            return;
+        }
 
         tabLayout.removeTabAt(tabLayout.getTabCount()-1);
         tabLayout.setScrollPosition(tabLayout.getTabCount()-1,0,true);
@@ -192,7 +186,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
         {
             tabLayout.setVisibility(View.GONE);
         }
-
     }
 
     @Override
@@ -224,4 +217,16 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
     public void setTabsNotificationReceiver(ReceiveNotificationFromTabsForItems tabsNotificationReceiver) {
         this.tabsNotificationReceiver = tabsNotificationReceiver;
     }
+
+
+
+    public ReceiveNotificationFromTabsForItemCat getNotificationReceiver() {
+        return notificationReceiver;
+    }
+
+    public void setNotificationReceiver(ReceiveNotificationFromTabsForItemCat notificationReceiver) {
+        this.notificationReceiver = notificationReceiver;
+    }
+
+
 }

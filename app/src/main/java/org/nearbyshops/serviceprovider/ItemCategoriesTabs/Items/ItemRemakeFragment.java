@@ -54,7 +54,6 @@ public class ItemRemakeFragment extends Fragment
     ItemRemakeAdapter listAdapter;
 
     GridLayoutManager layoutManager;
-
 //    @Inject
 //    ItemCategoryDataRouter dataRouter;
 
@@ -212,7 +211,6 @@ public class ItemRemakeFragment extends Fragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
 
                 if(dy > 20)
                 {
@@ -566,9 +564,7 @@ public class ItemRemakeFragment extends Fragment
     {
 //        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);
 
-
         Call<ResponseBody> call = itemService.updateItemBulk(list);
-
 //        Call<ResponseBody> call = null;
 //
 //
@@ -709,11 +705,8 @@ public class ItemRemakeFragment extends Fragment
         super.onSaveInstanceState(outState);
 
         Icepick.saveInstanceState(this,outState);
-
         outState.putParcelable("currentCategory",notifiedCurrentCategory);
-
         outState.putParcelableArrayList("dataset",dataset);
-
     }
 
 
@@ -726,16 +719,12 @@ public class ItemRemakeFragment extends Fragment
         if(savedInstanceState!=null)
         {
             notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
-
             ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
-
             dataset.clear();
             dataset.addAll(tempCat);
 
             notifyTitleChanged();
-
             listAdapter.notifyDataSetChanged();
         }
-
     }
 }

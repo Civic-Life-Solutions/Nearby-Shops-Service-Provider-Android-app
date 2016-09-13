@@ -80,6 +80,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
+
         <activity
             android:name=".SelectParent.ItemCategoriesParent"
             android:label="Select Parent Category"
