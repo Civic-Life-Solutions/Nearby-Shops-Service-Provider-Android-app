@@ -57,16 +57,11 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
     @Inject
     ItemCategoryService itemCategoryService;
 
-    List<ItemCategory> dataset;
-
-    Context context;
-    DetachedItemCatFragment activity;
-
-
-    ItemCategory requestedChangeParent = null;
-
-
-    ReceiveNotificationsFromAdapter notificationReceiver;
+    private List<ItemCategory> dataset;
+    private Context context;
+    private DetachedItemCatFragment activity;
+    private ItemCategory requestedChangeParent = null;
+    private ReceiveNotificationsFromAdapter notificationReceiver;
 
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
@@ -120,10 +115,10 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
                 + dataset.get(position).getImagePath();
 
-        if(!dataset.get(position).getImagePath().equals(""))
-        {
+//        if(dataset.get(position).getImagePath()!=null && !dataset.get(position).getImagePath().equals(""))
+//        {
             Picasso.with(context).load(imagePath).into(holder.categoryImage);
-        }
+//        }
 
 
 //        Log.d("applog",imagePath);

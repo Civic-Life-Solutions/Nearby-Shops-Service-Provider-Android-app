@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs;
+package org.nearbyshops.serviceprovider.DetachedTabs.Interfaces;
 
 /**
  * Created by sumeet on 28/6/16.

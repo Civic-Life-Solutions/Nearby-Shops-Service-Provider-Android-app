@@ -2,13 +2,11 @@
 <RelativeLayout
     android:animateLayoutChanges="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#22000000">
+<!--
 
     <android.support.design.widget.AppBarLayout
         android:animateLayoutChanges="true"
@@ -17,7 +15,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <!--
+        &lt;!&ndash;
         <android.support.v7.widget.Toolbar
 
             android:id="@+id/toolbar"
@@ -28,22 +26,26 @@
 
 
 
-        -->
+        &ndash;&gt;
 
-        <!--app:layout_scrollFlags = "scroll|enterAlways"-->
-        <!-- android:text="//Groceries\n\n- Rice \n- Basmati"-->
+        &lt;!&ndash;app:layout_scrollFlags = "scroll|enterAlways"&ndash;&gt;
+        &lt;!&ndash; android:text="//Groceries\n\n- Rice \n- Basmati"&ndash;&gt;
 
 
     </android.support.design.widget.AppBarLayout>
 
+-->
 
 
 
 
     <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
 
+<!--
 
     <RelativeLayout
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:id="@+id/options"
         android:layout_width="match_parent"
@@ -71,7 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <!--android:layout_margin="2dp"-->
+            &lt;!&ndash;android:layout_margin="2dp"&ndash;&gt;
             <TextView
                 android:id="@+id/changeParentBulk"
                 android:gravity="right|bottom"
@@ -95,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--android:layout_margin="2dp"-->
+            &lt;!&ndash;android:layout_margin="2dp"&ndash;&gt;
             <TextView
                 android:id="@+id/addItemCategory"
                 android:gravity="bottom|right"
@@ -111,7 +113,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
-            <!--android:layout_margin="2dp"-->
+            &lt;!&ndash;android:layout_margin="2dp"&ndash;&gt;
             <TextView
 
                 android:gravity="bottom|right"
@@ -130,21 +132,22 @@
         </LinearLayout>
 
     </RelativeLayout>
+-->
 
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_above="@id/options"
-        android:layout_below="@id/appbar"
+        android:animateLayoutChanges="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
-
             android:id="@+id/recyclerViewItemCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="2dp"/>
+            android:layout_height="match_parent" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

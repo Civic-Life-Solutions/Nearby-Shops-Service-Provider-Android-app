@@ -56,16 +56,11 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     @Inject
     ItemCategoryService itemCategoryService;
 
-    List<ItemCategory> dataset;
-
-    Context context;
-    ItemCategoriesFragment activity;
-
-
-    ItemCategory requestedChangeParent = null;
-
-
-    ReceiveNotificationsFromAdapter notificationReceiver;
+    private List<ItemCategory> dataset;
+    private Context context;
+    private ItemCategoriesFragment activity;
+    private ItemCategory requestedChangeParent = null;
+    private ReceiveNotificationsFromAdapter notificationReceiver;
 
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
@@ -105,6 +100,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         holder.categoryName.setText(String.valueOf(dataset.get(position).getItemCategoryID()) + ". " + dataset.get(position).getCategoryName());
         holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
 
+
+
         if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
         {
             holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.gplus_color_2));
@@ -120,11 +117,9 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
                 + dataset.get(position).getImagePath();
 
 
-            Picasso.with(context).load(imagePath).into(holder.categoryImage);
-
-
-
-//        Log.d("applog",imagePath);
+        Picasso.with(context).load(imagePath)
+                .placeholder(R.drawable.book_placeholder_image)
+                .into(holder.categoryImage);
 
     }
 
@@ -343,9 +338,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
                 case R.id.action_detach:
 
-
                     showToastMessage("Detach");
-
 
                     break;
 
@@ -366,14 +359,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
                     ItemCategoriesParent.excludeList
                             .put(requestedChangeParent.getItemCategoryID(),requestedChangeParent);
 
-
                     activity.startActivityForResult(intentParent,1,null);
-
-
                     break;
-
-
-
 
                 default:
 
@@ -400,7 +387,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public void notifyDelete()
     {
         activity.notifyDelete();
-
     }
 
 
@@ -409,7 +395,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         // method for notifying the list object to request sub category
         public void notifyRequestSubCategory(ItemCategory itemCategory);
         public void notifyItemCategorySelected();
-
     }
 
 
@@ -420,9 +405,5 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public ItemCategory getRequestedChangeParent() {
         return requestedChangeParent;
     }
-
-
-
-
 
 }

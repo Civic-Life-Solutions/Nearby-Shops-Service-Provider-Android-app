@@ -108,8 +108,10 @@ dependencies {
     compile 'frankiesardo:icepick:3.2.0'
     provided 'frankiesardo:icepick-processor:3.2.0'
 
+    // fab with menu
+    compile 'com.github.clans:fab:1.6.4'
 
 //    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
 
-
+    compile 'com.wunderlist:sliding-layer:1.2.5'
 }

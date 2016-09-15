@@ -15,14 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
-import org.nearbyshops.serviceprovider.DetachedTabs.FragmentsNotificationReceiver;
-import org.nearbyshops.serviceprovider.DetachedTabs.NotifyPagerAdapter;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.AddItemCategory;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyAssignParent;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyScroll;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.R;
@@ -37,7 +36,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 import okhttp3.ResponseBody;
@@ -46,17 +44,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DetachedItemCatFragment extends Fragment
-        implements DetachedItemCatAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener{
-
+        implements DetachedItemCatAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,NotifyAssignParent{
 
 
     ArrayList<ItemCategory> dataset = new ArrayList<>();
-
     RecyclerView itemCategoriesList;
     DetachedItemCatAdapter listAdapter;
-
     GridLayoutManager layoutManager;
-
 
     @State boolean show = false;
 
@@ -66,8 +60,8 @@ public class DetachedItemCatFragment extends Fragment
 //    @Bind(R.id.tablayout)
 //    TabLayout tabLayout;
 
-    @Bind(R.id.options)
-    RelativeLayout options;
+//    @Bind(R.id.options)
+//    RelativeLayout options;
 
     @Bind(R.id.appbar)
     AppBarLayout appBar;
@@ -129,15 +123,13 @@ public class DetachedItemCatFragment extends Fragment
         if(getActivity() instanceof DetachedTabs)
         {
             DetachedTabs activity = (DetachedTabs)getActivity();
-//            activity.setNotificationReceiver(this);
-//            Log.d("applog","DetachedItemFragment: Fragment Recreated");
+            activity.assignParentItemCategory = this;
         }
 
 
         if(getActivity() instanceof FragmentsNotificationReceiver)
         {
             DetachedTabs activity = (DetachedTabs)getActivity();
-
             this.notificationReceiverFragment = (FragmentsNotificationReceiver) activity;
         }
 
@@ -227,6 +219,12 @@ public class DetachedItemCatFragment extends Fragment
                 super.onScrolled(recyclerView, dx, dy);
 
 
+                if(getActivity() instanceof NotifyScroll)
+                {
+                    ((NotifyScroll) getActivity()).scrolled(dx,dy);
+                }
+
+
                 if(dy > 20)
                 {
 
@@ -238,11 +236,6 @@ public class DetachedItemCatFragment extends Fragment
                     {
                         // changed
                         Log.d("scrolllog","show");
-
-//                        options.animate().translationX(metrics.widthPixels-10);
-//                        options.animate().translationY(200);
-
-                        options.setVisibility(View.VISIBLE);
 
                         notificationReceiverFragment.showAppBar();
                     }
@@ -265,7 +258,7 @@ public class DetachedItemCatFragment extends Fragment
 
 //                        options.animate().translationY(0);
 
-                        options.setVisibility(View.GONE);
+
                         notificationReceiverFragment.hideAppBar();
                     }
                 }
@@ -300,13 +293,6 @@ public class DetachedItemCatFragment extends Fragment
 
     public void makeRequestRetrofit(Boolean parentIsNull)
     {
-
-//        Call<List<ItemCategory>> itemCategoryCall2 = itemCategoryService
-//                .getItemCategories(currentCategory.getItemCategoryID());
-
-
-//        Call<List<ItemCategory>> itemCategoryCall = itemCategoryService.getItemCategories(
-//                null,currentCategory.getItemCategoryID(),null,null,null,null,null,null,"id",limit,offset);
 
         Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
                 null,null,
@@ -390,33 +376,6 @@ public class DetachedItemCatFragment extends Fragment
         offset = 0 ; // reset the offset
         makeRequestRetrofit(true);
     }
-
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//
-//        swipeContainer.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeContainer.setRefreshing(true);
-//
-//                try {
-//
-//                    makeRequestRetrofit();
-//
-//                } catch (IllegalArgumentException ex)
-//                {
-//                    ex.printStackTrace();
-//
-//                }
-//
-////                adapter.notifyDataSetChanged();
-//            }
-//        });
-//    }
-
 
 
 
@@ -503,7 +462,8 @@ public class DetachedItemCatFragment extends Fragment
     }
 
 
-    @OnClick(R.id.changeParentBulk)
+
+
     void changeParentBulk()
     {
 
@@ -594,13 +554,6 @@ public class DetachedItemCatFragment extends Fragment
     void exitFullscreen()
     {
 
-
-//                options.setVisibility(View.VISIBLE);
-//                appBar.setVisibility(View.VISIBLE);
-//                notificationReceiverFragment.showAppBar();
-
-
-        options.setVisibility(View.VISIBLE);
         notificationReceiverFragment.showAppBar();
 
         if(show)
@@ -623,150 +576,20 @@ public class DetachedItemCatFragment extends Fragment
     }
 
 
-    /*@OnClick(R.id.addItemCategory)
-    void addItemCategoryClick()
-    {
-        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
 
-        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-
-        startActivity(addIntent);
-    }
-*/
 
     @Override
     public void onRefresh() {
 
         // reset the offset and make a network call
         offset = 0;
-
         dataset.clear();
         makeRequestRetrofit(true);
     }
 
 
-//    private boolean isRootCategory = true;
-//
-//    private ArrayList<String> categoryTree = new ArrayList<>();
 
 
-
-  /*  @Override
-    public void notifyRequestSubCategory(ItemCategory itemCategory) {
-
-        ItemCategory temp = currentCategory;
-
-        currentCategory = itemCategory;
-
-        currentCategoryID = itemCategory.getItemCategoryID();
-
-        currentCategory.setParentCategory(temp);
-
-
-        categoryTree.add(currentCategory.getCategoryName());
-
-        if(notificationReceiverFragment!=null)
-        {
-            notificationReceiverFragment.insertTab(currentCategory.getCategoryName());
-        }
-
-
-
-
-//        if(isRootCategory) {
-//
-//            isRootCategory = false;
-//
-//        }else
-//        {
-//            boolean isFirst = true;
-//        }
-
-
-
-
-
-//        options.setVisibility(View.VISIBLE);
-//        notificationReceiverFragment.showAppBar();
-//        appBar.setVisibility(View.VISIBLE);
-
-
-
-        dataset.clear();
-        offset = 0 ; // reset the offset
-        makeRequestRetrofit(false);
-
-//        exitFullscreen();
-
-//        notificationReceiverFragment.showAppBar();
-
-        if(!currentCategory.getAbstractNode())
-        {
-            notificationReceiverFragment.notifySwipeToright();
-        }
-
-
-    }
-*/
-
-  /*  @Override
-    public boolean backPressed() {
-
-        // clear the selected items when back button is pressed
-        listAdapter.selectedItems.clear();
-
-        if(currentCategory!=null) {
-
-            if (categoryTree.size() > 0) {
-
-                categoryTree.remove(categoryTree.size() - 1);
-
-                if (notificationReceiverFragment != null) {
-                    notificationReceiverFragment.removeLastTab();
-                }
-            }
-
-
-            if (currentCategory.getParentCategory() != null) {
-
-                currentCategory = currentCategory.getParentCategory();
-
-                currentCategoryID = currentCategory.getItemCategoryID();
-
-            } else {
-                currentCategoryID = currentCategory.getParentCategoryID();
-            }
-
-
-            if (currentCategoryID != -1) {
-
-
-
-//                options.setVisibility(View.VISIBLE);
-//                appBar.setVisibility(View.VISIBLE);
-//                notificationReceiverFragment.showAppBar();
-
-//                exitFullscreen();
-
-                dataset.clear();
-                offset =0; // reset the offset
-                makeRequestRetrofit(false);
-            }
-
-        }
-
-        if(currentCategoryID == -1)
-        {
-//            super.onBackPressed();
-
-            return  true;
-        }else
-        {
-            return  false;
-        }
-
-    }
-*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -801,19 +624,12 @@ public class DetachedItemCatFragment extends Fragment
         super.onViewStateRestored(savedInstanceState);
 
 
-
         if (savedInstanceState != null) {
-
             Icepick.restoreInstanceState(this, savedInstanceState);
-
-
             ArrayList<ItemCategory> tempList = savedInstanceState.getParcelableArrayList("dataset");
-
             dataset.clear();
             dataset.addAll(tempList);
-
             notifyTitleChanged();
-
             listAdapter.notifyDataSetChanged();
 //
 //            currentCategory = savedInstanceState.getParcelable("currentCat");
@@ -823,4 +639,9 @@ public class DetachedItemCatFragment extends Fragment
 
 
 
+
+    @Override
+    public void assignParentClick() {
+        changeParentBulk();
+    }
 }

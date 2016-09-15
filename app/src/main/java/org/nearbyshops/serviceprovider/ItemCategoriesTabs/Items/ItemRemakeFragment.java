@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,13 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.FragmentsNotificationReceiver;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.NotifyPagerAdapter;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
@@ -36,7 +36,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 import okhttp3.ResponseBody;
@@ -45,7 +44,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemRemakeFragment extends Fragment
-        implements  ItemRemakeAdapter.NotificationReceiver, SwipeRefreshLayout.OnRefreshListener, ItemCategoriesTabs.ReceiveNotificationFromTabsForItems {
+        implements  ItemRemakeAdapter.NotificationReceiver,
+        SwipeRefreshLayout.OnRefreshListener,
+        ItemCategoriesTabs.ReceiveNotificationFromTabsForItems, NotifyFabClick_Item{
 
     public static final String ADD_ITEM_INTENT_KEY = "add_item_intent_key";
 
@@ -54,29 +55,18 @@ public class ItemRemakeFragment extends Fragment
     ItemRemakeAdapter listAdapter;
 
     GridLayoutManager layoutManager;
-//    @Inject
-//    ItemCategoryDataRouter dataRouter;
 
 
-    @State boolean show = false;
+    @State boolean show = true;
 //    boolean isDragged = false;
 
     @Inject
     ItemService itemService;
 
-//    @Bind(R.id.tablayout)
-//    TabLayout tabLayout;
 
-    @Bind(R.id.options)
-    RelativeLayout options;
+    NotifyGeneral notificationReceiverFragment;
 
-    @Bind(R.id.appbar)
-    AppBarLayout appBar;
-
-
-    FragmentsNotificationReceiver notificationReceiverFragment;
-
-    NotifyPagerAdapter notifyPagerAdapter;
+    NotifyTitleChanged notifyTitleChanged;
 
 
 
@@ -129,18 +119,19 @@ public class ItemRemakeFragment extends Fragment
         {
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
             activity.setTabsNotificationReceiver(this);
+            activity.notifyFabClick_item = this;
         }
 
-        if(getActivity() instanceof FragmentsNotificationReceiver)
+        if(getActivity() instanceof NotifyGeneral)
         {
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
 
-            this.notificationReceiverFragment = (FragmentsNotificationReceiver) activity;
+            this.notificationReceiverFragment = (NotifyGeneral) activity;
         }
 
-        if(getActivity() instanceof NotifyPagerAdapter)
+        if(getActivity() instanceof NotifyTitleChanged)
         {
-            notifyPagerAdapter = (NotifyPagerAdapter)getActivity();
+            notifyTitleChanged = (NotifyTitleChanged)getActivity();
         }
 
 
@@ -224,34 +215,26 @@ public class ItemRemakeFragment extends Fragment
                         // changed
                         Log.d("scrolllog","show");
 
-//                        options.animate().translationX(metrics.widthPixels-10);
-//                        options.animate().translationY(200);
+                        if(getActivity() instanceof ToggleFab){
+                            ((ToggleFab)getActivity()).hideFab();
+                        }
 
-                        options.setVisibility(View.VISIBLE);
-
-                        notificationReceiverFragment.showAppBar();
                     }
 
                 }else if(dy < -20)
                 {
 
                     boolean previous = show;
-
                     show = true;
-
-
 
                     if(show!=previous)
                     {
                         // changed
-//                        options.setVisibility(View.VISIBLE);
-//                        options.animate().translationX(0);
                         Log.d("scrolllog","hide");
-
-//                        options.animate().translationY(0);
-
-                        options.setVisibility(View.GONE);
-                        notificationReceiverFragment.hideAppBar();
+                        if(getActivity() instanceof ToggleFab)
+                        {
+                            ((ToggleFab)getActivity()).showFab();
+                        }
                     }
                 }
 
@@ -314,9 +297,9 @@ public class ItemRemakeFragment extends Fragment
                 swipeContainer.setRefreshing(false);
                 listAdapter.notifyDataSetChanged();
 
-                if(notifyPagerAdapter!=null)
+                if(notifyTitleChanged !=null)
                 {
-//                    notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(item_count) + ")",1);
+//                    notifyTitleChanged.NotifyTitleChanged("Items (" + String.valueOf(item_count) + ")",1);
                     notifyTitleChanged();
                 }
 
@@ -330,47 +313,6 @@ public class ItemRemakeFragment extends Fragment
 
             }
         });
-
-
-        /*Call<List<Item>> itemCategoryCall = itemService.getItems(notifiedCurrentCategory.getItemCategoryID());
-
-
-        itemCategoryCall.enqueue(new Callback<List<Item>>() {
-            @Override
-            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
-
-//                dataset.clear();
-
-
-
-
-
-                if(response.body()!=null) {
-
-                    dataset.addAll(response.body());
-                }
-
-                swipeContainer.setRefreshing(false);
-                listAdapter.notifyDataSetChanged();
-
-                if(notifyPagerAdapter!=null)
-                {
-                    notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + ")",1);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Item>> call, Throwable t) {
-
-                showToastMessage("Network request failed. Please check your connection !");
-
-                swipeContainer.setRefreshing(false);
-
-            }
-        });
-*/
-
     }
 
 
@@ -387,45 +329,9 @@ public class ItemRemakeFragment extends Fragment
 
     void notifyDelete()
     {
-//        dataset.clear();
-//        offset = 0; // reset the offset
-//        makeRequestRetrofit();
-
         onRefresh();
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-
-//        swipeContainer.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeContainer.setRefreshing(true);
-//
-//                try {
-//
-//                    makeRequestRetrofit();
-//
-//                } catch (IllegalArgumentException ex)
-//                {
-//                    ex.printStackTrace();
-//
-//                }
-//            }
-//        });
-
-
-
-    }
-
-
-//    private boolean isRootCategory = true;
-//
-//    private ArrayList<String> categoryTree = new ArrayList<>();
 
 
 
@@ -511,10 +417,6 @@ public class ItemRemakeFragment extends Fragment
                 {
                     showToastMessage("Change Parent Successful !");
 
-//                    dataset.clear();
-//                    offset = 0 ; // reset the offset
-//                    makeRequestRetrofit();
-
                     onRefresh();
 
                 }else
@@ -538,7 +440,7 @@ public class ItemRemakeFragment extends Fragment
     }
 
 
-    @OnClick(R.id.changeParentBulk)
+
     void changeParentBulk()
     {
 
@@ -619,26 +521,15 @@ public class ItemRemakeFragment extends Fragment
     }
 
 
-    void exitFullScreen()
-    {
-        options.setVisibility(View.VISIBLE);
-        notificationReceiverFragment.showAppBar();
-
-
-        if(show)
-        {
-            show= false;
-        }else
-        {
-            show=true;
-        }
-    }
 
     @Override
-    public void notifyItemCategorySelected() {
+    public void notifyItemSelected() {
 
-        exitFullScreen();
-
+        // show fab if it is hidden
+        if(getActivity() instanceof ToggleFab)
+        {
+            ((ToggleFab)getActivity()).showFab();
+        }
     }
 
 
@@ -651,20 +542,6 @@ public class ItemRemakeFragment extends Fragment
     }
 
 
-    @OnClick(R.id.addItemCategory)
-    void addItemCategoryClick()
-    {
-        Intent addIntent = new Intent(getActivity(), AddItem.class);
-
-        addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
-
-        startActivity(addIntent);
-
-//        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-//
-//        startActivity(addIntent);
-
-    }
 
 
     @Override
@@ -683,10 +560,6 @@ public class ItemRemakeFragment extends Fragment
     public void itemCategoryChanged(ItemCategory currentCategory) {
 
         notifiedCurrentCategory = currentCategory;
-
-//        dataset.clear();
-//        makeRequestRetrofit();
-
         onRefresh();
     }
 
@@ -694,9 +567,9 @@ public class ItemRemakeFragment extends Fragment
 
     void notifyTitleChanged()
     {
-        if(notifyPagerAdapter!=null)
+        if(notifyTitleChanged !=null)
         {
-            notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count) + ")",1);
+            notifyTitleChanged.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count) + ")",1);
         }
     }
 
@@ -727,4 +600,34 @@ public class ItemRemakeFragment extends Fragment
             listAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void detachSelectedClick() {
+
+    }
+
+    @Override
+    public void changeParentForSelected() {
+
+        changeParentBulk();
+    }
+
+    @Override
+    public void addItem() {
+        addItemClick();
+    }
+
+    @Override
+    public void addfromGlobal() {
+
+    }
+
+
+    void addItemClick()
+    {
+        Intent addIntent = new Intent(getActivity(), AddItem.class);
+        addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
+        startActivity(addIntent);
+    }
+
 }

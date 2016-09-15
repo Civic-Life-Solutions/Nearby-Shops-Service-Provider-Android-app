@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DetachedTabs;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,11 +1,12 @@
-package org.nearbyshops.serviceprovider.DetachedTabs;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
-import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.PlaceholderFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
 
 /**
  * Created by sumeet on 27/6/16.
@@ -15,20 +16,20 @@ import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class PagerAdapter extends FragmentPagerAdapter {
 
 //    DetachedTabs activity;
 
-    public SectionsPagerAdapter(FragmentManager fm, DetachedTabs activity) {
+    public PagerAdapter(FragmentManager fm, ItemCategoriesTabs activity) {
         super(fm);
 
 //        this.activity = activity;
     }
 
 
-    DetachedItemCatFragment detachedItemCatFragment;
+    private ItemCategoriesFragment itemCategoriesFragment = new ItemCategoriesFragment();
 
-    DetachedItemFragment detachedItemFragment;
+    private ItemRemakeFragment itemRemakeFragment = new ItemRemakeFragment();;
 
     @Override
     public Fragment getItem(int position) {
@@ -39,18 +40,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         if(position == 0)
         {
-            detachedItemCatFragment = new DetachedItemCatFragment();
+//            activity.setNotificationReceiver(itemCategoriesFragment);
 
-//            activity.setNotificationReceiver(detachedItemCatFragment);
-
-            return detachedItemCatFragment;
+            return itemCategoriesFragment;
         }
         else if (position == 1)
         {
 
-            detachedItemFragment = new DetachedItemFragment();
-
-            return detachedItemFragment;
+            return itemRemakeFragment;
         }
 
 
@@ -68,9 +65,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
 
             case 0:
-                return titleDetachedItemCategories;
+                return titleCategories;
             case 1:
-                return titleDetachedItems;
+                return titleItems;
             case 2:
                 return titleDetachedItemCategories;
             case 3:
@@ -81,34 +78,29 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
 
-    String titleCategories = "Sub-Categories (0)";
-    String titleItems = "Items (0)";
-    String titleDetachedItemCategories = "Detached Item-Categories (0/0)";
-    String titleDetachedItems = "Detached Items (0/0)";
+    private String titleCategories = "Sub-Categories (0)";
+    private String titleItems = "Items (0)";
+    private String titleDetachedItemCategories = "Detached Item-Categories (0/0)";
+    private String titleDetachedItems = "Detached Items (0/0)";
 
 
     public void setTitle(String title, int tabPosition)
     {
         if(tabPosition == 0){
 
-
-            titleDetachedItemCategories = title;
-
+            titleCategories = title;
         }
         else if (tabPosition == 1)
         {
-            titleDetachedItems = title;
 
-
+            titleItems = title;
         }else if(tabPosition == 2)
         {
-            titleCategories = title;
-
+            titleDetachedItemCategories = title;
 
         }else if(tabPosition == 3)
         {
-            titleItems = title;
-
+            titleDetachedItems = title;
         }
 
 

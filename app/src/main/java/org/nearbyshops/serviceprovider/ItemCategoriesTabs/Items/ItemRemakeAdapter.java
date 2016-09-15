@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
@@ -177,7 +176,7 @@ public class ItemRemakeAdapter extends RecyclerView.Adapter<ItemRemakeAdapter.Vi
 
                 selectedItems.put(dataset.get(getLayoutPosition()).getItemID(),dataset.get(getLayoutPosition()));
 
-                notificationReceiver.notifyItemCategorySelected();
+                notificationReceiver.notifyItemSelected();
             }
 
 
@@ -383,7 +382,7 @@ public class ItemRemakeAdapter extends RecyclerView.Adapter<ItemRemakeAdapter.Vi
         // method for notifying the list object to request sub category
 //        public void notifyRequestSubCategory(ItemCategory itemCategory);
 
-        public void notifyItemCategorySelected();
+        public void notifyItemSelected();
 
     }
 

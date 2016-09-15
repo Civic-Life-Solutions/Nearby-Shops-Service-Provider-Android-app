@@ -10,16 +10,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyAssignParent;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyScroll;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class DetachedTabs extends AppCompatActivity implements FragmentsNotificationReceiver, NotifyPagerAdapter {
+public class DetachedTabs extends AppCompatActivity implements FragmentsNotificationReceiver, NotifyPagerAdapter, NotifyScroll {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private PagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
 //    private ReceiveNotificationFromTabsForItemCat notificationReceiver;
@@ -31,10 +37,14 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
     @Bind(R.id.tablayoutPager)
     TabLayout tabLayoutPager;
 
+    public NotifyAssignParent assignParentItemCategory;
+    public NotifyAssignParent assignParentItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_categories_tabs);
+        setContentView(R.layout.activity_item_categories_tabs_detached);
+
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,16 +52,13 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),this);
+        mSectionsPagerAdapter = new PagerAdapter(getSupportFragmentManager(),this);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         tabLayoutPager.setupWithViewPager(mViewPager);
-
-
-
     }
 
 
@@ -161,14 +168,14 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
     @Override
     public void showAppBar() {
 
-        appBar.setVisibility(View.VISIBLE);
+//        appBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideAppBar() {
 
 
-        appBar.setVisibility(View.GONE);
+//        appBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -205,6 +212,7 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
 
 
 
+
     public interface ReceiveNotificationFromTabsForItems {
 
         void itemCategoryChanged(ItemCategory currentCategory);
@@ -226,4 +234,46 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
     public void setTabsNotificationReceiver(ReceiveNotificationFromTabsForItems tabsNotificationReceiver) {
         this.tabsNotificationReceiver = tabsNotificationReceiver;
     }
+
+
+
+
+    @OnClick(R.id.changeParentBulk)
+    void assignParentButtonClick()
+    {
+        if(mViewPager.getCurrentItem()==0)
+        {
+            if(assignParentItemCategory!=null)
+            {
+                assignParentItemCategory.assignParentClick();
+            }
+        }
+    }
+
+
+
+    @Bind(R.id.options)
+    RelativeLayout options;
+
+
+    @Override
+    public void scrolled(int dx, int dy) {
+
+
+        if((options.getTranslationY()+dy) >= 0 && (options.getTranslationY() + dy) < options.getHeight())
+        {
+            options.setTranslationY(options.getTranslationY() + dy);
+
+        }
+        else if((options.getTranslationY()+dy)<0)
+        {
+            options.setTranslationY(0);
+        }
+        else if((options.getTranslationY()+dy)>options.getHeight())
+        {
+            options.setTranslationY(options.getHeight());
+        }
+    }
+
+
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,13 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
-import org.nearbyshops.serviceprovider.DetachedTabs.FragmentsNotificationReceiver;
-import org.nearbyshops.serviceprovider.DetachedTabs.NotifyPagerAdapter;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.AddItem;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -66,23 +64,9 @@ public class DetachedItemFragment extends Fragment
     @Inject
     ItemService itemService;
 
-//    @Bind(R.id.tablayout)
-//    TabLayout tabLayout;
-
-    @Bind(R.id.options)
-    RelativeLayout options;
-
-    @Bind(R.id.appbar)
-    AppBarLayout appBar;
-
 
     FragmentsNotificationReceiver notificationReceiverFragment;
-
     NotifyPagerAdapter notifyPagerAdapter;
-
-
-
-
     @State ItemCategory notifiedCurrentCategory = null;
 
 
@@ -90,8 +74,6 @@ public class DetachedItemFragment extends Fragment
     private int limit = 30;
     @State int offset = 0;
     @State int item_count = 0;
-
-
 
     public DetachedItemFragment() {
         super();
@@ -116,7 +98,7 @@ public class DetachedItemFragment extends Fragment
         super.onCreateView(inflater, container, savedInstanceState);
 
 
-        View rootView = inflater.inflate(R.layout.fragment_item_remake, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_item_detached, container, false);
 
         ButterKnife.bind(this,rootView);
 
@@ -136,7 +118,6 @@ public class DetachedItemFragment extends Fragment
         if(getActivity() instanceof FragmentsNotificationReceiver)
         {
             DetachedTabs activity = (DetachedTabs)getActivity();
-
             this.notificationReceiverFragment = (FragmentsNotificationReceiver) activity;
         }
 
@@ -163,9 +144,7 @@ public class DetachedItemFragment extends Fragment
         }
 
 
-
         return  rootView;
-
     }
 
 
@@ -229,10 +208,6 @@ public class DetachedItemFragment extends Fragment
 
 //                        options.animate().translationX(metrics.widthPixels-10);
 //                        options.animate().translationY(200);
-
-                        options.setVisibility(View.VISIBLE);
-
-                        notificationReceiverFragment.showAppBar();
                     }
 
                 }else if(dy < -20)
@@ -247,14 +222,8 @@ public class DetachedItemFragment extends Fragment
                     if(show!=previous)
                     {
                         // changed
-//                        options.setVisibility(View.VISIBLE);
-//                        options.animate().translationX(0);
-                        Log.d("scrolllog","hide");
+//                      Log.d("scrolllog","hide");
 
-//                        options.animate().translationY(0);
-
-                        options.setVisibility(View.GONE);
-                        notificationReceiverFragment.hideAppBar();
                     }
                 }
 
@@ -333,47 +302,6 @@ public class DetachedItemFragment extends Fragment
 
             }
         });
-
-
-        /*Call<List<Item>> itemCategoryCall = itemService.getItems(notifiedCurrentCategory.getItemCategoryID());
-
-
-        itemCategoryCall.enqueue(new Callback<List<Item>>() {
-            @Override
-            public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
-
-//                dataset.clear();
-
-
-
-
-
-                if(response.body()!=null) {
-
-                    dataset.addAll(response.body());
-                }
-
-                swipeContainer.setRefreshing(false);
-                listAdapter.notifyDataSetChanged();
-
-                if(notifyPagerAdapter!=null)
-                {
-                    notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + ")",1);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Item>> call, Throwable t) {
-
-                showToastMessage("Network request failed. Please check your connection !");
-
-                swipeContainer.setRefreshing(false);
-
-            }
-        });
-*/
-
     }
 
 
@@ -390,45 +318,8 @@ public class DetachedItemFragment extends Fragment
 
     void notifyDelete()
     {
-//        dataset.clear();
-//        offset = 0; // reset the offset
-//        makeRequestRetrofit();
-
         onRefresh();
     }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-
-//        swipeContainer.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeContainer.setRefreshing(true);
-//
-//                try {
-//
-//                    makeRequestRetrofit();
-//
-//                } catch (IllegalArgumentException ex)
-//                {
-//                    ex.printStackTrace();
-//
-//                }
-//            }
-//        });
-
-
-
-    }
-
-
-//    private boolean isRootCategory = true;
-//
-//    private ArrayList<String> categoryTree = new ArrayList<>();
 
 
 
@@ -502,8 +393,6 @@ public class DetachedItemFragment extends Fragment
     void makeUpdateRequest(Item item)
     {
 
-//        Call<ResponseBody> call2 = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
-
         Call<ResponseBody> call = itemService.updateItem(item,item.getItemID());
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -513,10 +402,6 @@ public class DetachedItemFragment extends Fragment
                 if(response.code() == 200)
                 {
                     showToastMessage("Change Parent Successful !");
-
-//                    dataset.clear();
-//                    offset = 0 ; // reset the offset
-//                    makeRequestRetrofit();
 
                     onRefresh();
 
@@ -541,7 +426,7 @@ public class DetachedItemFragment extends Fragment
     }
 
 
-    @OnClick(R.id.changeParentBulk)
+
     void changeParentBulk()
     {
 
@@ -565,14 +450,10 @@ public class DetachedItemFragment extends Fragment
 
     void makeRequestBulk(final List<Item> list)
     {
-//        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);
 
 
         Call<ResponseBody> call = itemService.updateItemBulk(list);
 
-//        Call<ResponseBody> call = null;
-//
-//
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -598,10 +479,6 @@ public class DetachedItemFragment extends Fragment
                     showToastMessage("Unknown server error or response !");
                 }
 
-
-
-//                makeRequestRetrofit();
-
                 onRefresh();
             }
 
@@ -624,25 +501,9 @@ public class DetachedItemFragment extends Fragment
     }
 
 
-    void exitFullScreen()
-    {
-        options.setVisibility(View.VISIBLE);
-        notificationReceiverFragment.showAppBar();
-
-
-        if(show)
-        {
-            show= false;
-        }else
-        {
-            show=true;
-        }
-    }
 
     @Override
     public void notifyItemCategorySelected() {
-
-        exitFullScreen();
 
     }
 
@@ -656,19 +517,11 @@ public class DetachedItemFragment extends Fragment
     }
 
 
-    @OnClick(R.id.addItemCategory)
     void addItemCategoryClick()
     {
         Intent addIntent = new Intent(getActivity(), AddItem.class);
-
         addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
-
         startActivity(addIntent);
-
-//        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-//
-//        startActivity(addIntent);
-
     }
 
 
@@ -688,10 +541,6 @@ public class DetachedItemFragment extends Fragment
     public void itemCategoryChanged(ItemCategory currentCategory) {
 
         notifiedCurrentCategory = currentCategory;
-
-//        dataset.clear();
-//        makeRequestRetrofit();
-
         onRefresh();
     }
 
@@ -729,12 +578,9 @@ public class DetachedItemFragment extends Fragment
             notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
 
             ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
-
             dataset.clear();
             dataset.addAll(tempCat);
-
             notifyTitleChanged();
-
             listAdapter.notifyDataSetChanged();
         }
 

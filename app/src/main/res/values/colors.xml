@@ -8,10 +8,18 @@
 
     -->
 
+    <!--
 
+    Green /
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF5722</color>
+    -->
+
+    <color name="colorPrimary">#607D8B</color>
+    <color name="colorPrimaryDark">#455A64</color>
+    <color name="colorAccent">#FF9800</color>
+
 
     <color name="white">#FFFFFF</color>
     <color name="buttonColor">#037BA3</color>

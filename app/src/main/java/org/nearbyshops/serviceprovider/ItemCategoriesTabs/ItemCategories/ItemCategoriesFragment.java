@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -17,12 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.FragmentsNotificationReceiver;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.NotifyPagerAdapter;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.R;
@@ -37,7 +37,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 import okhttp3.ResponseBody;
@@ -46,8 +45,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemCategoriesFragment extends Fragment
-        implements ItemCategoriesAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener, ItemCategoriesTabs.ReceiveNotificationFromTabsForItemCat {
-
+        implements ItemCategoriesAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,
+        ItemCategoriesTabs.ReceiveNotificationFromTabsForItemCat,
+        NotifyFabClick_ItemCategories {
 
 
     ArrayList<ItemCategory> dataset = new ArrayList<>();
@@ -55,23 +55,12 @@ public class ItemCategoriesFragment extends Fragment
     ItemCategoriesAdapter listAdapter;
     GridLayoutManager layoutManager;
 
-    @State boolean show = false;
+    @State boolean show = true;
 
     @Inject
     ItemCategoryService itemCategoryService;
 
-//    @Bind(R.id.tablayout)
-//    TabLayout tabLayout;
-
-    @Bind(R.id.options)
-    RelativeLayout options;
-
-    @Bind(R.id.appbar)
-    AppBarLayout appBar;
-
-
-    FragmentsNotificationReceiver notificationReceiverFragment;
-    NotifyPagerAdapter notifyPagerAdapter;
+    NotifyGeneral notificationReceiverFragment;
 
     @State
     ItemCategory currentCategory = null;
@@ -123,21 +112,15 @@ public class ItemCategoriesFragment extends Fragment
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
             activity.setNotificationReceiver(this);
 //            Log.d("applog","DetachedItemFragment: Fragment Recreated");
+            activity.notifyFabClickItemCategories = this;
         }
 
 
-        if(getActivity() instanceof FragmentsNotificationReceiver)
+        if(getActivity() instanceof NotifyGeneral)
         {
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-
-            this.notificationReceiverFragment = (FragmentsNotificationReceiver) activity;
+            this.notificationReceiverFragment = (NotifyGeneral) activity;
         }
-
-        if(getActivity() instanceof NotifyPagerAdapter)
-        {
-            notifyPagerAdapter = (NotifyPagerAdapter)getActivity();
-        }
-
 
 
         if(savedInstanceState==null)
@@ -188,33 +171,26 @@ public class ItemCategoriesFragment extends Fragment
     void setupRecyclerView()
     {
 
-
-
         listAdapter = new ItemCategoriesAdapter(dataset,getActivity(),this,this);
-
         itemCategoriesList.setAdapter(listAdapter);
-
         layoutManager = new GridLayoutManager(getActivity(),1, LinearLayoutManager.VERTICAL,false);
         itemCategoriesList.setLayoutManager(layoutManager);
 
 
+        // Code for Staggered Grid Layout
         /*layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 return (position % 3 == 0 ? 2 : 1);
             }
         });
-*/
+        */
 
 
         final DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-
         layoutManager.setSpanCount(metrics.widthPixels/350);
-
-
-
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
 
@@ -253,12 +229,10 @@ public class ItemCategoriesFragment extends Fragment
                         // changed
                         Log.d("scrolllog","show");
 
-//                        options.animate().translationX(metrics.widthPixels-10);
-//                        options.animate().translationY(200);
-
-                        options.setVisibility(View.VISIBLE);
-
-                        notificationReceiverFragment.showAppBar();
+                        if(getActivity() instanceof ToggleFab)
+                        {
+                            ((ToggleFab)getActivity()).hideFab();
+                        }
                     }
 
                 }else if(dy < -20)
@@ -268,19 +242,14 @@ public class ItemCategoriesFragment extends Fragment
 
                     show = true;
 
-
-
                     if(show!=previous)
                     {
-                        // changed
-//                        options.setVisibility(View.VISIBLE);
-//                        options.animate().translationX(0);
                         Log.d("scrolllog","hide");
 
-//                        options.animate().translationY(0);
-
-                        options.setVisibility(View.GONE);
-                        notificationReceiverFragment.hideAppBar();
+                        if(getActivity() instanceof ToggleFab)
+                        {
+                            ((ToggleFab)getActivity()).showFab();
+                        }
                     }
                 }
 
@@ -291,8 +260,12 @@ public class ItemCategoriesFragment extends Fragment
 
     }
 
+
+
+
     @Bind(R.id.swipeContainer)
     SwipeRefreshLayout swipeContainer;
+
 
     void setupSwipeContainer()
     {
@@ -300,7 +273,8 @@ public class ItemCategoriesFragment extends Fragment
         if(swipeContainer!=null) {
 
             swipeContainer.setOnRefreshListener(this);
-            swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+            swipeContainer.setColorSchemeResources(
+                    android.R.color.holo_blue_bright,
                     android.R.color.holo_green_light,
                     android.R.color.holo_orange_light,
                     android.R.color.holo_red_light);
@@ -310,24 +284,14 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-
-
     public void makeRequestRetrofit(final boolean notifyItemCategoryChanged)
     {
-
-//        Call<List<ItemCategory>> itemCategoryCall2 = itemCategoryService
-//                .getItemCategories(currentCategory.getItemCategoryID());
-
-
-//        Call<List<ItemCategory>> itemCategoryCall = itemCategoryService.getItemCategories(
-//                null,currentCategory.getItemCategoryID(),null,null,null,null,null,null,"id",limit,offset);
 
         Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
                 null,currentCategory.getItemCategoryID(),
                 null,null,null,null,null,null,"id",limit,offset,false);
 
         Log.d("applog","DetachedTabs: Network call made !");
-
 
 
         endPointCall.enqueue(new Callback<ItemCategoryEndPoint>() {
@@ -337,15 +301,9 @@ public class ItemCategoriesFragment extends Fragment
                 if(response.body()!=null)
                 {
                     ItemCategoryEndPoint endPoint = response.body();
-
                     item_count = endPoint.getItemCount();
-
                     dataset.addAll(endPoint.getResults());
-
-                    Log.d("applog",String.valueOf(item_count) + " : " + endPoint.getResults().size());
-
                     listAdapter.notifyDataSetChanged();
-
 
                     if(notifyItemCategoryChanged)
                     {
@@ -355,20 +313,8 @@ public class ItemCategoriesFragment extends Fragment
                         }
                     }
 
-                    if(notifyPagerAdapter!=null)
-                    {
-//                        notifyPagerAdapter.NotifyTitleChanged("Subcategories ( " +  String.valueOf(dataset.size())
-//                                + " / " + item_count + " )",0);
+                    notifyTitleChanged();
 
-                        notifyTitleChanged();
-                    }
-
-                }
-
-
-                else
-                {
-                    Log.d("applog","body null" + " : " + response.errorBody().toString());
 
                 }
 
@@ -379,10 +325,7 @@ public class ItemCategoriesFragment extends Fragment
             @Override
             public void onFailure(Call<ItemCategoryEndPoint> call, Throwable t) {
 
-
                 showToastMessage("Network request failed. Please check your connection !");
-
-
                 if(swipeContainer!=null)
                 {
                     swipeContainer.setRefreshing(false);
@@ -391,6 +334,7 @@ public class ItemCategoriesFragment extends Fragment
         });
 
     }
+
 
 
 
@@ -412,36 +356,8 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//
-//        swipeContainer.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeContainer.setRefreshing(true);
-//
-//                try {
-//
-//                    makeRequestRetrofit();
-//
-//                } catch (IllegalArgumentException ex)
-//                {
-//                    ex.printStackTrace();
-//
-//                }
-//
-////                adapter.notifyDataSetChanged();
-//            }
-//        });
-//    }
 
 
-
-
-
-    @OnClick(R.id.detachSelected)
     void detachedSelectedClick(View view)
     {
 
@@ -473,18 +389,6 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    void detachSelected()
-    {
-        List<ItemCategory> tempList = new ArrayList<>();
-
-        for(Map.Entry<Integer,ItemCategory> entry : listAdapter.selectedItems.entrySet())
-        {
-            entry.getValue().setParentCategoryID(-1);
-            tempList.add(entry.getValue());
-        }
-
-        makeRequestBulk(tempList);
-    }
 
 
 
@@ -503,7 +407,7 @@ public class ItemCategoriesFragment extends Fragment
 
                     listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
 
-                    makeUpdateRequest(listAdapter.getRequestedChangeParent());
+                    makeRequestUpdate(listAdapter.getRequestedChangeParent());
                 }
             }
         }
@@ -525,7 +429,7 @@ public class ItemCategoriesFragment extends Fragment
                         tempList.add(entry.getValue());
                     }
 
-                    makeRequestBulk(tempList);
+                    makeRequestUpdateBulk(tempList);
                 }
 
             }
@@ -534,7 +438,7 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-    void makeUpdateRequest(ItemCategory itemCategory)
+    void makeRequestUpdate(ItemCategory itemCategory)
     {
         Call<ResponseBody> call = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
 
@@ -569,29 +473,9 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    @OnClick(R.id.changeParentBulk)
-    void changeParentBulk()
-    {
-
-        if(listAdapter.selectedItems.size()==0)
-        {
-            showToastMessage("No item selected. Please make a selection !");
-
-            return;
-        }
-
-        // make an exclude list. Put selected items to an exclude list. This is done to preven a category to make itself or its
-        // children its parent. This is logically incorrect and should not happen.
-
-        ItemCategoriesParent.clearExcludeList();
-        ItemCategoriesParent.excludeList.putAll(listAdapter.selectedItems);
-
-        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
-        startActivityForResult(intentParent,2,null);
-    }
 
 
-    void makeRequestBulk(final List<ItemCategory> list)
+    void makeRequestUpdateBulk(final List<ItemCategory> list)
     {
         Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(list);
 
@@ -607,7 +491,7 @@ public class ItemCategoriesFragment extends Fragment
 
                 }else if (response.code() == 206)
                 {
-                    showToastMessage("Partially Updated. Check data changes !");
+                    showToastMessage("Partially Updated. Check for data changes !");
 
                     clearSelectedItems();
 
@@ -622,9 +506,11 @@ public class ItemCategoriesFragment extends Fragment
                 }
 
 
-                dataset.clear();
+                /*dataset.clear();
                 offset = 0 ; // reset the offset
-                makeRequestRetrofit(false);
+                makeRequestRetrofit(false);*/
+                onRefresh();
+
             }
 
             @Override
@@ -653,31 +539,13 @@ public class ItemCategoriesFragment extends Fragment
     @Override
     public void notifyItemCategorySelected() {
 
-        exitFullscreen();
-    }
-
-
-    void exitFullscreen()
-    {
-
-
-//                options.setVisibility(View.VISIBLE);
-//                appBar.setVisibility(View.VISIBLE);
-//                notificationReceiverFragment.showAppBar();
-
-
-        options.setVisibility(View.VISIBLE);
-        notificationReceiverFragment.showAppBar();
-
-        if(show)
+        if(getActivity() instanceof ToggleFab)
         {
-            show= false;
-        }else
-        {
-            show=true;
+            ((ToggleFab)getActivity()).showFab();
         }
-
     }
+
+
 
 
 
@@ -689,23 +557,11 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    @OnClick(R.id.addItemCategory)
-    void addItemCategoryClick()
-    {
-        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
-
-        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-
-        startActivity(addIntent);
-    }
-
-
     @Override
     public void onRefresh() {
 
         // reset the offset and make a network call
         offset = 0;
-
         dataset.clear();
         makeRequestRetrofit(false);
     }
@@ -724,8 +580,6 @@ public class ItemCategoriesFragment extends Fragment
         currentCategory = itemCategory;
         currentCategory.setParentCategory(temp);
 
-//        currentCategoryID = itemCategory.getItemCategoryID();
-//        categoryTree.add(currentCategory.getCategoryName());
 
         if(notificationReceiverFragment!=null)
         {
@@ -733,38 +587,15 @@ public class ItemCategoriesFragment extends Fragment
         }
 
 
-//        if(isRootCategory) {
-//
-//            isRootCategory = false;
-//
-//        }else
-//        {
-//            boolean isFirst = true;
-//        }
-
-
-
-
-
-//        options.setVisibility(View.VISIBLE);
-//        notificationReceiverFragment.showAppBar();
-//        appBar.setVisibility(View.VISIBLE);
-
-
-
         dataset.clear();
         offset = 0 ; // reset the offset
         makeRequestRetrofit(true);
 
-//        exitFullscreen();
-
-//        notificationReceiverFragment.showAppBar();
 
         if(!currentCategory.getAbstractNode())
         {
             notificationReceiverFragment.notifySwipeToright();
         }
-
 
     }
 
@@ -778,11 +609,6 @@ public class ItemCategoriesFragment extends Fragment
         listAdapter.selectedItems.clear();
 
         if(currentCategory!=null) {
-
-            /*if (categoryTree.size() > 0) {
-
-                categoryTree.remove(categoryTree.size() - 1)2;
-            }*/
 
             if (notificationReceiverFragment != null) {
                 notificationReceiverFragment.removeLastTab();
@@ -838,14 +664,14 @@ public class ItemCategoriesFragment extends Fragment
 
     void notifyTitleChanged()
     {
-        if(notifyPagerAdapter!=null)
+        if(getActivity() instanceof NotifyTitleChanged)
         {
-//            notifyPagerAdapter.NotifyTitleChanged("Subcategories (" +  String.valueOf(itemCount) + ")",0);
-
-            notifyPagerAdapter
-                    .NotifyTitleChanged("Subcategories (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count )+ ")",0);
+            ((NotifyTitleChanged) getActivity())
+                    .NotifyTitleChanged(
+                            currentCategory.getCategoryName() + " Subcategories ("
+                            + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count )+ ")",0
+                    );
         }
-
     }
 
 
@@ -873,5 +699,77 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
+    void detachSelected()
+    {
 
+        if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }
+
+        List<ItemCategory> tempList = new ArrayList<>();
+
+        for(Map.Entry<Integer,ItemCategory> entry : listAdapter.selectedItems.entrySet())
+        {
+            entry.getValue().setParentCategoryID(-1);
+            tempList.add(entry.getValue());
+        }
+
+        makeRequestUpdateBulk(tempList);
+    }
+
+
+
+    void addItemCategoryClick()
+    {
+        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
+        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
+        startActivity(addIntent);
+    }
+
+
+
+    void changeParentBulk()
+    {
+
+        if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }
+
+        // make an exclude list. Put selected items to an exclude list. This is done to preven a category to make itself or its
+        // children its parent. This is logically incorrect and should not happen.
+
+        ItemCategoriesParent.clearExcludeList();
+        ItemCategoriesParent.excludeList.putAll(listAdapter.selectedItems);
+
+        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
+        startActivityForResult(intentParent,2,null);
+    }
+
+
+
+    @Override
+    public void detachSelectedClick() {
+        detachSelected();
+    }
+
+    @Override
+    public void changeParentForSelected() {
+        changeParentBulk();
+    }
+
+    @Override
+    public void addItemCategory() {
+        addItemCategoryClick();
+    }
+
+    @Override
+    public void addfromGlobal() {
+
+    }
 }

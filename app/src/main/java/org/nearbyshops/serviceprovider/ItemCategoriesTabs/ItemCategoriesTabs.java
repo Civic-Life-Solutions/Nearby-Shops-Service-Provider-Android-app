@@ -1,35 +1,79 @@
 package org.nearbyshops.serviceprovider.ItemCategoriesTabs;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.wunderlist.slidinglayer.SlidingLayer;
+
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNotificationReceiver, NotifyPagerAdapter {
+public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGeneral,
+        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    // Fab Variables
+    @Bind(R.id.fab_menu)
+    FloatingActionMenu fab_menu;
+
+    @Bind(R.id.fab_detach)
+    FloatingActionButton fab_detach;
+
+    @Bind(R.id.fab_add)
+    FloatingActionButton fab_add;
+
+    @Bind(R.id.fab_change_parent)
+    FloatingActionButton fab_change_parent;
+
+    @Bind(R.id.fab_add_from_global)
+    FloatingActionButton fab_add_from_global;
+
+    public NotifyFabClick_ItemCategories notifyFabClickItemCategories;
+    public NotifyFabClick_Item notifyFabClick_item;
+    // Fab Variables Ends
+
+
+    private PagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
 
     private ReceiveNotificationFromTabsForItemCat notificationReceiver;
     private ReceiveNotificationFromTabsForItems tabsNotificationReceiver;
+
+
+    @Bind(R.id.appbar)
+    AppBarLayout appBar;
 
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
 
     @Bind(R.id.tablayoutPager)
     TabLayout tabLayoutPager;
+
+
+    @Bind(R.id.slidingLayer)
+    SlidingLayer slidingLayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +86,60 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),this);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),this);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        mViewPager.setAdapter(mPagerAdapter);
         tabLayoutPager.setupWithViewPager(mViewPager);
 
+        mViewPager.addOnPageChangeListener(this);
+
+        setFabBackground();
+        setupSlidingLayer();
+    }
+
+
+
+    void setupSlidingLayer()
+    {
+
+        ////slidingLayer.setShadowDrawable(R.drawable.sidebar_shadow);
+        //slidingLayer.setShadowSizeRes(R.dimen.shadow_size);
+
+        if(slidingLayer!=null)
+        {
+            slidingLayer.setChangeStateOnTap(true);
+            slidingLayer.setSlidingEnabled(true);
+            slidingLayer.setPreviewOffsetDistance(15);
+            slidingLayer.setOffsetDistance(10);
+            slidingLayer.setStickTo(SlidingLayer.STICK_TO_RIGHT);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+            //RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(250, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            //slidingContents.setLayoutParams(layoutParams);
+
+            //slidingContents.setMinimumWidth(metrics.widthPixels-50);
+
+        }
+
+    }
+
+
+    private void setFabBackground() {
+        // assign background to the FAB's
+        fab_add.setImageResource(R.drawable.fab_add);
+        Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_low_priority_black_24px, getTheme());
+        fab_change_parent.setImageDrawable(drawable);
+
+        Drawable drawable_add = VectorDrawableCompat.create(getResources(), R.drawable.ic_playlist_add_from_global, getTheme());
+        fab_add_from_global.setImageDrawable(drawable_add);
+
+        Drawable drawable_detach = VectorDrawableCompat.create(getResources(), R.drawable.ic_detach, getTheme());
+        fab_detach.setImageDrawable(drawable_detach);
     }
 
 
@@ -79,7 +169,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
     @Override
     public void NotifyTitleChanged(String title, int tabPosition) {
 
-        mSectionsPagerAdapter.setTitle(title,tabPosition);
+        mPagerAdapter.setTitle(title,tabPosition);
     }
 
 
@@ -89,8 +179,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
 
     @Override
     public void onBackPressed() {
-
-
 
         if(notificationReceiver!=null)
         {
@@ -105,9 +193,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
         else
         {
             super.onBackPressed();
-
-
-
         }
     }
 
@@ -126,13 +211,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
     }
 
 
-
-
-
-    @Bind(R.id.appbar)
-    AppBarLayout appBar;
-
-
     @Override
     public void itemCategoryChanged(ItemCategory currentCategory) {
 
@@ -146,18 +224,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
     }
 
 
-    @Override
-    public void showAppBar() {
-
-        appBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideAppBar() {
-
-
-        appBar.setVisibility(View.GONE);
-    }
 
     @Override
     public void insertTab(String categoryName) {
@@ -191,9 +257,18 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
     @Override
     public void notifySwipeToright() {
 
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(1,true);
     }
 
+    @Override
+    public void showFab() {
+        fab_menu.animate().translationY(0);
+    }
+
+    @Override
+    public void hideFab() {
+        fab_menu.animate().translationY(120);
+    }
 
 
     public interface ReceiveNotificationFromTabsForItems {
@@ -228,5 +303,127 @@ public class ItemCategoriesTabs extends AppCompatActivity implements FragmentsNo
         this.notificationReceiver = notificationReceiver;
     }
 
+
+
+
+
+    // Click Listeners for Fab Buttons
+
+
+    @OnClick(R.id.fab_detach)
+    void fabDetachClick()
+    {
+        if(mViewPager.getCurrentItem()==0)
+        {
+            if(notifyFabClickItemCategories!=null)
+            {
+                notifyFabClickItemCategories.detachSelectedClick();
+            }
+        }
+        else if(mViewPager.getCurrentItem()==1)
+        {
+            if(notifyFabClick_item!=null)
+            {
+                notifyFabClick_item.detachSelectedClick();
+            }
+        }
+    }
+
+    @OnClick(R.id.fab_change_parent)
+    void fabChangeParentClick()
+    {
+        if(mViewPager.getCurrentItem()==0)
+        {
+            if(notifyFabClickItemCategories!=null)
+            {
+                notifyFabClickItemCategories.changeParentForSelected();
+            }
+        }
+        else if(mViewPager.getCurrentItem()==1)
+        {
+            if(notifyFabClick_item!=null)
+            {
+                notifyFabClick_item.changeParentForSelected();
+            }
+        }
+
+
+    }
+
+    @OnClick(R.id.fab_add)
+    void fabAddClick()
+    {
+        if(mViewPager.getCurrentItem()==0)
+        {
+            if(notifyFabClickItemCategories!=null)
+            {
+                notifyFabClickItemCategories.addItemCategory();
+            }
+        }
+        else if (mViewPager.getCurrentItem()==1)
+        {
+            if(notifyFabClick_item!=null)
+            {
+                notifyFabClick_item.addItem();
+            }
+        }
+
+
+    }
+
+
+    @OnClick(R.id.fab_add_from_global)
+    void fabAddFromGlobal()
+    {
+        if(mViewPager.getCurrentItem()==0)
+        {
+            if(notifyFabClickItemCategories!=null)
+            {
+                notifyFabClickItemCategories.addfromGlobal();
+            }
+        }
+        else if(mViewPager.getCurrentItem()==1)
+        {
+            if(notifyFabClick_item!=null)
+            {
+                notifyFabClick_item.addfromGlobal();
+            }
+        }
+    }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+        if(position==0)
+        {
+            showFab();
+
+            fab_add.setLabelText(getString(R.string.fab_label_add_item_category));
+            fab_change_parent.setLabelText(getString(R.string.fab_label_change_parent_categories));
+            fab_add_from_global.setLabelText(getString(R.string.fab_label_add_from_global_item_cat));
+            fab_menu.setMenuButtonColorNormal(getResources().getColor(R.color.phonographyBlue));
+
+        }else if(position == 1)
+        {
+            showFab();
+
+            fab_add.setLabelText(getString(R.string.fab_label_add_Item));
+            fab_change_parent.setLabelText(getString(R.string.fab_label_change_parent_item));
+            fab_add_from_global.setLabelText(getString(R.string.fab_label_add_from_global_item));
+            fab_menu.setMenuButtonColorNormal(getResources().getColor(R.color.orangeDark));
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 
 }
