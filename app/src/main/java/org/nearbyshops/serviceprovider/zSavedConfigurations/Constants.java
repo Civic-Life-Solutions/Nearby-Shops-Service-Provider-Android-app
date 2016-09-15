@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.SavedConfigurations;
+package org.nearbyshops.serviceprovider.zSavedConfigurations;
 
 /**
  * Created by sumeet on 23/6/16.

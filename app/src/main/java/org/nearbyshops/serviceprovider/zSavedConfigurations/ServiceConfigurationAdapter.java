@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.SavedConfigurations;
+package org.nearbyshops.serviceprovider.zSavedConfigurations;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,8 +19,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.Model.Service;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.serviceprovider.R;
+import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import java.util.List;
@@ -35,7 +36,7 @@ import butterknife.OnClick;
 public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceConfigurationAdapter.ViewHolder>{
 
 
-    List<Service> dataset = null;
+    List<ServiceConfiguration> dataset = null;
 
 
     Context context;
@@ -43,7 +44,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
 
 
-    public ServiceConfigurationAdapter(List<Service> dataset, Context context, NotificationReceiver notificationReceiver) {
+    public ServiceConfigurationAdapter(List<ServiceConfiguration> dataset, Context context, NotificationReceiver notificationReceiver) {
 
         this.dataset = dataset;
         this.context = context;
@@ -64,27 +65,27 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Service service = dataset.get(position);
+        ServiceConfiguration serviceConfiguration = dataset.get(position);
 
-        if(service != null)
+        if(serviceConfiguration != null)
         {
 
-            holder.serviceID.setText("ID : " + String.valueOf(service.getServiceID()));
+            holder.serviceID.setText("ID : " + String.valueOf(serviceConfiguration.getServiceID()));
 
-            holder.nickname.setText(service.getConfigurationNickname());
-            holder.serviceName.setText(service.getServiceName());
+//            holder.nickname.setText(serviceConfiguration.getConfigurationNickname());
+            holder.serviceName.setText(serviceConfiguration.getServiceName());
 
-            holder.serviceCityCountry.setText(service.getCity() + ", " + service.getCountry());
-            holder.serviceRange.setText("Coverage : " + service.getServiceRange() + " Km");
+            holder.serviceCityCountry.setText(serviceConfiguration.getCity() + ", " + serviceConfiguration.getCountry());
+            holder.serviceRange.setText("Coverage : " + serviceConfiguration.getServiceRange() + " Km");
 
-            holder.serviceDistance.setText("Distance : " + String.format("%.2f",service.getRt_distance()) + " Km");
+            holder.serviceDistance.setText("Distance : " + String.format("%.2f", serviceConfiguration.getRt_distance()) + " Km");
 
 //            holder.serviceTypeBadge.setText();
 
-            holder.serviceTypeBadge.setText( Constants.getServiceType(service.getServiceType()) + " | " +  Constants.getServiceLevel(service.getServiceLevel()));
+            holder.serviceTypeBadge.setText( Constants.getServiceType(serviceConfiguration.getServiceType()) + " | " +  Constants.getServiceLevel(serviceConfiguration.getServiceLevel()));
 
             Picasso.with(context).load(UtilityGeneral
-                    .getConfigImageEndpointURL(context) + service.getImagePath())
+                    .getConfigImageEndpointURL(context) + serviceConfiguration.getImagePath())
                     .into(holder.serviceImage);
 
 
@@ -228,7 +229,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                    builder.setTitle("Confirm Remove Service Configuration !")
+                    builder.setTitle("Confirm Remove ServiceConfiguration Configuration !")
                             .setMessage("Do you want to remove this configuration.")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
@@ -256,9 +257,9 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
 //                    Toast.makeText(context,"Real Edit !",Toast.LENGTH_SHORT).show();
 
-                    Intent editIntent = new Intent(context,EditService.class);
+                    Intent editIntent = new Intent(context,EditServiceConfiguration.class);
 
-                    editIntent.putExtra(EditService.SERVICE_CONFIG_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    editIntent.putExtra(EditServiceConfiguration.SERVICE_CONFIG_INTENT_KEY,dataset.get(getLayoutPosition()));
                     context.startActivity(editIntent);
 
                     break;
@@ -286,11 +287,11 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
     public interface NotificationReceiver{
 
-        void notifyEdit(Service service);
+        void notifyEdit(ServiceConfiguration serviceConfiguration);
 
-        void notifyRemove(Service service);
+        void notifyRemove(ServiceConfiguration serviceConfiguration);
 
-        void notifyListItemClick(Service service);
+        void notifyListItemClick(ServiceConfiguration serviceConfiguration);
 
     }
 

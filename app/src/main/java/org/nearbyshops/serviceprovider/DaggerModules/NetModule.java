@@ -9,18 +9,24 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.nearbyshops.serviceprovider.MyApplication;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.SettingsService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by sumeet on 14/5/16.
@@ -67,6 +73,9 @@ public class NetModule {
     Gson provideGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         //gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+
+
+
         return gsonBuilder.create();
     }
 
@@ -89,7 +98,7 @@ public class NetModule {
 
     //    @Singleton
 
-    @Provides
+    @Provides @Named("normal")
     @Singleton
     Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
 
@@ -108,9 +117,34 @@ public class NetModule {
 
 
 
+    @Provides @Named("reactive")
+    @Singleton
+    Retrofit provideRetrofitReactive(Gson gson, OkHttpClient okHttpClient) {
+
+
+//        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.create();
+
+//        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(UtilityGeneral.getServiceURL(MyApplication.getAppContext()))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+
+        //        .client(okHttpClient)
+
+        Log.d("applog","Retrofit : " + UtilityGeneral.getServiceURL(MyApplication.getAppContext()));
+
+
+        return retrofit;
+    }
+
+
+
 
     @Provides
-    ServiceConfigurationService provideConfigurationService(Retrofit retrofit)
+    ServiceConfigurationService provideConfigurationService(@Named("normal")Retrofit retrofit)
     {
         ServiceConfigurationService service = retrofit.create(ServiceConfigurationService.class);
 
@@ -120,7 +154,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    ItemCategoryService provideItemCategoryService(Retrofit retrofit)
+    ItemCategoryService provideItemCategoryService(@Named("normal")Retrofit retrofit)
     {
         ItemCategoryService service = retrofit.create(ItemCategoryService.class);
 
@@ -129,11 +163,32 @@ public class NetModule {
 
 
     @Provides
-    ItemService provideItemService(Retrofit retrofit)
+    ItemService provideItemService(@Named("normal")Retrofit retrofit)
     {
         ItemService service = retrofit.create(ItemService.class);
 
         return service;
+    }
+
+
+    @Provides
+    AdminService provideAdminService(@Named("reactive")Retrofit retrofit)
+    {
+        return retrofit.create(AdminService.class);
+    }
+
+
+    @Provides
+    StaffService provideStaffService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(StaffService.class);
+    }
+
+
+    @Provides
+    SettingsService provideSettingsService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(SettingsService.class);
     }
 
 

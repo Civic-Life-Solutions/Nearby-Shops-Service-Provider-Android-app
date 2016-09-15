@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ServiceProvider</string>
+    <string name="app_name">Service Provider</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -43,7 +43,7 @@
         You cannot have a sub Item Category Under a leaf node Item Category.
         But you can have Items placed under a Leaf Node Item Category.
         Leaf Node Item Category is an Item Category which can have Items placed under them but cannot have Sub Item Category / Item Categories under it.</string>
-    <string name="title_activity_item_categories_tabs">ItemCategoriesTabs</string>
+    <string name="title_activity_item_categories_tabs">Item Categories</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="fab_label_add_item_category">Add Item Category</string>
     <string name="fab_label_change_parent_categories">Change Parent for Selected Item Categories</string>
@@ -53,6 +53,8 @@
     <string name="fab_label_add_from_global_item">Add Item From Global Database</string>
     <string name="fab_label_detach_item_category">Detach Selected Item Categories</string>
     <string name="fab_label_detach_item">Detach Selected Items</string>
-
+    <string name="NetworkConnectionError">Not Connected !</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_distributor_accounts">Distributor Accounts</string>
 
 </resources>

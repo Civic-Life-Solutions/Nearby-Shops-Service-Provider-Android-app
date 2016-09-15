@@ -167,13 +167,13 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                 <ImageView
                     android:tint="#ffffff"
                     android:padding="10dp"
-                    android:layout_above="@+id/text_suggested_categories"
+                    android:layout_above="@+id/text_item_category_updates"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <TextView
                     android:padding="10dp"
-                    android:id="@+id/text_suggested_categories"
+                    android:id="@+id/text_item_category_updates"
                     android:textSize="@dimen/menu_item_text_size"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
@@ -201,7 +201,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             <RelativeLayout
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:id="@+id/option_shop_stats"
+                android:id="@+id/option_settings"
                 android:background="@color/blueGrey800"
                 android:layout_width="@dimen/menu_item_width"
                 android:layout_height="@dimen/menu_item_width">

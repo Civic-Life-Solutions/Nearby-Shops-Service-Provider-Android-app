@@ -40,7 +40,7 @@ public class PlaceholderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_item_categories_tabs, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+        TextView textView = (TextView) rootView.findViewById(R.id.end_user_account_enabled);
         textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         return rootView;
     }

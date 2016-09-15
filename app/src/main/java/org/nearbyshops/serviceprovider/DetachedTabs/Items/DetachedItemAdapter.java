@@ -55,16 +55,12 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
     @Inject
     ItemService itemCategoryService;
 
-    List<Item> dataset;
+    private List<Item> dataset;
 
-    Context context;
-    DetachedItemFragment activity;
-
-
-    Item requestedChangeParent = null;
-
-
-    NotificationReceiver notificationReceiver;
+    private Context context;
+    private DetachedItemFragment activity;
+    private Item requestedChangeParent = null;
+    private NotificationReceiver notificationReceiver;
 
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
@@ -117,10 +113,7 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
                 + dataset.get(position).getItemImageURL();
 
-        if(!dataset.get(position).getItemImageURL().equals(""))
-        {
-            Picasso.with(context).load(imagePath).into(holder.categoryImage);
-        }
+        Picasso.with(context).load(imagePath).into(holder.categoryImage);
 
 
 //        Log.d("applog",imagePath);

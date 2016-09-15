@@ -11,12 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
+import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorAccountsActivity;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
-import org.nearbyshops.serviceprovider.SavedConfigurations.ServiceConfigurationActivity;
+import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
+import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,7 +30,6 @@ public class Home extends AppCompatActivity
 
     DrawerLayout drawer;
     NavigationView navigationView;
-
 
     @Bind(R.id.option_saved_configuration)
     RelativeLayout optionSavedConfiguration;
@@ -43,7 +45,6 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,6 +54,9 @@ public class Home extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        setVisibilityByRole();
     }
 
 
@@ -75,7 +79,6 @@ public class Home extends AppCompatActivity
     void optionServiceStatsClick()
     {
         startActivity(new Intent(this,MapsActivity.class));
-
     }
 
 
@@ -147,25 +150,36 @@ public class Home extends AppCompatActivity
 
 
 
-
     @OnClick(R.id.option_saved_configuration)
     void savedConfigurationClick(View view)
     {
-        Intent intent = new Intent(this, ServiceConfigurationActivity.class);
-
+        Intent intent = new Intent(this, EditServiceConfiguration.class);
         startActivity(intent);
-
     }
+
+
+    @OnClick(R.id.option_settings)
+    void settingsClick(View view)
+    {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
 
 
     @OnClick(R.id.option_add_items)
     void itemCategoriesClick(View view)
     {
-
         Intent intent = new Intent(this, ItemCategoriesTabs.class);
-
         startActivity(intent);
+    }
 
+
+    @OnClick(R.id.option_shop_approvals)
+    void distributorAccountClick(View view)
+    {
+        Intent intent = new Intent(this, DistributorAccountsActivity.class);
+        startActivity(intent);
     }
 
 
@@ -175,4 +189,29 @@ public class Home extends AppCompatActivity
 
         ButterKnife.unbind(this);
     }
+
+
+    @Bind(R.id.row_three)
+    LinearLayout rowSettins;
+
+    @Bind(R.id.row_eight)
+    LinearLayout rowAccounts;
+
+
+    void setVisibilityByRole() {
+
+        if (UtilityLogin.getRoleID(this) == UtilityLogin.ROLE_STAFF)
+        {
+            rowAccounts.setVisibility(View.GONE);
+            rowSettins.setVisibility(View.GONE);
+
+        }
+        else if(UtilityLogin.getRoleID(this)== UtilityLogin.ROLE_ADMIN)
+        {
+            rowAccounts.setVisibility(View.VISIBLE);
+            rowSettins.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 }

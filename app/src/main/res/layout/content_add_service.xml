@@ -152,7 +152,7 @@
             <TextView
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="Select service Level"
+                android:text="Select serviceConfiguration Level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -178,7 +178,7 @@
             <TextView
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="Select service Type"
+                android:text="Select serviceConfiguration Type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

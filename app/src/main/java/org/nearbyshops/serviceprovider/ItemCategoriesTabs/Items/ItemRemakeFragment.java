@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
@@ -44,15 +45,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemRemakeFragment extends Fragment
-        implements  ItemRemakeAdapter.NotificationReceiver,
+        implements  ItemAdapterTwo.NotificationReceiver,
         SwipeRefreshLayout.OnRefreshListener,
-        ItemCategoriesTabs.ReceiveNotificationFromTabsForItems, NotifyFabClick_Item{
+        NotifyCategoryChanged, NotifyFabClick_Item{
 
     public static final String ADD_ITEM_INTENT_KEY = "add_item_intent_key";
 
     ArrayList<Item> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
-    ItemRemakeAdapter listAdapter;
+    ItemAdapterTwo listAdapter;
     GridLayoutManager layoutManager;
 
 
@@ -114,7 +115,7 @@ public class ItemRemakeFragment extends Fragment
         if(getActivity() instanceof ItemCategoriesTabs)
         {
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-            activity.setTabsNotificationReceiver(this);
+            activity.notifyCategoryChanged = this;
             activity.notifyFabClick_item = this;
         }
 
@@ -142,7 +143,7 @@ public class ItemRemakeFragment extends Fragment
                     swipeContainer.setRefreshing(true);
 
                         dataset.clear();
-                        makeRequestRetrofit();
+                        makeRequestRetrofit(false);
 
                 }
             });
@@ -161,7 +162,7 @@ public class ItemRemakeFragment extends Fragment
     {
 
 
-        listAdapter = new ItemRemakeAdapter(dataset,getActivity(),this,this);
+        listAdapter = new ItemAdapterTwo(dataset,getActivity(),this,this);
 
         itemCategoriesList.setAdapter(listAdapter);
 
@@ -190,7 +191,7 @@ public class ItemRemakeFragment extends Fragment
                     if((offset+limit)<=item_count)
                     {
                         offset = offset + limit;
-                        makeRequestRetrofit();
+                        makeRequestRetrofit(false);
                     }
 
                 }
@@ -264,7 +265,7 @@ public class ItemRemakeFragment extends Fragment
 
 
 
-    public void makeRequestRetrofit()
+    public void makeRequestRetrofit(final boolean isbackPressed)
     {
         if(notifiedCurrentCategory==null)
         {
@@ -275,10 +276,8 @@ public class ItemRemakeFragment extends Fragment
         }
 
 
-        Call<ItemEndPoint> endPointCall = itemService.getItems(notifiedCurrentCategory.getItemCategoryID(),
-                null,null,null,null,null,null,null,
-                limit,offset,
-                null);
+        Call<ItemEndPoint> endPointCall = itemService.getItemsOuterJoin(notifiedCurrentCategory.getItemCategoryID(),
+                null, limit,offset, null);
 
         endPointCall.enqueue(new Callback<ItemEndPoint>() {
             @Override
@@ -294,8 +293,13 @@ public class ItemRemakeFragment extends Fragment
 
                 swipeContainer.setRefreshing(false);
                 listAdapter.notifyDataSetChanged();
+                notifyTitleChanged();
 
-                    notifyTitleChanged();
+
+                if(!notifiedCurrentCategory.getAbstractNode() && item_count>0 && !isbackPressed)
+                {
+                    notificationReceiverFragment.notifySwipeToright();
+                }
 
             }
 
@@ -303,6 +307,8 @@ public class ItemRemakeFragment extends Fragment
             public void onFailure(Call<ItemEndPoint> call, Throwable t) {
 
                 showToastMessage("Network request failed. Please check your connection !");
+
+//                Log.d("errorlog",t.toString());
                 swipeContainer.setRefreshing(false);
 
             }
@@ -543,7 +549,7 @@ public class ItemRemakeFragment extends Fragment
 
         dataset.clear();
         offset = 0 ; // reset the offset
-        makeRequestRetrofit();
+        makeRequestRetrofit(false);
 
 
         Log.d("applog","refreshed");
@@ -551,18 +557,31 @@ public class ItemRemakeFragment extends Fragment
 
 
     @Override
-    public void itemCategoryChanged(ItemCategory currentCategory) {
+    public void itemCategoryChanged(ItemCategory currentCategory, Boolean isBackPressed) {
 
         notifiedCurrentCategory = currentCategory;
-        onRefresh();
+        dataset.clear();
+        offset = 0 ; // reset the offset
+        makeRequestRetrofit(isBackPressed);
     }
+
+
+
 
     void notifyTitleChanged()
     {
+        String name = "";
+
+        if(notifiedCurrentCategory!=null)
+        {
+            name = notifiedCurrentCategory.getCategoryName();
+        }
+
+
         if(getActivity() instanceof NotifyTitleChanged)
         {
             ((NotifyTitleChanged)getActivity())
-                    .NotifyTitleChanged(notifiedCurrentCategory.getCategoryName()+
+                    .NotifyTitleChanged( name +
                             " Items (" + String.valueOf(dataset.size())
                                     + "/" + String.valueOf(item_count) + ")",1);
         }
@@ -624,5 +643,4 @@ public class ItemRemakeFragment extends Fragment
         addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
         startActivity(addIntent);
     }
-
 }

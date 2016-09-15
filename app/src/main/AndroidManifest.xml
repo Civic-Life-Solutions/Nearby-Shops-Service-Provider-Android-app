@@ -28,7 +28,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SavedConfigurations.ServiceConfigurationActivity"
+            android:name=".zSavedConfigurations.ServiceConfigurationActivity"
             android:label="Saved Configurations"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -43,25 +43,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SavedConfigurations.AddService"
+            android:name=".zSavedConfigurations.AddService"
             android:label="Add Service"
-            android:parentActivityName=".SavedConfigurations.ServiceConfigurationActivity"
+            android:parentActivityName=".zSavedConfigurations.ServiceConfigurationActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SavedConfigurations.ServiceConfigurationActivity" />
+                android:value=".zSavedConfigurations.ServiceConfigurationActivity" />
         </activity>
         <activity
-            android:name=".SavedConfigurations.EditService"
-            android:label="Edit Service"
-            android:parentActivityName=".SavedConfigurations.ServiceConfigurationActivity"
+            android:name=".ServiceConfiguration.EditServiceConfiguration"
+            android:label="Service Configuration"
+            android:parentActivityName=".zSavedConfigurations.ServiceConfigurationActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SavedConfigurations.ServiceConfigurationActivity" />
+                android:value=".zSavedConfigurations.ServiceConfigurationActivity" />
         </activity>
-
-
         <activity
             android:name=".ItemCategoriesTabs.ItemCategories.AddItemCategory"
             android:label="Add Item Category"
@@ -80,7 +78,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-
         <activity
             android:name=".SelectParent.ItemCategoriesParent"
             android:label="Select Parent Category"
@@ -119,7 +116,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
         <activity
             android:name=".DetachedTabs.DetachedTabs"
             android:label="@string/title_activity_item_categories_tabs"
@@ -129,7 +125,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
         <activity
             android:name=".ItemCategoriesTabs.Items.AddItem"
             android:label="Add Item"
@@ -139,8 +134,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs" />
         </activity>
-
-
         <activity
             android:name=".ItemCategoriesTabs.Items.EditItem"
             android:label="Edit Item"
@@ -150,8 +143,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs" />
         </activity>
-
-
+        <activity
+            android:name=".Settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+        <activity
+            android:name=".DistributorAccounts.DistributorAccountsActivity"
+            android:label="@string/title_activity_distributor_accounts"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
     </application>
 
 </manifest>

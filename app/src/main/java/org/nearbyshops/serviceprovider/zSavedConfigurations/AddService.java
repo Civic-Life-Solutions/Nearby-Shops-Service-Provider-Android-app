@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.SavedConfigurations;
+package org.nearbyshops.serviceprovider.zSavedConfigurations;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -25,7 +25,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.Model.Service;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
@@ -224,68 +224,48 @@ public class AddService extends AppCompatActivity implements Callback<Image>, Ad
 
     void addNewService(String imagePath) {
 
-        Service serviceForAdd = new Service();
+        ServiceConfiguration serviceConfigurationForAdd = new ServiceConfiguration();
 
-        serviceForAdd.setImagePath(imagePath);
-        serviceForAdd.setConfigurationNickname(nickname.getText().toString());
+        serviceConfigurationForAdd.setImagePath(imagePath);
+//        serviceConfigurationForAdd.setConfigurationNickname(nickname.getText().toString());
 
-        serviceForAdd.setServiceName(service_name.getText().toString());
-        serviceForAdd.setServiceURL(service_url.getText().toString());
-        serviceForAdd.setHelplineNumber(helpline_number.getText().toString());
+        serviceConfigurationForAdd.setServiceName(service_name.getText().toString());
+//        serviceConfigurationForAdd.setServiceURL(service_url.getText().toString());
+        serviceConfigurationForAdd.setHelplineNumber(helpline_number.getText().toString());
 
-        serviceForAdd.setServiceType(spinnerServiceType.getSelectedItemPosition()+ 1);
-        serviceForAdd.setServiceLevel(spinnerServiceLevel.getSelectedItemPosition()+ 1);
+        serviceConfigurationForAdd.setServiceType(spinnerServiceType.getSelectedItemPosition()+ 1);
+        serviceConfigurationForAdd.setServiceLevel(spinnerServiceLevel.getSelectedItemPosition()+ 1);
 
-        serviceForAdd.setAddress(address.getText().toString());
-        serviceForAdd.setCity(city.getText().toString());
+        serviceConfigurationForAdd.setAddress(address.getText().toString());
+        serviceConfigurationForAdd.setCity(city.getText().toString());
 
         if(!pincode.getText().toString().equals(""))
         {
-            serviceForAdd.setPincode(Long.parseLong(pincode.getText().toString()));
+            serviceConfigurationForAdd.setPincode(Long.parseLong(pincode.getText().toString()));
         }
 
 
-        serviceForAdd.setLandmark(landmark.getText().toString());
-        serviceForAdd.setState(state.getText().toString());
-        serviceForAdd.setISOCountryCode(countryCodeList.get(spinnerCountry.getSelectedItemPosition()));
+        serviceConfigurationForAdd.setLandmark(landmark.getText().toString());
+        serviceConfigurationForAdd.setState(state.getText().toString());
+        serviceConfigurationForAdd.setISOCountryCode(countryCodeList.get(spinnerCountry.getSelectedItemPosition()));
 
-        Locale locale = new Locale("",serviceForAdd.getISOCountryCode());
-        serviceForAdd.setCountry(locale.getDisplayCountry());
+        Locale locale = new Locale("", serviceConfigurationForAdd.getISOCountryCode());
+        serviceConfigurationForAdd.setCountry(locale.getDisplayCountry());
 
-        serviceForAdd.setISOLanguageCode(autoComplete.getText().toString());
+        serviceConfigurationForAdd.setISOLanguageCode(autoComplete.getText().toString());
 
         if(!latitude.getText().toString().equals("")&&!longitude.getText().toString().equals(""))
         {
-            serviceForAdd.setLatCenter(Double.parseDouble(latitude.getText().toString()));
-            serviceForAdd.setLonCenter(Double.parseDouble(longitude.getText().toString()));
+            serviceConfigurationForAdd.setLatCenter(Double.parseDouble(latitude.getText().toString()));
+            serviceConfigurationForAdd.setLonCenter(Double.parseDouble(longitude.getText().toString()));
         }
 
         if(!serviceConverage.getText().toString().equals(""))
         {
-            serviceForAdd.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
+            serviceConfigurationForAdd.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
         }
 
 
-
-        Call<Service> call = serviceConfigurationService.postService(serviceForAdd);
-
-
-        call.enqueue(new Callback<Service>() {
-            @Override
-            public void onResponse(Call<Service> call, Response<Service> response) {
-
-                if (response.code() == 201) {
-
-                    showToastMessage("Item added Successfully !");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Service> call, Throwable t) {
-
-                showToastMessage("Network request failed ! ");
-            }
-        });
 
     }
 

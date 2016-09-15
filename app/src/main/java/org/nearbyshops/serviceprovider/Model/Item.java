@@ -4,27 +4,32 @@ package org.nearbyshops.serviceprovider.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.nearbyshops.serviceprovider.ModelStats.ItemStats;
+
 import java.sql.Timestamp;
 
 public class Item implements Parcelable{
 
 
-	ItemCategory itemCategory;
+	private ItemCategory itemCategory;
 
 
-	int itemID;
-	String itemName;
-	String itemDescription;
-	String itemImageURL;
+	private int itemID;
+	private String itemName;
+	private String itemDescription;
+	private String itemImageURL;
 
 
-	int itemCategoryID;
+	private int itemCategoryID;
 
 	// recently added
-	String quantityUnit;
-	Timestamp dateTimeCreated;
-	String itemDescriptionLong;
+	private String quantityUnit;
+	private Timestamp dateTimeCreated;
+	private String itemDescriptionLong;
 
+
+
+	private ItemStats itemStats;
 
 
 
@@ -198,5 +203,13 @@ public class Item implements Parcelable{
 
 	public void setItemDescriptionLong(String itemDescriptionLong) {
 		this.itemDescriptionLong = itemDescriptionLong;
+	}
+
+	public ItemStats getItemStats() {
+		return itemStats;
+	}
+
+	public void setItemStats(ItemStats itemStats) {
+		this.itemStats = itemStats;
 	}
 }

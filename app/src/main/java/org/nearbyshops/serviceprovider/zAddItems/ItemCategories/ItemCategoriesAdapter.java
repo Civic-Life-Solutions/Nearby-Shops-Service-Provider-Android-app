@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.AddItems.ItemCategories;
+package org.nearbyshops.serviceprovider.zAddItems.ItemCategories;
 
 import android.content.Context;
 import android.content.DialogInterface;

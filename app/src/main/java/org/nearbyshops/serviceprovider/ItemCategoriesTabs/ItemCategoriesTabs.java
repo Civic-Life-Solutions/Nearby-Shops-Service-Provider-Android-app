@@ -13,11 +13,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.wunderlist.slidinglayer.SlidingLayer;
 
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyBackPressed;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
@@ -31,7 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGeneral,
-        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener {
+        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener, NotifyCategoryChanged{
 
     // Fab Variables
     @Bind(R.id.fab_menu)
@@ -49,6 +52,10 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Bind(R.id.fab_add_from_global)
     FloatingActionButton fab_add_from_global;
 
+    @Bind(R.id.slidinglayerfragment)
+    FrameLayout slidingFragmentContainer;
+
+
     public NotifyFabClick_ItemCategories notifyFabClickItemCategories;
     public NotifyFabClick_Item notifyFabClick_item;
     // Fab Variables Ends
@@ -57,8 +64,8 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     private PagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
 
-    private ReceiveNotificationFromTabsForItemCat notificationReceiver;
-    private ReceiveNotificationFromTabsForItems tabsNotificationReceiver;
+    public NotifyBackPressed notifyBackPressed;
+    public NotifyCategoryChanged notifyCategoryChanged;
 
 
     @Bind(R.id.appbar)
@@ -97,6 +104,8 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
         setFabBackground();
         setupSlidingLayer();
+
+        insertTab("Root");
     }
 
 
@@ -123,6 +132,12 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
             //slidingContents.setLayoutParams(layoutParams);
 
             //slidingContents.setMinimumWidth(metrics.widthPixels-50);
+
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.slidinglayerfragment,new SlidingLayerFragment())
+                    .commit();
 
         }
 
@@ -180,14 +195,15 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public void onBackPressed() {
 
-        if(notificationReceiver!=null)
+        if(notifyBackPressed !=null)
         {
-            if(notificationReceiver.backPressed())
+            if(notifyBackPressed.backPressed())
             {
                 super.onBackPressed();
             }else
             {
-                mViewPager.setCurrentItem(0,true);
+//                mViewPager.setCurrentItem(0,true);
+                mViewPager.setCurrentItem(0);
             }
         }
         else
@@ -195,12 +211,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
             super.onBackPressed();
         }
     }
-
-
-
-
-
-
 
 
     @Override
@@ -212,18 +222,18 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
 
     @Override
-    public void itemCategoryChanged(ItemCategory currentCategory) {
+    public void itemCategoryChanged(ItemCategory currentCategory, Boolean isBackPressed) {
 
         Log.d("applog","Item Category Changed : " + currentCategory.getCategoryName() + " : " + String.valueOf(currentCategory.getItemCategoryID()));
 
+        showFab();
 
-        if(tabsNotificationReceiver!=null)
+        if(notifyCategoryChanged !=null)
         {
-            tabsNotificationReceiver.itemCategoryChanged(currentCategory);
+            notifyCategoryChanged.itemCategoryChanged(currentCategory,isBackPressed);
         }
+
     }
-
-
 
     @Override
     public void insertTab(String categoryName) {
@@ -250,14 +260,15 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
         if(tabLayout.getTabCount()==0)
         {
-            tabLayout.setVisibility(View.GONE);
+//            tabLayout.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void notifySwipeToright() {
 
-        mViewPager.setCurrentItem(1,true);
+//        mViewPager.setCurrentItem(1,true);
+        mViewPager.setCurrentItem(1);
     }
 
     @Override
@@ -269,40 +280,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     public void hideFab() {
         fab_menu.animate().translationY(120);
     }
-
-
-    public interface ReceiveNotificationFromTabsForItems {
-
-        void itemCategoryChanged(ItemCategory currentCategory);
-    }
-
-
-
-    public interface ReceiveNotificationFromTabsForItemCat {
-
-        boolean backPressed();
-    }
-
-
-
-    public ReceiveNotificationFromTabsForItems getTabsNotificationReceiver() {
-        return tabsNotificationReceiver;
-    }
-
-    public void setTabsNotificationReceiver(ReceiveNotificationFromTabsForItems tabsNotificationReceiver) {
-        this.tabsNotificationReceiver = tabsNotificationReceiver;
-    }
-
-
-
-    public ReceiveNotificationFromTabsForItemCat getNotificationReceiver() {
-        return notificationReceiver;
-    }
-
-    public void setNotificationReceiver(ReceiveNotificationFromTabsForItemCat notificationReceiver) {
-        this.notificationReceiver = notificationReceiver;
-    }
-
 
 
 

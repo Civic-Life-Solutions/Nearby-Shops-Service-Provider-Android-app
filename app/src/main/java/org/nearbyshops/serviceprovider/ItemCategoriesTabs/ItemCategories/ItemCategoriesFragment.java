@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyBackPressed;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
@@ -46,7 +48,7 @@ import retrofit2.Response;
 
 public class ItemCategoriesFragment extends Fragment
         implements ItemCategoriesAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,
-        ItemCategoriesTabs.ReceiveNotificationFromTabsForItemCat,
+        NotifyBackPressed,
         NotifyFabClick_ItemCategories {
 
 
@@ -111,9 +113,9 @@ public class ItemCategoriesFragment extends Fragment
         if(getActivity() instanceof ItemCategoriesTabs)
         {
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-            activity.setNotificationReceiver(this);
 //            Log.d("applog","DetachedItemFragment: Fragment Recreated");
             activity.notifyFabClickItemCategories = this;
+            activity.notifyBackPressed = this;
         }
 
 
@@ -122,6 +124,7 @@ public class ItemCategoriesFragment extends Fragment
             ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
             this.notificationReceiverFragment = (NotifyGeneral) activity;
         }
+
 
 
         if(savedInstanceState==null)
@@ -142,7 +145,7 @@ public class ItemCategoriesFragment extends Fragment
                         // make a network call
                         offset = 0;
                         dataset.clear();
-                        makeRequestRetrofit(false);
+                        makeRequestRetrofit(false,false);
 
 
                     } catch (IllegalArgumentException ex)
@@ -206,7 +209,7 @@ public class ItemCategoriesFragment extends Fragment
                     if((offset+limit)<=item_count)
                     {
                         offset = offset + limit;
-                        makeRequestRetrofit(false);
+                        makeRequestRetrofit(false,false);
                     }
 
                 }
@@ -285,7 +288,7 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-    public void makeRequestRetrofit(final boolean notifyItemCategoryChanged)
+    public void makeRequestRetrofit(final boolean notifyItemCategoryChanged, final boolean backPressed)
     {
 
         Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
@@ -310,7 +313,8 @@ public class ItemCategoriesFragment extends Fragment
                     {
                         if(currentCategory!=null)
                         {
-                            notificationReceiverFragment.itemCategoryChanged(currentCategory);
+
+                            ((NotifyCategoryChanged)getActivity()).itemCategoryChanged(currentCategory,backPressed);
                         }
                     }
 
@@ -353,7 +357,7 @@ public class ItemCategoriesFragment extends Fragment
     {
         dataset.clear();
         offset = 0 ; // reset the offset
-        makeRequestRetrofit(false);
+        makeRequestRetrofit(false,false);
     }
 
 
@@ -422,7 +426,7 @@ public class ItemCategoriesFragment extends Fragment
 
                     dataset.clear();
                     offset = 0 ; // reset the offset
-                    makeRequestRetrofit(false);
+                    makeRequestRetrofit(false,false);
 
                 }else
                 {
@@ -533,7 +537,7 @@ public class ItemCategoriesFragment extends Fragment
         // reset the offset and make a network call
         offset = 0;
         dataset.clear();
-        makeRequestRetrofit(false);
+        makeRequestRetrofit(false,false);
     }
 
 
@@ -559,13 +563,13 @@ public class ItemCategoriesFragment extends Fragment
 
         dataset.clear();
         offset = 0 ; // reset the offset
-        makeRequestRetrofit(true);
+        makeRequestRetrofit(true,false);
 
-
+/*
         if(!currentCategory.getAbstractNode())
         {
             notificationReceiverFragment.notifySwipeToright();
-        }
+        }*/
 
     }
 
@@ -603,7 +607,7 @@ public class ItemCategoriesFragment extends Fragment
 
                 dataset.clear();
                 offset =0; // reset the offset
-                makeRequestRetrofit(true);
+                makeRequestRetrofit(true,true);
             }
 
         }
@@ -677,7 +681,7 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    void detachedSelectedClick(View view)
+    void detachedSelectedDialog()
     {
 
         if(listAdapter.selectedItems.size()==0)
@@ -690,7 +694,6 @@ public class ItemCategoriesFragment extends Fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Confirm Detach Item Categories !")
-                .setIcon(R.drawable.ic_menu_camera)
                 .setMessage("Do you want to remove / detach parent for the selected Categories ? ")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -766,7 +769,7 @@ public class ItemCategoriesFragment extends Fragment
 
     @Override
     public void detachSelectedClick() {
-        detachSelectedClick();
+        detachedSelectedDialog();
     }
 
     @Override
@@ -783,4 +786,5 @@ public class ItemCategoriesFragment extends Fragment
     public void addfromGlobal() {
 
     }
+
 }

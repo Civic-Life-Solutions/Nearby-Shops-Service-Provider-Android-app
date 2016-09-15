@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.AddItems;
+package org.nearbyshops.serviceprovider.zAddItems;
 
 import android.content.Context;
 import android.view.GestureDetector;

@@ -7,7 +7,6 @@ import org.nearbyshops.serviceprovider.Model.ItemCategory;
  */
 public interface NotifyGeneral {
 
-        void itemCategoryChanged(ItemCategory currentCategory);
         void insertTab(String categoryName);
         void removeLastTab();
         void notifySwipeToright();

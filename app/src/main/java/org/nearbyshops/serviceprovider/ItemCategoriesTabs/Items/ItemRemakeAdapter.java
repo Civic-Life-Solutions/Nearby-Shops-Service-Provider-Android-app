@@ -3,6 +3,8 @@ package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -116,7 +118,13 @@ public class ItemRemakeAdapter extends RecyclerView.Adapter<ItemRemakeAdapter.Vi
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
                 + dataset.get(position).getItemImageURL();
 
-        Picasso.with(context).load(imagePath).into(holder.categoryImage);
+        Drawable drawable = VectorDrawableCompat
+                .create(context.getResources(),
+                        R.drawable.ic_nature_people_white_48px, context.getTheme());
+
+        Picasso.with(context).load(imagePath)
+                .placeholder(drawable)
+                .into(holder.categoryImage);
 
 //        Log.d("applog",imagePath);
 

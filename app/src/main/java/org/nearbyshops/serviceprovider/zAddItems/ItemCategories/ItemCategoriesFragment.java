@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.AddItems.ItemCategories;
+package org.nearbyshops.serviceprovider.zAddItems.ItemCategories;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
@@ -40,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemCategoriesFragment extends Fragment
-        implements  ItemCategoriesAdapter.NotificationReceiver, SwipeRefreshLayout.OnRefreshListener, ItemCategoriesTabs.ReceiveNotificationFromTabsForItemCat {
+        implements  ItemCategoriesAdapter.NotificationReceiver, SwipeRefreshLayout.OnRefreshListener{
 
     List<ItemCategory> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
@@ -565,7 +564,7 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    @Override
+
     public boolean backPressed() {
 
         // clear the selected items when back button is pressed

@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.SavedConfigurations;
+package org.nearbyshops.serviceprovider.ServiceConfiguration;
 
 
 import android.content.Intent;
@@ -24,7 +24,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.Model.Service;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
@@ -46,7 +46,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class EditService extends AppCompatActivity implements Callback<Image>, AdapterView.OnItemSelectedListener {
+public class EditServiceConfiguration extends AppCompatActivity implements Callback<Image>, AdapterView.OnItemSelectedListener {
 
 
     @Inject
@@ -58,14 +58,14 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
 
 
-    @Bind(R.id.nickname)
-    EditText nickname;
+//    @Bind(R.id.nickname)
+//    EditText nickname;
 
     @Bind(R.id.service_name)
     EditText service_name;
 
-    @Bind(R.id.service_url)
-    EditText service_url;
+//    @Bind(R.id.service_url)
+//    EditText service_url;
 
     @Bind(R.id.helpline_number)
     EditText helpline_number;
@@ -123,10 +123,10 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
     public static final String SERVICE_CONFIG_INTENT_KEY = "ServiceConfigIntentKey";
 
-    Service serviceForEdit;
+    ServiceConfiguration serviceConfigurationForEdit;
 
 
-    public EditService() {
+    public EditServiceConfiguration() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
@@ -139,7 +139,7 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
         ButterKnife.bind(this);
 
-        serviceForEdit = getIntent().getParcelableExtra(SERVICE_CONFIG_INTENT_KEY);
+        serviceConfigurationForEdit = getIntent().getParcelableExtra(SERVICE_CONFIG_INTENT_KEY);
 
 
 
@@ -206,17 +206,50 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
 
 
+        getConfigurationNetworkCall();
 
-        if(serviceForEdit!=null) {
 
+        /*if(serviceConfigurationForEdit !=null) {
             bindDataToEditText();
+            loadImage(serviceConfigurationForEdit.getImagePath());
+        }*/
 
-            loadImage(serviceForEdit.getImagePath());
-        }
+    }
 
+
+
+
+
+    void getConfigurationNetworkCall()
+    {
+        final Call<ServiceConfiguration> serviceConfiguration = configurationService.getServiceConfiguration();
+
+        serviceConfiguration.enqueue(new Callback<ServiceConfiguration>() {
+
+            @Override
+            public void onResponse(Call<ServiceConfiguration> call, Response<ServiceConfiguration> response) {
+
+                if(response.body()!=null)
+                {
+                    serviceConfigurationForEdit = response.body();
+                    bindDataToEditText();
+                    loadImage(serviceConfigurationForEdit.getImagePath());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceConfiguration> call, Throwable t) {
+                showToastMessage(getString(R.string.NetworkConnectionError));
+            }
+        });
 
 
     }
+
+
+
+
+
 
 
 
@@ -239,7 +272,7 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
             // delete previous Image from the Server
             ConfigImageCalls.getInstance()
                     .deleteImage(
-                            serviceForEdit.getImagePath(),
+                            serviceConfigurationForEdit.getImagePath(),
                             new DeleteImageCallback()
                     );
 
@@ -247,7 +280,7 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
             if(isImageRemoved)
             {
 
-                serviceForEdit.setImagePath("");
+                serviceConfigurationForEdit.setImagePath("");
 
                 retrofitPUTRequest();
 
@@ -282,73 +315,67 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
     void bindDataToEditText()
     {
-        if(serviceForEdit!=null) {
+        if(serviceConfigurationForEdit !=null) {
 
-            nickname.setText(serviceForEdit.getConfigurationNickname());
-            service_name.setText(serviceForEdit.getServiceName());
-            service_url.setText(serviceForEdit.getServiceURL());
-            helpline_number.setText(serviceForEdit.getHelplineNumber());
-
-            spinnerServiceType.setSelection(serviceForEdit.getServiceType()-1);
-
-            spinnerServiceLevel.setSelection(serviceForEdit.getServiceLevel()-1);
-
-            address.setText(serviceForEdit.getAddress());
-            city.setText(serviceForEdit.getCity());
-            pincode.setText(String.valueOf(serviceForEdit.getPincode()));
-            landmark.setText(serviceForEdit.getLandmark());
-            state.setText(serviceForEdit.getState());
-            spinnerCountry.setSelection(countryCodeList.indexOf(serviceForEdit.getISOCountryCode()));
-            autoComplete.setText(serviceForEdit.getISOLanguageCode());
-            latitude.setText(String.valueOf(serviceForEdit.getLatCenter()));
-            longitude.setText(String.valueOf(serviceForEdit.getLonCenter()));
-            serviceConverage.setText(String.valueOf(serviceForEdit.getServiceRange()));
+//            nickname.setText(serviceConfigurationForEdit.getConfigurationNickname());
+            service_name.setText(serviceConfigurationForEdit.getServiceName());
+//            service_url.setText(serviceConfigurationForEdit.getServiceURL());
+            helpline_number.setText(serviceConfigurationForEdit.getHelplineNumber());
+            spinnerServiceType.setSelection(serviceConfigurationForEdit.getServiceType()-1);
+            spinnerServiceLevel.setSelection(serviceConfigurationForEdit.getServiceLevel()-1);
+            address.setText(serviceConfigurationForEdit.getAddress());
+            city.setText(serviceConfigurationForEdit.getCity());
+            pincode.setText(String.valueOf(serviceConfigurationForEdit.getPincode()));
+            landmark.setText(serviceConfigurationForEdit.getLandmark());
+            state.setText(serviceConfigurationForEdit.getState());
+            spinnerCountry.setSelection(countryCodeList.indexOf(serviceConfigurationForEdit.getISOCountryCode()));
+            autoComplete.setText(serviceConfigurationForEdit.getISOLanguageCode());
+            latitude.setText(String.valueOf(serviceConfigurationForEdit.getLatCenter()));
+            longitude.setText(String.valueOf(serviceConfigurationForEdit.getLonCenter()));
+            serviceConverage.setText(String.valueOf(serviceConfigurationForEdit.getServiceRange()));
 
         }
     }
 
 
-    void getDataFromEditText(Service service)
+    void getDataFromEditText(ServiceConfiguration serviceConfiguration)
     {
-        if(service!=null)
+        if(serviceConfiguration !=null)
         {
 
-            serviceForEdit.setConfigurationNickname(nickname.getText().toString());
-
-            serviceForEdit.setServiceName(service_name.getText().toString());
-            serviceForEdit.setServiceURL(service_url.getText().toString());
-            serviceForEdit.setHelplineNumber(helpline_number.getText().toString());
-
-            serviceForEdit.setServiceType(spinnerServiceType.getSelectedItemPosition() + 1);
-            serviceForEdit.setServiceLevel(spinnerServiceLevel.getSelectedItemPosition() + 1);
-
-            serviceForEdit.setAddress(address.getText().toString());
-            serviceForEdit.setCity(city.getText().toString());
+//            serviceConfigurationForEdit.setConfigurationNickname(nickname.getText().toString());
+            serviceConfigurationForEdit.setServiceName(service_name.getText().toString());
+//            serviceConfigurationForEdit.setServiceURL(service_url.getText().toString());
+            serviceConfigurationForEdit.setHelplineNumber(helpline_number.getText().toString());
+            serviceConfigurationForEdit.setServiceType(spinnerServiceType.getSelectedItemPosition() + 1);
+            serviceConfigurationForEdit.setServiceLevel(spinnerServiceLevel.getSelectedItemPosition() + 1);
+            serviceConfigurationForEdit.setAddress(address.getText().toString());
+            serviceConfigurationForEdit.setCity(city.getText().toString());
 
             if(!pincode.getText().toString().equals(""))
             {
-                serviceForEdit.setPincode(Long.parseLong(pincode.getText().toString()));
+                serviceConfigurationForEdit.setPincode(Long.parseLong(pincode.getText().toString()));
             }
 
 
-            serviceForEdit.setLandmark(landmark.getText().toString());
-            serviceForEdit.setState(state.getText().toString());
-            serviceForEdit.setISOCountryCode(countryCodeList.get(spinnerCountry.getSelectedItemPosition()));
+            serviceConfigurationForEdit.setLandmark(landmark.getText().toString());
+            serviceConfigurationForEdit.setState(state.getText().toString());
+            serviceConfigurationForEdit.setISOCountryCode(countryCodeList.get(spinnerCountry.getSelectedItemPosition()));
 
-            Locale locale = new Locale("",serviceForEdit.getISOCountryCode());
-            serviceForEdit.setCountry(locale.getDisplayCountry());
+            Locale locale = new Locale("", serviceConfigurationForEdit.getISOCountryCode());
+            serviceConfigurationForEdit.setCountry(locale.getDisplayCountry());
 
-            serviceForEdit.setISOLanguageCode(autoComplete.getText().toString());
+            serviceConfigurationForEdit.setISOLanguageCode(autoComplete.getText().toString());
 
             if(!latitude.getText().toString().equals("")&&!longitude.getText().toString().equals(""))
             {
-                serviceForEdit.setLatCenter(Double.parseDouble(latitude.getText().toString()));
-                serviceForEdit.setLonCenter(Double.parseDouble(longitude.getText().toString()));
+                serviceConfigurationForEdit.setLatCenter(Double.parseDouble(latitude.getText().toString()));
+                serviceConfigurationForEdit.setLonCenter(Double.parseDouble(longitude.getText().toString()));
             }
 
             if(!serviceConverage.getText().toString().equals(""))
             {
-                serviceForEdit.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
+                serviceConfigurationForEdit.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
             }
 
         }
@@ -362,10 +389,10 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
 
 
-        getDataFromEditText(serviceForEdit);
+        getDataFromEditText(serviceConfigurationForEdit);
 
 
-        Call<ResponseBody> itemCall = configurationService.putService(serviceForEdit,serviceForEdit.getServiceID());
+        Call<ResponseBody> itemCall = configurationService.putServiceConfiguration(serviceConfigurationForEdit);
 
         itemCall.enqueue(new Callback<ResponseBody>() {
 
@@ -374,7 +401,7 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
                 if (response.code() == 200)
                 {
-                    Toast.makeText(EditService.this,"Update Successful !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditServiceConfiguration.this,"Update Successful !",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -543,11 +570,11 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
         }
 
 
-        serviceForEdit.setImagePath(null);
+        serviceConfigurationForEdit.setImagePath(null);
 
-        if(serviceForEdit!=null)
+        if(serviceConfigurationForEdit !=null)
         {
-            serviceForEdit.setImagePath(image.getPath());
+            serviceConfigurationForEdit.setImagePath(image.getPath());
         }
 
         retrofitPUTRequest();
@@ -563,7 +590,7 @@ public class EditService extends AppCompatActivity implements Callback<Image>, A
 
         showToastMessage("Image Upload failed !");
 
-        serviceForEdit.setImagePath("");
+        serviceConfigurationForEdit.setImagePath("");
 
         retrofitPUTRequest();
 
