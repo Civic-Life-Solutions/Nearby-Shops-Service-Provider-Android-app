@@ -346,8 +346,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
                 notifyFabClick_item.changeParentForSelected();
             }
         }
-
-
     }
 
     @OnClick(R.id.fab_add)
@@ -404,7 +402,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
         if(position==0)
         {
             showFab();
-
+            fab_detach.setLabelText(getString(R.string.fab_label_detach_item_category));
             fab_add.setLabelText(getString(R.string.fab_label_add_item_category));
             fab_change_parent.setLabelText(getString(R.string.fab_label_change_parent_categories));
             fab_add_from_global.setLabelText(getString(R.string.fab_label_add_from_global_item_cat));
@@ -413,7 +411,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
         }else if(position == 1)
         {
             showFab();
-
+            fab_detach.setLabelText(getString(R.string.fab_label_detach_item));
             fab_add.setLabelText(getString(R.string.fab_label_add_Item));
             fab_change_parent.setLabelText(getString(R.string.fab_label_change_parent_item));
             fab_add_from_global.setLabelText(getString(R.string.fab_label_add_from_global_item));

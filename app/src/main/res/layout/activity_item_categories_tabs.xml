@@ -95,7 +95,7 @@
             fab:fab_size="mini"
             app:fab_colorNormal="@color/phonographyBlue"
             app:fab_colorPressed="@color/blueGrey800"
-            fab:fab_label="Detach Selected" />
+            fab:fab_label="Detach Selected Item Categories" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_change_parent"

@@ -78,8 +78,8 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
 
 
-    private String titleCategories = "Sub-Categories (0)";
-    private String titleItems = "Items (0)";
+    private String titleCategories = "SubCategories(0/0)";
+    private String titleItems = "Items(0/0)";
     private String titleDetachedItemCategories = "Detached Item-Categories (0/0)";
     private String titleDetachedItems = "Detached Items (0/0)";
 

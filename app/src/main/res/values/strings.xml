@@ -51,6 +51,8 @@
     <string name="fab_label_change_parent_item">Change Parent for Selected Items</string>
     <string name="fab_label_add_from_global_item_cat">Add Item Category from Global Database</string>
     <string name="fab_label_add_from_global_item">Add Item From Global Database</string>
+    <string name="fab_label_detach_item_category">Detach Selected Item Categories</string>
+    <string name="fab_label_detach_item">Detach Selected Items</string>
 
 
 </resources>

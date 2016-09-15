@@ -53,7 +53,6 @@ public class ItemRemakeFragment extends Fragment
     ArrayList<Item> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
     ItemRemakeAdapter listAdapter;
-
     GridLayoutManager layoutManager;
 
 
@@ -66,10 +65,7 @@ public class ItemRemakeFragment extends Fragment
 
     NotifyGeneral notificationReceiverFragment;
 
-    NotifyTitleChanged notifyTitleChanged;
-
-
-
+//    NotifyTitleChanged notifyTitleChanged;
 
     @State ItemCategory notifiedCurrentCategory = null;
 
@@ -129,10 +125,12 @@ public class ItemRemakeFragment extends Fragment
             this.notificationReceiverFragment = (NotifyGeneral) activity;
         }
 
+/*
         if(getActivity() instanceof NotifyTitleChanged)
         {
             notifyTitleChanged = (NotifyTitleChanged)getActivity();
         }
+*/
 
 
         if(savedInstanceState==null)
@@ -297,11 +295,7 @@ public class ItemRemakeFragment extends Fragment
                 swipeContainer.setRefreshing(false);
                 listAdapter.notifyDataSetChanged();
 
-                if(notifyTitleChanged !=null)
-                {
-//                    notifyTitleChanged.NotifyTitleChanged("Items (" + String.valueOf(item_count) + ")",1);
                     notifyTitleChanged();
-                }
 
             }
 
@@ -563,13 +557,14 @@ public class ItemRemakeFragment extends Fragment
         onRefresh();
     }
 
-
-
     void notifyTitleChanged()
     {
-        if(notifyTitleChanged !=null)
+        if(getActivity() instanceof NotifyTitleChanged)
         {
-            notifyTitleChanged.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count) + ")",1);
+            ((NotifyTitleChanged)getActivity())
+                    .NotifyTitleChanged(notifiedCurrentCategory.getCategoryName()+
+                            " Items (" + String.valueOf(dataset.size())
+                                    + "/" + String.valueOf(item_count) + ")",1);
         }
     }
 

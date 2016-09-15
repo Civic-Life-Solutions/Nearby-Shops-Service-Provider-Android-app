@@ -75,6 +75,7 @@ public class ItemCategoriesFragment extends Fragment
 
         currentCategory = new ItemCategory();
         currentCategory.setItemCategoryID(1);
+        currentCategory.setCategoryName("");
         currentCategory.setParentCategoryID(-1);
     }
 
@@ -358,37 +359,6 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-    void detachedSelectedClick(View view)
-    {
-
-        if(listAdapter.selectedItems.size()==0)
-        {
-            showToastMessage("No item selected. Please make a selection !");
-
-            return;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setTitle("Confirm Detach Item Categories !")
-                .setIcon(R.drawable.ic_menu_camera)
-                .setMessage("Do you want to remove / detach parent for the selected Categories ? ")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        detachSelected();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        showToastMessage("Cancelled !");
-                    }
-                })
-                .show();
-    }
-
-
 
 
 
@@ -664,11 +634,19 @@ public class ItemCategoriesFragment extends Fragment
 
     void notifyTitleChanged()
     {
+
+        /*String name = "";
+
+        if(currentCategory.getCategoryName()!=null)
+        {
+            name = currentCategory.getCategoryName();
+        }*/
+
         if(getActivity() instanceof NotifyTitleChanged)
         {
             ((NotifyTitleChanged) getActivity())
-                    .NotifyTitleChanged(
-                            currentCategory.getCategoryName() + " Subcategories ("
+                    .NotifyTitleChanged(currentCategory.getCategoryName()
+                             + " Subcategories ("
                             + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count )+ ")",0
                     );
         }
@@ -699,7 +677,7 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    void detachSelected()
+    void detachedSelectedClick(View view)
     {
 
         if(listAdapter.selectedItems.size()==0)
@@ -708,6 +686,39 @@ public class ItemCategoriesFragment extends Fragment
 
             return;
         }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Confirm Detach Item Categories !")
+                .setIcon(R.drawable.ic_menu_camera)
+                .setMessage("Do you want to remove / detach parent for the selected Categories ? ")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        detachSelected();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showToastMessage("Cancelled !");
+                    }
+                })
+                .show();
+    }
+
+
+
+
+    void detachSelected()
+    {
+
+        /*if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }*/
 
         List<ItemCategory> tempList = new ArrayList<>();
 
@@ -755,7 +766,7 @@ public class ItemCategoriesFragment extends Fragment
 
     @Override
     public void detachSelectedClick() {
-        detachSelected();
+        detachSelectedClick();
     }
 
     @Override
