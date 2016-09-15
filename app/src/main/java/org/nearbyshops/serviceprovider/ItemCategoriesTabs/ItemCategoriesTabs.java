@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -48,6 +49,10 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
     @Bind(R.id.fab_add_from_global)
     FloatingActionButton fab_add_from_global;
+
+    @Bind(R.id.slidinglayerfragment)
+    FrameLayout slidingFragmentContainer;
+
 
     public NotifyFabClick_ItemCategories notifyFabClickItemCategories;
     public NotifyFabClick_Item notifyFabClick_item;
@@ -97,6 +102,8 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
         setFabBackground();
         setupSlidingLayer();
+
+
     }
 
 
@@ -123,6 +130,12 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
             //slidingContents.setLayoutParams(layoutParams);
 
             //slidingContents.setMinimumWidth(metrics.widthPixels-50);
+
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.slidinglayerfragment,new SlidingLayerFragment())
+                    .commit();
 
         }
 
@@ -187,7 +200,8 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
                 super.onBackPressed();
             }else
             {
-                mViewPager.setCurrentItem(0,true);
+//                mViewPager.setCurrentItem(0,true);
+                mViewPager.setCurrentItem(0);
             }
         }
         else
@@ -195,12 +209,6 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
             super.onBackPressed();
         }
     }
-
-
-
-
-
-
 
 
     @Override
@@ -216,6 +224,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
         Log.d("applog","Item Category Changed : " + currentCategory.getCategoryName() + " : " + String.valueOf(currentCategory.getItemCategoryID()));
 
+        showFab();
 
         if(tabsNotificationReceiver!=null)
         {
@@ -257,7 +266,8 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public void notifySwipeToright() {
 
-        mViewPager.setCurrentItem(1,true);
+//        mViewPager.setCurrentItem(1,true);
+        mViewPager.setCurrentItem(1);
     }
 
     @Override

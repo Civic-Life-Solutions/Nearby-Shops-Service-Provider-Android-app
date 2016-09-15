@@ -561,11 +561,11 @@ public class ItemCategoriesFragment extends Fragment
         offset = 0 ; // reset the offset
         makeRequestRetrofit(true);
 
-
+/*
         if(!currentCategory.getAbstractNode())
         {
             notificationReceiverFragment.notifySwipeToright();
-        }
+        }*/
 
     }
 
@@ -677,7 +677,7 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    void detachedSelectedClick(View view)
+    void detachedSelectedDialog()
     {
 
         if(listAdapter.selectedItems.size()==0)
@@ -690,7 +690,6 @@ public class ItemCategoriesFragment extends Fragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("Confirm Detach Item Categories !")
-                .setIcon(R.drawable.ic_menu_camera)
                 .setMessage("Do you want to remove / detach parent for the selected Categories ? ")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -766,7 +765,7 @@ public class ItemCategoriesFragment extends Fragment
 
     @Override
     public void detachSelectedClick() {
-        detachSelectedClick();
+        detachedSelectedDialog();
     }
 
     @Override

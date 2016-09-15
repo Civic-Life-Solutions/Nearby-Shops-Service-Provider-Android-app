@@ -294,8 +294,13 @@ public class ItemRemakeFragment extends Fragment
 
                 swipeContainer.setRefreshing(false);
                 listAdapter.notifyDataSetChanged();
+                notifyTitleChanged();
 
-                    notifyTitleChanged();
+
+                if(!notifiedCurrentCategory.getAbstractNode() && item_count>0)
+                {
+                    notificationReceiverFragment.notifySwipeToright();
+                }
 
             }
 
