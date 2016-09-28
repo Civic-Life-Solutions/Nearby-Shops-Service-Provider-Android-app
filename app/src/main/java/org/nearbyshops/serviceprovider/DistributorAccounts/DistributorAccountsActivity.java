@@ -28,6 +28,7 @@ public class DistributorAccountsActivity extends AppCompatActivity {
     TabLayout tabLayout;
 
     FloatingActionButton fab;
+    
 
 
     @Override
