@@ -4,22 +4,31 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.wunderlist.slidinglayer.SlidingLayer;
+
+import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifySort;
+import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.ToggleFab;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.SlidingLayerFragment;
 import org.nearbyshops.serviceprovider.R;
+import org.nearbyshops.serviceprovider.Utility.ViewPagerModified;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DistributorAccountsActivity extends AppCompatActivity {
+public class DistributorAccountsActivity extends AppCompatActivity implements ToggleFab,NotifyTitleChanged, NotifySort{
 
     private PagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private ViewPagerModified mViewPager;
 
     @Bind(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
@@ -27,8 +36,13 @@ public class DistributorAccountsActivity extends AppCompatActivity {
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
 
+    @Bind(R.id.fab)
     FloatingActionButton fab;
-    
+
+
+    @Bind(R.id.slidingLayer)
+    SlidingLayer slidingLayer;
+
 
 
     @Override
@@ -46,11 +60,48 @@ public class DistributorAccountsActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPagerModified) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        setupSlidingLayer();
+    }
+
+
+
+    void setupSlidingLayer()
+    {
+
+        ////slidingLayer.setShadowDrawable(R.drawable.sidebar_shadow);
+        //slidingLayer.setShadowSizeRes(R.dimen.shadow_size);
+
+        if(slidingLayer!=null)
+        {
+            slidingLayer.setChangeStateOnTap(true);
+            slidingLayer.setSlidingEnabled(true);
+            slidingLayer.setPreviewOffsetDistance(15);
+            slidingLayer.setOffsetDistance(10);
+            slidingLayer.setStickTo(SlidingLayer.STICK_TO_RIGHT);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+            //RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(250, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            //slidingContents.setLayoutParams(layoutParams);
+
+            //slidingContents.setMinimumWidth(metrics.widthPixels-50);
+
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.slidinglayerfragment,new SlidingLayerDistributor())
+                    .commit();
+
+        }
+
     }
 
 
@@ -89,5 +140,47 @@ public class DistributorAccountsActivity extends AppCompatActivity {
         super.onDestroy();
 
         ButterKnife.unbind(this);
+    }
+
+
+
+    @Override
+    public void showFab() {
+        fab.animate().translationY(0);
+    }
+
+    @Override
+    public void hideFab() {
+        fab.animate().translationY(120);
+    }
+
+
+    @Override
+    public void NotifyTitleChanged(String title, int tabPosition) {
+        mSectionsPagerAdapter.setTitle(title,tabPosition);
+    }
+
+
+
+    @Override
+    public void notifySortChanged() {
+
+//        Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(makeFragmentName(R.id.container,mViewPager.getCurrentItem()));
+
+//        fragment = mViewPager.getActiveFragment(getSupportFragmentManager(),mViewPager.getCurrentItem());
+
+        fragment = (Fragment) mSectionsPagerAdapter.instantiateItem(mViewPager,mViewPager.getCurrentItem());
+
+        if(fragment instanceof DistributorAccountFragment)
+        {
+            ((DistributorAccountFragment)fragment).notifySort();
+        }
+    }
+
+
+    private static String makeFragmentName(int viewId, int index) {
+        return "android:switcher:" + viewId + ":" + index;
     }
 }

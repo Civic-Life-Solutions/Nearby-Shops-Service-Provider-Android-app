@@ -12,7 +12,6 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -40,7 +39,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
+    <org.nearbyshops.serviceprovider.Utility.ViewPagerModified
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,5 +52,28 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/fab_add" />
+
+
+
+    <com.wunderlist.slidinglayer.SlidingLayer
+        android:id="@+id/slidingLayer"
+        android:elevation="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <FrameLayout
+            android:background="@color/white"
+            android:layout_gravity="end"
+            android:layout_marginLeft="@dimen/slidinglayerwidth"
+            android:layout_marginStart="@dimen/slidinglayerwidth"
+            android:id="@+id/slidinglayerfragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+
+    </com.wunderlist.slidinglayer.SlidingLayer>
+
 
 </android.support.design.widget.CoordinatorLayout>

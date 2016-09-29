@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import org.nearbyshops.serviceprovider.MyApplication;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.DistributorAccountService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
@@ -190,6 +191,13 @@ public class NetModule {
     {
         return retrofit.create(SettingsService.class);
     }
+
+    @Provides
+    DistributorAccountService provideDistributorService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(DistributorAccountService.class);
+    }
+
 
 
 //    @Provides

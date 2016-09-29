@@ -99,7 +99,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //serviceUrlEditText = (EditText) findViewById(R.id.serviceURLEditText);
         //username = (EditText) findViewById(R.id.distributorIDEdittext);
 
-        serviceUrlEditText.setText(getServiceURL());
+        serviceUrlEditText.setText(UtilityGeneral.getServiceURL(getApplicationContext()));
         username.setText(UtilityLogin.getUsername(this));
         password.setText(UtilityLogin.getPassword(this));
         setRoleButtons();
@@ -125,23 +125,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             }
         });
 
-    }
-
-
-
-
-
-
-    public String  getServiceURL()
-    {
-        // Get a handle to the shared preference
-        SharedPreferences sharedPref;
-        sharedPref = this.getSharedPreferences(getString(R.string.preference_file_name), this.MODE_PRIVATE);
-
-        // read from shared preference
-        String service_url = sharedPref.getString(getString(R.string.preference_service_url_key),"default");
-
-        return service_url;
     }
 
 

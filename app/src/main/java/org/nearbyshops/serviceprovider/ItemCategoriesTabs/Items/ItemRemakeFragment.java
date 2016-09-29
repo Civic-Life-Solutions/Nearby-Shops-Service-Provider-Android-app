@@ -284,11 +284,12 @@ public class ItemRemakeFragment extends Fragment
             public void onResponse(Call<ItemEndPoint> call, Response<ItemEndPoint> response) {
 
 
-                item_count = response.body().getItemCount();
+
 
                 if(response.body()!=null) {
 
                     dataset.addAll(response.body().getResults());
+                    item_count = response.body().getItemCount();
                 }
 
                 swipeContainer.setRefreshing(false);

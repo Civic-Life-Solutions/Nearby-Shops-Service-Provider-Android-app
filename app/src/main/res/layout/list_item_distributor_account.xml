@@ -1,91 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_marginRight="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@color/white"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="2dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
-    <TextView
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:id="@+id/distributor_title"
-        android:textSize="25sp"
-        android:text="Distributor Name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/list_item_distributor"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        app:layout_constraintRight_toLeftOf="@id/more_vert"
-        app:layout_constraintBottom_toBottomOf="@id/distributor_title"
-        app:layout_constraintTop_toTopOf="@id/distributor_title"
-        android:background="#88000000"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"/>
-
-    <TextView
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="5dp"
-        android:id="@+id/border_title"
-        android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/distributor_title"
-        android:background="#88000000"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="wrap_content">
 
 
-    <ImageView
-        android:id="@+id/more_vert"
-        android:layout_marginRight="0dp"
-        android:layout_marginEnd="0dp"
-        android:padding="5dp"
-        app:layout_constraintBottom_toBottomOf="@id/distributor_title"
-        app:layout_constraintTop_toTopOf="@id/distributor_title"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_more_vert_black_48px"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:id="@+id/distributor_title"
+            android:textSize="25sp"
+            android:text="Distributor Name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <!--app:layout_constraintRight_toLeftOf="@id/more_vert"-->
+
+
+        <ImageView
+            android:id="@+id/more_vert"
+            android:layout_marginRight="0dp"
+            android:layout_marginEnd="0dp"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/distributor_title"
+            app:layout_constraintTop_toTopOf="@id/distributor_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@drawable/ic_more_vert_black_48px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            app:layout_constraintRight_toLeftOf="@id/more_vert"
+            app:layout_constraintBottom_toBottomOf="@id/distributor_title"
+            app:layout_constraintTop_toTopOf="@id/distributor_title"
+            android:background="#88000000"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_margin="5dp"
+            android:id="@+id/border_title"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/distributor_title"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
 
 
 
-    <ImageView
-        android:id="@+id/profile_picture"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        app:layout_constraintTop_toBottomOf="@id/border_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:background="@color/light_grey"
-        android:scaleType="centerCrop"
-        android:maxHeight="100dp"
-        android:maxWidth="100dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
-    
-    <TextView
-        android:text="About distributor : Lorem ipsum, consofu, oaoer, aoeworu, afosufoauerae, aoufoasduf,, aoueroaeur,, oasdfaosdif asdofuasofu, werowero asodfaf, asdofuaof"
-        app:layout_constraintLeft_toRightOf="@id/profile_picture"
-        app:layout_constraintTop_toTopOf="@id/profile_picture"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
-    
-    <TextView
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@id/profile_picture"
-        android:background="#88000000"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/profile_picture"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            app:layout_constraintTop_toBottomOf="@id/border_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:background="@color/light_grey"
+            android:scaleType="centerCrop"
+            android:maxHeight="100dp"
+            android:maxWidth="100dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:id="@+id/about_distributor"
+            android:text="@string/about_distributor"
+            app:layout_constraintLeft_toRightOf="@id/profile_picture"
+            app:layout_constraintTop_toTopOf="@id/profile_picture"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_marginTop="5dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_picture"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

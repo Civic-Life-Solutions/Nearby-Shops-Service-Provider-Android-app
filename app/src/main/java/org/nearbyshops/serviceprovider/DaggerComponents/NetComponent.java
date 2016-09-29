@@ -5,6 +5,7 @@ import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemC
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
+import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorAccountFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.AddItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
@@ -79,4 +80,6 @@ public interface NetComponent {
     void Inject(Login login);
 
     void Inject(SettingsActivity settingsActivity);
+
+    void Inject(DistributorAccountFragment distributorAccountFragment);
 }

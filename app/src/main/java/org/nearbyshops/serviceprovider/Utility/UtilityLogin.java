@@ -47,6 +47,8 @@ public class UtilityLogin {
 
     public static String getUsername(Context context)
     {
+        context = MyApplication.getAppContext();
+
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
         String service_url = sharedPref.getString("username", "");
         return service_url;
@@ -54,6 +56,8 @@ public class UtilityLogin {
 
     public static String getPassword(Context context)
     {
+        context = MyApplication.getAppContext();
+
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
         String service_url = sharedPref.getString("password", "");
         return service_url;
