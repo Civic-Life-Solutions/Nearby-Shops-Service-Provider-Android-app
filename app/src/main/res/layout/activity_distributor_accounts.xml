@@ -10,28 +10,51 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
+        android:background="@color/light_grey"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content">
 
+
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/floating_search_view"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:layout_height="62dp"
+            app:floatingSearch_searchBarMarginLeft="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginTop="@dimen/search_view_inset"
+            app:floatingSearch_searchBarMarginRight="@dimen/search_view_inset"
+            app:floatingSearch_searchHint="Search..."
+            app:floatingSearch_suggestionsListAnimDuration="250"
+            app:floatingSearch_showSearchKey="false"
+            app:floatingSearch_leftActionMode="showHome"
+            app:floatingSearch_menu="@menu/distributor_account_item_overflow"
+            app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+
+
+<!--
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
+-->
 
         <android.support.design.widget.TabLayout
-            android:background="@color/blueGrey800"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:visibility="visible"
             android:layout_below="@id/appbar"
-            app:tabTextColor="@color/white"
-            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/phonographyBlue"
+            app:tabSelectedTextColor="@color/orangeDark"
             android:textAlignment="center"
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             app:tabGravity="fill"
             app:tabMode="scrollable"
             app:tabIndicatorHeight="2dp"
@@ -39,7 +62,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <org.nearbyshops.serviceprovider.Utility.ViewPagerModified
+    <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

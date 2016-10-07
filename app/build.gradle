@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "org.nearbyshops.serviceprovider"
@@ -127,4 +127,5 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
     provided 'frankiesardo:icepick-processor:3.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
+    compile 'com.github.arimorty:floatingsearchview:2.0.3'
 }

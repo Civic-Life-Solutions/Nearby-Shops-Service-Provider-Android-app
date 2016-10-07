@@ -4,6 +4,8 @@ package org.nearbyshops.serviceprovider.ModelRoles;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.sql.Timestamp;
+
 public class Distributor implements Parcelable{
 
 	public Distributor() {
@@ -29,6 +31,10 @@ public class Distributor implements Parcelable{
 	public static final String IS_ENABLED = "IS_ENABLED";
 	public static final String IS_WAITLISTED = "IS_WAITLISTED";
 
+	// to be implemented
+	public static final String CREATED = "CREATED";
+	public static final String UPDATED = "UPDATED";
+
 	/*
 	Enable or Disable indicates whether the account is enabled or not.
 	When the staff is approving the new accounts they might put some or few accounts on hold because they might
@@ -49,7 +55,11 @@ public class Distributor implements Parcelable{
 			+ " " + Distributor.PROFILE_IMAGE_URL + " text,"
 
 			+ " " + Distributor.IS_ENABLED + " boolean,"
-			+ " " + Distributor.IS_WAITLISTED + " boolean"
+			+ " " + Distributor.IS_WAITLISTED + " boolean,"
+
+			+ " " + Distributor.CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
+			+ " " + Distributor.UPDATED + " timestamp with time zone "
+
 			+ ")";
 
 
@@ -64,8 +74,10 @@ public class Distributor implements Parcelable{
 	private String about;
 	private String profileImageURL;
 
-	private boolean isEnabled;
-	private boolean isWaitlisted;
+	private boolean enabled;
+	private boolean waitlisted;
+	private Timestamp created;
+	private Timestamp updated;
 
 
 	protected Distributor(Parcel in) {
@@ -75,8 +87,13 @@ public class Distributor implements Parcelable{
 		password = in.readString();
 		about = in.readString();
 		profileImageURL = in.readString();
-		isEnabled = in.readByte() != 0;
-		isWaitlisted = in.readByte() != 0;
+		enabled = in.readByte() != 0;
+		waitlisted = in.readByte() != 0;
+
+		created = new Timestamp(in.readLong());
+		updated = new Timestamp(in.readLong());
+
+
 	}
 
 	@Override
@@ -87,8 +104,26 @@ public class Distributor implements Parcelable{
 		dest.writeString(password);
 		dest.writeString(about);
 		dest.writeString(profileImageURL);
-		dest.writeByte((byte) (isEnabled ? 1 : 0));
-		dest.writeByte((byte) (isWaitlisted ? 1 : 0));
+		dest.writeByte((byte) (enabled ? 1 : 0));
+		dest.writeByte((byte) (waitlisted ? 1 : 0));
+
+		if(created!=null)
+		{
+			dest.writeLong(created.getTime());
+		}
+		else
+		{
+			dest.writeLong(0);
+		}
+
+		if(updated!=null)
+		{
+			dest.writeLong(updated.getTime());
+		}
+		else
+		{
+			dest.writeLong(0);
+		}
 	}
 
 	@Override
@@ -132,20 +167,20 @@ public class Distributor implements Parcelable{
 		this.username = username;
 	}
 
-	public Boolean getEnabled() {
-		return isEnabled;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
-	public void setEnabled(Boolean enabled) {
-		isEnabled = enabled;
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
-	public Boolean getWaitlisted() {
-		return isWaitlisted;
+	public boolean isWaitlisted() {
+		return waitlisted;
 	}
 
-	public void setWaitlisted(Boolean waitlisted) {
-		isWaitlisted = waitlisted;
+	public void setWaitlisted(boolean waitlisted) {
+		this.waitlisted = waitlisted;
 	}
 
 	public String getPassword() {
@@ -170,5 +205,22 @@ public class Distributor implements Parcelable{
 
 	public void setDistributorName(String distributorName) {
 		this.distributorName = distributorName;
+	}
+
+
+	public Timestamp getCreated() {
+		return created;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public Timestamp getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Timestamp updated) {
+		this.updated = updated;
 	}
 }

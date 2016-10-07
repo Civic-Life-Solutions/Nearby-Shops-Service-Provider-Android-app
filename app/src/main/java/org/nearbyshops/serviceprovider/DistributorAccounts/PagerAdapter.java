@@ -75,7 +75,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         }
         else if (tabPosition == 1)
         {
-
             titleWaitlisted = title;
 
         }else if(tabPosition == 2)

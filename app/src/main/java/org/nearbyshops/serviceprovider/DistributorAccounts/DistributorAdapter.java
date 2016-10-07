@@ -1,6 +1,7 @@
 package org.nearbyshops.serviceprovider.DistributorAccounts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorDetail.DistributorDetail;
 import org.nearbyshops.serviceprovider.ModelRoles.Distributor;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
@@ -106,7 +109,10 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
         @OnClick(R.id.list_item_distributor)
         void listItemClick(View view)
         {
-            Toast.makeText(context,"List Item Click", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context,"List Item Click", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, DistributorDetail.class);
+            intent.putExtra(DistributorDetail.DISTRIBUTOR_DETAIL_INTENT_KEY,dataset.get(getLayoutPosition()));
+            context.startActivity(intent);
         }
 
         @OnClick(R.id.more_vert)

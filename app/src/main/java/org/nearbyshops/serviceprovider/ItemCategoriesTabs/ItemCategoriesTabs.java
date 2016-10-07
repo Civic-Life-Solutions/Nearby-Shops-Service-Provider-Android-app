@@ -396,6 +396,14 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
         }
     }
 
+
+    @OnClick({R.id.icon_sort,R.id.text_sort})
+    void sortClick()
+    {
+        slidingLayer.openLayer(true);
+    }
+
+
     @Override
     public void onPageScrollStateChanged(int state) {
 

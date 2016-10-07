@@ -35,6 +35,28 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
+        <LinearLayout
+            app:layout_scrollFlags = "scroll|enterAlways"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icon_sort"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                app:srcCompat="@drawable/ic_sort_black_24px"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/text_sort"
+                android:padding="5dp"
+                android:text="Filter / Sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <android.support.design.widget.TabLayout
             android:visibility="visible"
             android:layout_below="@id/appbar"

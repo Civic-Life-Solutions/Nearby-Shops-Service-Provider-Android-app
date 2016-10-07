@@ -15,5 +15,6 @@
     <dimen name="image_view_height">200dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="slidinglayerwidth">20dp</dimen>
+    <dimen name="search_view_inset">5dp</dimen>
 
 </resources>

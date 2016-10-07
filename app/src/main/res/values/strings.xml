@@ -66,5 +66,6 @@
     <string name="sort_by_name">Name</string>
     <string name="sort_by_ascending">Ascending</string>
     <string name="sort_by_descending">Descending</string>
+    <string name="title_activity_distributor_detail">Distributor Details</string>
 
 </resources>

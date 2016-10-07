@@ -5,9 +5,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -18,17 +17,16 @@ import com.wunderlist.slidinglayer.SlidingLayer;
 import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.ToggleFab;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.SlidingLayerFragment;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.Utility.ViewPagerModified;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DistributorAccountsActivity extends AppCompatActivity implements ToggleFab,NotifyTitleChanged, NotifySort{
+public class DistributorAccountsActivity extends AppCompatActivity
+        implements ToggleFab,NotifyTitleChanged, NotifySort{
 
     private PagerAdapter mSectionsPagerAdapter;
-    private ViewPagerModified mViewPager;
+    private ViewPager mViewPager;
 
     @Bind(R.id.main_content)
     CoordinatorLayout coordinatorLayout;
@@ -52,15 +50,17 @@ public class DistributorAccountsActivity extends AppCompatActivity implements To
         ButterKnife.bind(this);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPagerModified) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         tabLayout.setupWithViewPager(mViewPager);
 
@@ -161,17 +161,10 @@ public class DistributorAccountsActivity extends AppCompatActivity implements To
     }
 
 
-
     @Override
     public void notifySortChanged() {
 
-//        Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(makeFragmentName(R.id.container,mViewPager.getCurrentItem()));
-
-//        fragment = mViewPager.getActiveFragment(getSupportFragmentManager(),mViewPager.getCurrentItem());
-
-        fragment = (Fragment) mSectionsPagerAdapter.instantiateItem(mViewPager,mViewPager.getCurrentItem());
+        Fragment fragment = (Fragment) mSectionsPagerAdapter.instantiateItem(mViewPager,mViewPager.getCurrentItem());
 
         if(fragment instanceof DistributorAccountFragment)
         {

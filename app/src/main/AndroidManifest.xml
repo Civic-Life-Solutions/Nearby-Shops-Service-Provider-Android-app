@@ -161,6 +161,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
+        <activity
+            android:name=".DistributorAccounts.DistributorDetail.DistributorDetail"
+            android:label="@string/title_activity_distributor_detail"
+            android:parentActivityName=".DistributorAccounts.DistributorAccountsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.DistributorAccounts.DistributorAccountsActivity" />
+        </activity>
     </application>
 
 </manifest>

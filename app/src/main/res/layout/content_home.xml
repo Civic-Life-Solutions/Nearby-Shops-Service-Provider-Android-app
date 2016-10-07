@@ -88,18 +88,16 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
                 <TextView
-                    android:gravity="right"
                     android:padding="10dp"
                     android:id="@+id/text_add_stock"
                     android:textSize="@dimen/menu_item_text_size"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="Detached Items and Item Categories"
+                    android:text="Detached Items"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
-
 
         </LinearLayout>
 
@@ -118,6 +116,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/row_two"
             android:weightSum="2"
             android:layout_marginTop="10dp"
@@ -148,7 +147,8 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="Item Submissions"
+
+                    android:text="Item Category Updates"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
@@ -222,7 +222,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
             <RelativeLayout
                 android:id="@+id/option_suggested_categories"
-                android:background="@color/deepOrange800"
+                android:background="@color/colorAccent"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/menu_item_width">
@@ -241,19 +241,40 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="Item Category Updates"
+                    android:text="Item Submissions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
         </LinearLayout>
 
 
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/border_settings"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/row_two_one"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+        <TextView
+            android:layout_below="@id/border_settings"
+            android:id="@+id/label_settings"
+            android:textSize="24sp"
+            android:text="Settings and Configuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:orientation="horizontal"
             android:id="@+id/borderthree"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_below="@id/row_two_one"
+            android:layout_below="@id/label_settings"
             android:background="#88000000"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
@@ -304,7 +325,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             <RelativeLayout
                 android:layout_marginLeft="5dp"
                 android:id="@+id/option_saved_configuration"
-                android:background="@color/cyan900"
+                android:background="@color/deepOrange800"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/menu_item_width">
@@ -331,9 +352,8 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         </LinearLayout>
 
 
-
-
         <LinearLayout
+            android:visibility="gone"
             android:orientation="horizontal"
             android:id="@+id/bordertwo"
             android:layout_marginTop="10dp"
@@ -346,6 +366,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/row_four"
             android:layout_below="@id/bordertwo"
             android:layout_width="match_parent"
@@ -436,6 +457,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/row_six"
             android:layout_below="@id/border_six"
             android:layout_width="match_parent"
@@ -503,12 +525,22 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         </LinearLayout>
 
 
+        <TextView
+            android:textSize="24sp"
+            android:text="User Accounts"
+            android:id="@+id/label_accounts"
+            android:layout_below="@id/row_six"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
         <LinearLayout
             android:orientation="horizontal"
             android:id="@+id/border_seven"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_below="@id/row_six"
+            android:layout_below="@id/label_accounts"
             android:background="#88000000"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
