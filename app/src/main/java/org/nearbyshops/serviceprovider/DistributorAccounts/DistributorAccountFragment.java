@@ -24,7 +24,7 @@ import org.nearbyshops.serviceprovider.ModelRoles.DistributorEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.DistributorAccountService;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
-import org.nearbyshops.serviceprovider.Utility.UtilitySort;
+import org.nearbyshops.serviceprovider.Utility.UtilitySortDistributor;
 
 import java.util.ArrayList;
 
@@ -168,7 +168,17 @@ public class DistributorAccountFragment extends Fragment implements SwipeRefresh
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
-        layoutManager.setSpanCount(metrics.widthPixels/350);
+//        layoutManager.setSpanCount(metrics.widthPixels/350);
+
+
+
+        int spanCount = (int) (metrics.widthPixels/(230 * metrics.density));
+
+        if(spanCount==0){
+            spanCount = 1;
+        }
+
+        layoutManager.setSpanCount(spanCount);
 
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -271,8 +281,8 @@ public class DistributorAccountFragment extends Fragment implements SwipeRefresh
         }
 
 
-//        sort_options = UtilitySort.getSort(getActivity());
-        current_sort = UtilitySort.getSort(getContext()) + " " + UtilitySort.getAscending(getContext());
+//        sort_options = UtilitySortDistributor.getSort(getActivity());
+        current_sort = UtilitySortDistributor.getSort(getContext()) + " " + UtilitySortDistributor.getAscending(getContext());
 
         Call<DistributorEndPoint> call = distributorAccountService
                 .getDistributor(

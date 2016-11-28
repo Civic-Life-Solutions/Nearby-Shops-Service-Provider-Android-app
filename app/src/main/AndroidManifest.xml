@@ -33,7 +33,7 @@
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Login"
+            android:name=".LoginScreen"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -170,6 +170,54 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.DistributorAccounts.DistributorAccountsActivity" />
         </activity>
+        <activity
+            android:name=".ShopAdminApprovals.ShopAdminApprovals"
+            android:label="@string/title_activity_shop_admin_approvals"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+        <activity
+            android:name=".ShopAdminApprovals.EditShopAdmin.EditShopAdmin"
+            android:label="@string/title_activity_shop_admin_approvals"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+        <activity
+            android:name=".ShopApprovals.ShopApprovals"
+            android:label="@string/title_activity_shop_approals"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+        <activity
+            android:name=".StaffAccounts.StaffAccounts"
+            android:label="@string/title_activity_main"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+
+
+        <activity
+            android:name=".StaffAccounts.EditStaff.EditStaff"
+            android:label="Edit Staff"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+
     </application>
 
 </manifest>

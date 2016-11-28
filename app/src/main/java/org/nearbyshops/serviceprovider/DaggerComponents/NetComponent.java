@@ -13,7 +13,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemAdapterTwo;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeAdapter;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
-import org.nearbyshops.serviceprovider.Login;
+import org.nearbyshops.serviceprovider.LoginScreen;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParentAdapter;
@@ -22,6 +22,11 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCat
 import org.nearbyshops.serviceprovider.DaggerModules.AppModule;
 import org.nearbyshops.serviceprovider.DaggerModules.NetModule;
 import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.EditShopAdmin.EditShopAdminFragment;
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.FragmentShopAdmins;
+import org.nearbyshops.serviceprovider.ShopApprovals.FragmentShopApprovals;
+import org.nearbyshops.serviceprovider.StaffAccounts.EditStaff.EditStaffFragment;
+import org.nearbyshops.serviceprovider.StaffAccounts.FragmentStaffAccounts;
 import org.nearbyshops.serviceprovider.zSavedConfigurations.AddService;
 import org.nearbyshops.serviceprovider.zSavedConfigurations.ServiceConfigurationActivity;
 
@@ -78,11 +83,24 @@ public interface NetComponent {
 
     void Inject(ItemAdapterTwo itemAdapterTwo);
 
-    void Inject(Login login);
+    void Inject(LoginScreen loginScreen);
 
     void Inject(SettingsActivity settingsActivity);
 
     void Inject(DistributorAccountFragment distributorAccountFragment);
 
     void Inject(DistributorDetail distributorDetail);
+
+    void Inject(EditShopAdminFragment editShopAdminFragment);
+
+    void Inject(FragmentShopAdmins fragmentShopAdmins);
+
+    void Inject(FragmentShopApprovals fragmentShopApprovals);
+
+    void Inject(EditStaffFragment editStaffFragment);
+
+    void Inject(FragmentStaffAccounts fragmentStaffAccounts);
+
+
+//    void Inject(LoginDialog loginDialog);
 }

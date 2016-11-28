@@ -1,7 +1,6 @@
 package org.nearbyshops.serviceprovider;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +38,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class Login extends AppCompatActivity implements View.OnClickListener {
+public class LoginScreen extends AppCompatActivity implements View.OnClickListener {
 
     @Bind(R.id.serviceURLEditText)
     EditText serviceUrlEditText;
@@ -63,8 +62,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     TextView roleStaff;
 
 
-
-
     @Inject
     AdminService adminService;
 
@@ -72,7 +69,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     StaffService staffService;
 
 
-    public Login() {
+    public LoginScreen() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent()
@@ -178,7 +175,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         setProgressBar(true);
 
 
-        Call<Staff> staffCall = staffService.loginStaff(UtilityLogin.baseEncoding(username,password));
+        Call<Staff> staffCall = staffService.getLogin(UtilityLogin.baseEncoding(username,password));
 
         staffCall.enqueue(new Callback<Staff>() {
             @Override
@@ -191,7 +188,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     Gson gson = new Gson();
                     Log.d("login", gson.toJson(staff));
 
-                    startActivity(new Intent(Login.this,Home.class));
+                    startActivity(new Intent(LoginScreen.this,Home.class));
                 }
 
                 if(response.code()==403 || response.code() ==401)
@@ -206,7 +203,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             public void onFailure(Call<Staff> call, Throwable t) {
 
                 Log.d("login",String.valueOf(t.toString()));
-                showSnackBar("Login failed. Please try again !");
+                showSnackBar("LoginScreen failed. Please try again !");
                 setProgressBar(false);
             }
 
@@ -263,7 +260,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             }
                             else
                             {
-                                showSnackBar("Login failed. Please try again !");
+                                showSnackBar("LoginScreen failed. Please try again !");
                             }
 
                         }
@@ -280,7 +277,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             Gson gson = new Gson();
                             Log.d("login", gson.toJson(admin));
 
-                            startActivity(new Intent(Login.this,Home.class));
+                            startActivity(new Intent(LoginScreen.this,Home.class));
 
                         }
 
@@ -358,8 +355,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         {
             selectRoleStaff();
         }
-
     }
+
+
+
 
 
     @Bind(R.id.progress_bar)

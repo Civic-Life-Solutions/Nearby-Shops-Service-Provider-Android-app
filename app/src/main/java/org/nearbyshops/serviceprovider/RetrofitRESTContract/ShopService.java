@@ -1,6 +1,7 @@
 package org.nearbyshops.serviceprovider.RetrofitRESTContract;
 
 import org.nearbyshops.serviceprovider.Model.Shop;
+import org.nearbyshops.serviceprovider.ModelEndPoints.ShopEndPoint;
 
 import java.util.List;
 
@@ -18,6 +19,25 @@ import retrofit2.http.Query;
  * Created by sumeet on 12/3/16.
  */
 public interface ShopService {
+
+
+    @GET("/api/v1/Shop/QuerySimple")
+    Call<ShopEndPoint> getShopListSimple(
+            @Query("Enabled")Boolean enabled,
+            @Query("Waitlisted") Boolean waitlisted,
+            @Query("latCenter")Double latCenter, @Query("lonCenter")Double lonCenter,
+            @Query("deliveryRangeMax")Double deliveryRangeMax,
+            @Query("deliveryRangeMin")Double deliveryRangeMin,
+            @Query("proximity")Double proximity,
+            @Query("SearchString") String searchString,
+            @Query("SortBy") String sortBy,
+            @Query("Limit") Integer limit, @Query("Offset") int offset
+    );
+
+
+
+    //***********************************
+
 
     @GET("/api/Shop")
     Call<List<Shop>> getShops(@Query("DistributorID") int distributorID);

@@ -19,6 +19,7 @@ import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
@@ -28,6 +29,8 @@ import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
+import org.nearbyshops.serviceprovider.Utility.UtilitySortDistributor;
+import org.nearbyshops.serviceprovider.Utility.UtilitySortItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +50,13 @@ import retrofit2.Response;
 public class ItemRemakeFragment extends Fragment
         implements  ItemAdapterTwo.NotificationReceiver,
         SwipeRefreshLayout.OnRefreshListener,
-        NotifyCategoryChanged, NotifyFabClick_Item{
+        NotifyCategoryChanged, NotifyFabClick_Item, NotifySort{
 
     public static final String ADD_ITEM_INTENT_KEY = "add_item_intent_key";
 
+    @State
     ArrayList<Item> dataset = new ArrayList<>();
+
     RecyclerView itemCategoriesList;
     ItemAdapterTwo listAdapter;
     GridLayoutManager layoutManager;
@@ -68,7 +73,8 @@ public class ItemRemakeFragment extends Fragment
 
 //    NotifyTitleChanged notifyTitleChanged;
 
-    @State ItemCategory notifiedCurrentCategory = null;
+    @State
+    ItemCategory notifiedCurrentCategory = null;
 
 
     // scroll variables
@@ -94,6 +100,8 @@ public class ItemRemakeFragment extends Fragment
     }
 
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,9 +114,6 @@ public class ItemRemakeFragment extends Fragment
         ButterKnife.bind(this,rootView);
 
         itemCategoriesList = (RecyclerView)rootView.findViewById(R.id.recyclerViewItemCategories);
-
-        setupRecyclerView();
-        setupSwipeContainer();
 
 
 
@@ -137,7 +142,7 @@ public class ItemRemakeFragment extends Fragment
         if(savedInstanceState==null)
         {
 
-             swipeContainer.post(new Runnable() {
+            swipeContainer.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeContainer.setRefreshing(true);
@@ -149,7 +154,14 @@ public class ItemRemakeFragment extends Fragment
             });
 
         }
+        else
+        {
+            onViewStateRestored(savedInstanceState);
+        }
 
+
+        setupRecyclerView();
+        setupSwipeContainer();
 
 
         return  rootView;
@@ -163,7 +175,6 @@ public class ItemRemakeFragment extends Fragment
 
 
         listAdapter = new ItemAdapterTwo(dataset,getActivity(),this,this);
-
         itemCategoriesList.setAdapter(listAdapter);
 
         layoutManager = new GridLayoutManager(getActivity(),1);
@@ -175,7 +186,16 @@ public class ItemRemakeFragment extends Fragment
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
-        layoutManager.setSpanCount(metrics.widthPixels/350);
+//        layoutManager.setSpanCount(metrics.widthPixels/350);
+
+
+        int spanCount = (int) (metrics.widthPixels/(230 * metrics.density));
+
+        if(spanCount==0){
+            spanCount = 1;
+        }
+
+        layoutManager.setSpanCount(spanCount);
 
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -269,22 +289,21 @@ public class ItemRemakeFragment extends Fragment
     {
         if(notifiedCurrentCategory==null)
         {
-
             swipeContainer.setRefreshing(false);
-
             return;
         }
 
 
+        String current_sort = "";
+
+        current_sort = UtilitySortItem.getSort(getContext()) + " " + UtilitySortItem.getAscending(getContext());
+
         Call<ItemEndPoint> endPointCall = itemService.getItemsOuterJoin(notifiedCurrentCategory.getItemCategoryID(),
-                null, limit,offset, null);
+                current_sort, limit,offset, null);
 
         endPointCall.enqueue(new Callback<ItemEndPoint>() {
             @Override
             public void onResponse(Call<ItemEndPoint> call, Response<ItemEndPoint> response) {
-
-
-
 
                 if(response.body()!=null) {
 
@@ -593,8 +612,8 @@ public class ItemRemakeFragment extends Fragment
         super.onSaveInstanceState(outState);
 
         Icepick.saveInstanceState(this,outState);
-        outState.putParcelable("currentCategory",notifiedCurrentCategory);
-        outState.putParcelableArrayList("dataset",dataset);
+//        outState.putParcelable("currentCategory",notifiedCurrentCategory);
+//        outState.putParcelableArrayList("dataset",dataset);
     }
 
 
@@ -603,17 +622,19 @@ public class ItemRemakeFragment extends Fragment
         super.onViewStateRestored(savedInstanceState);
 
         Icepick.restoreInstanceState(this,savedInstanceState);
+        notifyTitleChanged();
+
+//        listAdapter.notifyDataSetChanged();
+//        setupRecyclerView();
 
         if(savedInstanceState!=null)
         {
-            notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
-            ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
-            dataset.clear();
-            dataset.addAll(tempCat);
-
-            notifyTitleChanged();
-            listAdapter.notifyDataSetChanged();
+//            notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
+//            ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
+//            dataset.clear();
+//            dataset.addAll(tempCat);
         }
+
     }
 
     @Override
@@ -644,4 +665,11 @@ public class ItemRemakeFragment extends Fragment
         addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
         startActivity(addIntent);
     }
+
+    @Override
+    public void notifySortChanged() {
+        onRefresh();
+    }
+
+
 }

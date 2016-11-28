@@ -68,6 +68,8 @@ public class ImageCropUtility{
 
         UCrop.Options options = new UCrop.Options();
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setFreeStyleCropEnabled(true);
+
 //        options.setCompressionQuality(100);
 
         options.setToolbarColor(activityContext.getResources().getColor(R.color.cyan900));
@@ -77,9 +79,9 @@ public class ImageCropUtility{
         // this function takes the file from the source URI and saves in into the destination URI location.
         UCrop.of(sourceUri, destinationUri)
                 .withOptions(options)
-                .withMaxResultSize(400,300)
                 .start(activityContext);
 
+        //.withMaxResultSize(400,300)
         //.withMaxResultSize(500, 400)
         //.withAspectRatio(16, 9)
     }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.Utility.UtilitySort;
+import org.nearbyshops.serviceprovider.Utility.UtilitySortDistributor;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -78,19 +78,21 @@ public class SlidingLayerDistributor extends Fragment{
 
 
     void loadDefaultSort() {
-//        String[] sort_options = UtilitySort.getSort(getActivity());
+//        String[] sort_options = UtilitySortDistributor.getSort(getActivity());
 
-        currentSort = UtilitySort.getSort(getActivity());
-        currentAscending = UtilitySort.getAscending(getActivity());
+        currentSort = UtilitySortDistributor.getSort(getActivity());
+        currentAscending = UtilitySortDistributor.getAscending(getActivity());
 
         clearSelectionSort();
         clearSelectionAscending();
 
-        if (currentSort.equals(SORT_BY_NAME)) {
+        if (currentSort.equals(SORT_BY_NAME))
+        {
             sort_by_name.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
             sort_by_name.setBackgroundColor(ContextCompat.getColor(getActivity(), colorSelected));
         }
-        else if (currentSort.equals(SORT_BY_USERNAME)) {
+        else if (currentSort.equals(SORT_BY_USERNAME))
+        {
             sort_by_username.setTextColor(ContextCompat.getColor(getActivity(),R.color.white));
             sort_by_username.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelected));
         }
@@ -127,7 +129,7 @@ public class SlidingLayerDistributor extends Fragment{
         sort_by_name.setTextColor(ContextCompat.getColor(getActivity(),R.color.white));
         sort_by_name.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelected));
 
-        UtilitySort.saveSort(getActivity(),SORT_BY_NAME);
+        UtilitySortDistributor.saveSort(getActivity(),SORT_BY_NAME);
 
         if(getActivity() instanceof NotifySort)
         {
@@ -143,7 +145,7 @@ public class SlidingLayerDistributor extends Fragment{
         sort_by_username.setTextColor(ContextCompat.getColor(getActivity(),R.color.white));
         sort_by_username.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelected));
 
-        UtilitySort.saveSort(getActivity(),SORT_BY_USERNAME);
+        UtilitySortDistributor.saveSort(getActivity(),SORT_BY_USERNAME);
 
         if(getActivity() instanceof NotifySort)
         {
@@ -159,7 +161,7 @@ public class SlidingLayerDistributor extends Fragment{
         sort_by_created.setTextColor(ContextCompat.getColor(getActivity(),R.color.white));
         sort_by_created.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelected));
 
-        UtilitySort.saveSort(getActivity(),SORT_BY_CREATED);
+        UtilitySortDistributor.saveSort(getActivity(),SORT_BY_CREATED);
 
         if(getActivity() instanceof NotifySort)
         {
@@ -175,7 +177,7 @@ public class SlidingLayerDistributor extends Fragment{
         sort_by_updated.setTextColor(ContextCompat.getColor(getActivity(),R.color.white));
         sort_by_updated.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelected));
 
-        UtilitySort.saveSort(getActivity(),SORT_BY_UPDATED);
+        UtilitySortDistributor.saveSort(getActivity(),SORT_BY_UPDATED);
 
         if(getActivity() instanceof NotifySort)
         {
@@ -192,7 +194,7 @@ public class SlidingLayerDistributor extends Fragment{
         sort_ascending.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelectedAscending));
 
 
-        UtilitySort.saveAscending(getActivity(),SORT_ASCENDING);
+        UtilitySortDistributor.saveAscending(getActivity(),SORT_ASCENDING);
 
         if(getActivity() instanceof NotifySort)
         {
@@ -210,7 +212,7 @@ public class SlidingLayerDistributor extends Fragment{
         sort_descending.setBackgroundColor(ContextCompat.getColor(getActivity(),colorSelectedAscending));
 
 
-        UtilitySort.saveAscending(getActivity(),SORT_DESCENDING);
+        UtilitySortDistributor.saveAscending(getActivity(),SORT_DESCENDING);
 
         if(getActivity() instanceof NotifySort)
         {

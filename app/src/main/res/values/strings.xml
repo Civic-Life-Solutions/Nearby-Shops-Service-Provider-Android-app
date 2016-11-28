@@ -68,4 +68,12 @@
     <string name="sort_by_descending">Descending</string>
     <string name="title_activity_distributor_detail">Distributor Details</string>
 
+    <string name="alert_dialog_yes">Yes</string>
+    <string name="alert_dialog_no">No</string>
+    <string name="alert_dialog_cancelled">Cancelled !</string>
+    <string name="dialog_dismissed">Dismissed !</string>
+    <string name="title_activity_shop_admin_approvals">Shop Admin Approvals</string>
+    <string name="title_activity_shop_approals">Shop Approvals</string>
+    <string name="title_activity_main">Staff Accounts</string>
+
 </resources>

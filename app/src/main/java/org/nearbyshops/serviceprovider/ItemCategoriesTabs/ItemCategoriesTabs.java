@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCateg
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGeneral,
-        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener, NotifyCategoryChanged{
+        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener, NotifyCategoryChanged, NotifySort{
 
     // Fab Variables
     @Bind(R.id.fab_menu)
@@ -136,7 +138,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.slidinglayerfragment,new SlidingLayerFragment())
+                    .replace(R.id.slidinglayerfragment,new SlidingLayerItemSort())
                     .commit();
 
         }
@@ -161,8 +163,8 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_item_categories_tabs, menu);
-        return true;
+//        getMenuInflater().inflate(R.menu.menu_item_categories_tabs, menu);
+        return false;
     }
 
     @Override
@@ -407,6 +409,22 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+
+
+    @Override
+    public void notifySortChanged() {
+
+        if(mViewPager.getCurrentItem()==1)
+        {
+            Fragment fragment = (Fragment)mPagerAdapter.instantiateItem(mViewPager,mViewPager.getCurrentItem());
+
+            if(fragment instanceof NotifySort)
+            {
+                ((NotifySort)fragment).notifySortChanged();
+            }
+        }
     }
 
 }

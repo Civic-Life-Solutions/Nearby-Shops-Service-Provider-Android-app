@@ -3,6 +3,8 @@ package org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -97,9 +99,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public void onBindViewHolder(ItemCategoriesAdapter.ViewHolder holder, final int position) {
 
 
-        holder.categoryName.setText(String.valueOf(dataset.get(position).getItemCategoryID()) + ". " + dataset.get(position).getCategoryName());
+        holder.categoryName.setText(String.valueOf(dataset.get(position).getCategoryName()));
         holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
-
 
 
         if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
@@ -116,9 +117,12 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         String imagePath = UtilityGeneral.getImageEndpointURL(context)
                 + dataset.get(position).getImagePath();
 
+        Drawable placeholder = VectorDrawableCompat
+                .create(context.getResources(),
+                        R.drawable.ic_nature_people_white_48px, context.getTheme());
 
         Picasso.with(context).load(imagePath)
-                .placeholder(R.drawable.book_placeholder_image)
+                .placeholder(placeholder)
                 .into(holder.categoryImage);
 
     }

@@ -136,13 +136,13 @@ public class DistributorDetail extends AppCompatActivity {
         switchWaitlisted.setChecked(distributor.isWaitlisted());
 
 
-        updateSwitchLabels();
+//        updateSwitchLabels();
 
         username.setText("Usename : " + distributor.getUsername());
     }
 
 
-    void updateSwitchLabels()
+    void updateSwitchLabels_()
     {
         if(switchWaitlisted.isChecked())
         {
@@ -172,7 +172,7 @@ public class DistributorDetail extends AppCompatActivity {
     @OnCheckedChanged({R.id.switch_enabled,R.id.switch_waitlisted})
     void swtichEnabled()
     {
-        updateSwitchLabels();
+//        updateSwitchLabels();
     }
 
 
@@ -181,11 +181,11 @@ public class DistributorDetail extends AppCompatActivity {
     {
         if(switchEnabled.isChecked())
         {
-            switchWaitlisted.setVisibility(View.INVISIBLE);
+//            switchWaitlisted.setVisibility(View.INVISIBLE);
         }
         else
         {
-            switchWaitlisted.setVisibility(View.VISIBLE);
+//            switchWaitlisted.setVisibility(View.VISIBLE);
         }
     }
 

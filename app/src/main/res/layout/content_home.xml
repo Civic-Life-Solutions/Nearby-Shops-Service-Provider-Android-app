@@ -496,6 +496,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
             <RelativeLayout
+                android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:id="@+id/option_reported_complaints"
@@ -514,6 +515,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:padding="10dp"
                     android:id="@+id/text_reported_complaints"
                     android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
@@ -554,6 +556,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:id="@+id/option_enduser_accounts"
@@ -572,10 +575,11 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:padding="10dp"
                     android:id="@+id/text_enduser_accounts"
                     android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="EndUser Accounts"
+                    android:text="EndUser Approvals"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
@@ -604,10 +608,11 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:padding="10dp"
                     android:id="@+id/text_shop_approvals"
                     android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="Distributor Accounts"
+                    android:text="Shop Admin Approvals"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
@@ -622,6 +627,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
             <RelativeLayout
                 android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:id="@+id/option_staff_accounts"
                 android:background="@color/blueGrey800"
@@ -640,6 +646,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:id="@+id/text_staff_accounts"
                     android:textSize="@dimen/menu_item_text_size"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
                     android:text="Staff Accounts"
@@ -671,10 +678,11 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
                     android:padding="10dp"
                     android:id="@+id/text_admin_approvals"
                     android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:textColor="#ffffff"
-                    android:text="Administrator Accounts"
+                    android:text="Shop Approvals"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>

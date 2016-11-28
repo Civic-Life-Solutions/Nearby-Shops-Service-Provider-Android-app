@@ -15,10 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
-import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorAccountsActivity;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.ShopAdminApprovals;
+import org.nearbyshops.serviceprovider.ShopApprovals.ShopApprovals;
+import org.nearbyshops.serviceprovider.StaffAccounts.StaffAccounts;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import butterknife.Bind;
@@ -175,10 +177,30 @@ public class Home extends AppCompatActivity
     }
 
 
+    @OnClick(R.id.option_admin_accounts)
+    void optionAdminClick(View view)
+    {
+        Intent intent = new Intent(this, ShopApprovals.class);
+        startActivity(intent);
+    }
+
+
+    @OnClick(R.id.option_staff_accounts)
+    void optionStaffClick(View view)
+    {
+        Intent intent = new Intent(this, StaffAccounts.class);
+        startActivity(intent);
+    }
+
+
+
     @OnClick(R.id.option_shop_approvals)
     void distributorAccountClick(View view)
     {
-        Intent intent = new Intent(this, DistributorAccountsActivity.class);
+//        Intent intent = new Intent(this, DistributorAccountsActivity.class);
+//        startActivity(intent);
+
+        Intent intent = new Intent(this, ShopAdminApprovals.class);
         startActivity(intent);
     }
 

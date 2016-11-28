@@ -25,6 +25,26 @@ public class UtilityLogin {
 
 
 
+    public static String getAuthorizationHeaders(Context context)
+    {
+        return UtilityLogin
+                .baseEncoding(UtilityLogin.getUsername(context), UtilityLogin.getPassword(context));
+
+
+//        if(getRoleID(context)==ROLE_DISTRIBUTOR)
+//        {
+//            Distributor distributor = UtilityLogin.getDistributor(context);
+//
+//            if(distributor!=null)
+//            {
+//            }
+//        }
+//        return null;
+
+    }
+
+
+
 
     public static void saveCredentials(Context context, String username, String password)
     {

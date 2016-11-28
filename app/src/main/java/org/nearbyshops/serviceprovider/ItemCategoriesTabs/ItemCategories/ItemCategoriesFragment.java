@@ -21,6 +21,7 @@ import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyBackPressed;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
@@ -49,10 +50,13 @@ import retrofit2.Response;
 public class ItemCategoriesFragment extends Fragment
         implements ItemCategoriesAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,
         NotifyBackPressed,
-        NotifyFabClick_ItemCategories {
+        NotifyFabClick_ItemCategories , NotifySort{
 
 
+
+    @State
     ArrayList<ItemCategory> dataset = new ArrayList<>();
+
     RecyclerView itemCategoriesList;
     ItemCategoriesAdapter listAdapter;
     GridLayoutManager layoutManager;
@@ -82,10 +86,6 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    int getMaxChildCount(int spanCount, int heightPixels)
-    {
-       return (spanCount * (heightPixels/250));
-    }
 
 
     @Nullable
@@ -105,8 +105,6 @@ public class ItemCategoriesFragment extends Fragment
 
         itemCategoriesList = (RecyclerView)rootView.findViewById(R.id.recyclerViewItemCategories);
 
-        setupRecyclerView();
-        setupSwipeContainer();
 
 
 
@@ -158,6 +156,15 @@ public class ItemCategoriesFragment extends Fragment
 
 
         }
+        else
+        {
+            onViewStateRestored(savedInstanceState);
+        }
+
+
+
+        setupRecyclerView();
+        setupSwipeContainer();
 
 
         return  rootView;
@@ -194,7 +201,18 @@ public class ItemCategoriesFragment extends Fragment
         final DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        layoutManager.setSpanCount(metrics.widthPixels/350);
+//        layoutManager.setSpanCount(metrics.widthPixels/350);
+
+
+        int spanCount = (int) (metrics.widthPixels/(230 * metrics.density));
+
+        if(spanCount==0){
+            spanCount = 1;
+        }
+
+        layoutManager.setSpanCount(spanCount);
+
+
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
 
@@ -630,7 +648,7 @@ public class ItemCategoriesFragment extends Fragment
         super.onSaveInstanceState(outState);
 
         Icepick.saveInstanceState(this, outState);
-        outState.putParcelableArrayList("dataset",dataset);
+//        outState.putParcelableArrayList("dataset",dataset);
 //        outState.putParcelable("currentCat",currentCategory);
     }
 
@@ -661,9 +679,10 @@ public class ItemCategoriesFragment extends Fragment
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
 
-
         Icepick.restoreInstanceState(this, savedInstanceState);
+        notifyTitleChanged();
 
+        /*
         if (savedInstanceState != null) {
 
             ArrayList<ItemCategory> tempList = savedInstanceState.getParcelableArrayList("dataset");
@@ -671,12 +690,12 @@ public class ItemCategoriesFragment extends Fragment
             dataset.clear();
             dataset.addAll(tempList);
 
-            notifyTitleChanged();
+
 
             listAdapter.notifyDataSetChanged();
 //
 //            currentCategory = savedInstanceState.getParcelable("currentCat");
-        }
+        }*/
 
     }
 
@@ -787,4 +806,8 @@ public class ItemCategoriesFragment extends Fragment
 
     }
 
+    @Override
+    public void notifySortChanged() {
+        onRefresh();
+    }
 }

@@ -25,7 +25,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
+        // Return a FragmentShopAdmins (defined as a static inner class below).
 
         if(position == 0)
         {
@@ -56,7 +56,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return "API Keys";
             case 2:
-                return "Login API Keys";
+                return "LoginScreen API Keys";
         }
         return null;
     }

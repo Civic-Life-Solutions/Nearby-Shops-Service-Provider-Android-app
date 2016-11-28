@@ -15,6 +15,8 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.SettingsService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopAdminService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
@@ -196,6 +198,20 @@ public class NetModule {
     DistributorAccountService provideDistributorService(@Named("normal")Retrofit retrofit)
     {
         return retrofit.create(DistributorAccountService.class);
+    }
+
+
+    @Provides
+    ShopAdminService provideShopAdmin(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ShopAdminService.class);
+    }
+
+
+    @Provides
+    ShopService provideShopService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ShopService.class);
     }
 
 

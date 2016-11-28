@@ -3,6 +3,7 @@ package org.nearbyshops.serviceprovider.ItemCategoriesTabs;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.PlaceholderFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
@@ -16,7 +17,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragme
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class PagerAdapter extends FragmentPagerAdapter {
+public class PagerAdapter extends FragmentStatePagerAdapter {
 
 //    DetachedTabs activity;
 
@@ -34,7 +35,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
+        // Return a FragmentShopAdmins (defined as a static inner class below).
 
 
 
