@@ -134,9 +134,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
             case R.id.loginButton:
 
                 startActivity(new Intent(this,Home.class));
-
                 break;
-
         }
 
     }

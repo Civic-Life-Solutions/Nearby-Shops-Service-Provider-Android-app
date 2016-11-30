@@ -38,12 +38,14 @@
                 app:srcCompat="@drawable/ic_nature_people_white_48px"/>
 
 
-
+<!--
             <TextView
+                android:visibility="gone"
                 android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:background="#77000000"
                 android:layout_marginLeft="5dp"
@@ -53,7 +55,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Category Description"/>
+                android:text="Category Description"/>-->
 
         </RelativeLayout>
 

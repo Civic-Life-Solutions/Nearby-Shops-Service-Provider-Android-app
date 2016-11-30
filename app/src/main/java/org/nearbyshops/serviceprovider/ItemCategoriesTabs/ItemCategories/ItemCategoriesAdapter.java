@@ -100,7 +100,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
 
         holder.categoryName.setText(String.valueOf(dataset.get(position).getCategoryName()));
-        holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
+//        holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
 
 
         if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
@@ -146,7 +146,9 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
 
-        private TextView categoryName,categoryDescription;
+        private TextView categoryName;
+
+//                TextView categoryDescription;
 
         @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
 
@@ -163,7 +165,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
             categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
             categoryName = (TextView) itemView.findViewById(R.id.categoryName);
-            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
+//            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
 
             itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
         }

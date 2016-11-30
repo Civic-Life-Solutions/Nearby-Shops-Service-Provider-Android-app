@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Item;
+import org.nearbyshops.serviceprovider.ModelStats.ItemStats;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
@@ -87,7 +90,7 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
     @Override
     public ItemAdapterTwo.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_item,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_item_guide,parent,false);
 
         return new ViewHolder(v);
     }
@@ -97,10 +100,22 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
     public void onBindViewHolder(ItemAdapterTwo.ViewHolder holder, final int position) {
 
         holder.categoryName.setText(dataset.get(position).getItemName());
-        holder.categoryDescription
-                .setText(dataset.get(position).getItemDescription()
-                + "\n\nPrice (Average) : " + String.valueOf(dataset.get(position).getItemStats().getAvg_price()) + " Per " + dataset.get(position).getQuantityUnit()
-                + "\nAvailable in " + String.valueOf(dataset.get(position).getItemStats().getShopCount()) + " Shops");
+
+        ItemStats itemStats = dataset.get(position).getItemStats();
+
+
+        holder.priceRange.setText("Price Range : Rs." + itemStats.getMin_price() + " - " + itemStats.getMax_price());
+        holder.priceAverage.setText("Price (Average) : " + itemStats.getAvg_price());
+        holder.shopCount.setText("Available in " + itemStats.getShopCount() + " Shops");
+        holder.itemRating.setText(String.format("%.2f",itemStats.getRating_avg()));
+        holder.ratingCount.setText("( " + String.valueOf(itemStats.getRatingCount()) + " Ratings )");
+
+
+
+//        holder.categoryDescription
+//                .setText(dataset.get(position).getItemDescription()
+//                + "\n\nPrice (Average) : " + String.valueOf(dataset.get(position).getItemStats().getAvg_price()) + " Per " + dataset.get(position).getQuantityUnit()
+//                + "\nAvailable in " + String.valueOf(dataset.get(position).getItemStats().getShopCount()) + " Shops");
 
         if(selectedItems.containsKey(dataset.get(position).getItemID()))
         {
@@ -140,11 +155,17 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
 
-        private TextView categoryName,categoryDescription;
+        @Bind(R.id.itemName) TextView categoryName;
+//        TextView categoryDescription;
 
-        @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
+        @Bind(R.id.items_list_item) CardView itemCategoryListItem;
+        @Bind(R.id.itemImage) ImageView categoryImage;
+        @Bind(R.id.price_range) TextView priceRange;
+        @Bind(R.id.price_average) TextView priceAverage;
+        @Bind(R.id.shop_count) TextView shopCount;
+        @Bind(R.id.item_rating) TextView itemRating;
+        @Bind(R.id.rating_count) TextView ratingCount;
 
-        @Bind(R.id.categoryImage) ImageView categoryImage;
 
 
         public ViewHolder(View itemView) {
@@ -152,16 +173,17 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 
             ButterKnife.bind(this,itemView);
 
-            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
-            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
-            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
 
-            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
+//            categoryImage = (ImageView) itemView.findViewById(R.id.itemImage);
+//            categoryName = (TextView) itemView.findViewById(R.id.itemName);
+//            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
+
+//            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.items_list_item);
         }
 
 
 
-        @OnClick(R.id.itemCategoryListItem)
+        @OnClick(R.id.items_list_item)
         public void listItemClick()
         {
 
@@ -171,17 +193,14 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
             if(selectedItems.containsKey(
                     dataset.get(getLayoutPosition())
                             .getItemID()
-            )
-                    )
-
+            ))
             {
                 selectedItems.remove(dataset.get(getLayoutPosition()).getItemID());
-
-            }else
+            }
+            else
             {
 
                 selectedItems.put(dataset.get(getLayoutPosition()).getItemID(),dataset.get(getLayoutPosition()));
-
                 notificationReceiver.notifyItemSelected();
             }
 

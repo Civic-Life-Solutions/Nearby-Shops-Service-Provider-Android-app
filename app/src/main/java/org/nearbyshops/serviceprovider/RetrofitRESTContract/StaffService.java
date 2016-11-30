@@ -1,13 +1,9 @@
 package org.nearbyshops.serviceprovider.RetrofitRESTContract;
 
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.ModelRoles.Admin;
-import org.nearbyshops.serviceprovider.ModelRoles.ShopAdmin;
 import org.nearbyshops.serviceprovider.ModelRoles.Staff;
 
 import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -20,25 +16,23 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
+
+
 
 /**
  * Created by sumeet on 12/3/16.
  */
 public interface StaffService {
 
-
     @POST("/api/v1/Staff")
     Call<Staff> postStaff(@Header("Authorization") String headers,
-                                  @Body Staff staff);
-
+                          @Body Staff staff);
 
 
     @PUT("/api/v1/Staff/{StaffID}")
     Call<ResponseBody> putStaff(@Header("Authorization") String headers,
                                 @Path("StaffID") int id,
                                 @Body Staff staff);
-
 
 
     @PUT("/api/v1/Staff/UpdateBySelf/{StaffID}")
@@ -59,9 +53,7 @@ public interface StaffService {
 
     @GET("/api/v1/Staff")
     Call<List<Staff>> getStaffList(@Header("Authorization") String headers,
-                               @Query("IsEnabled") Boolean isEnabled);
-
-
+                                   @Query("IsEnabled") Boolean isEnabled);
 
 
     @GET("/api/v1/Staff/CheckUsernameExists/{username}")

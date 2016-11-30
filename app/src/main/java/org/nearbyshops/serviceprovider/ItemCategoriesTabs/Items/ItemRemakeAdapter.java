@@ -50,13 +50,12 @@ import retrofit2.Response;
 public class ItemRemakeAdapter extends RecyclerView.Adapter<ItemRemakeAdapter.ViewHolder>{
 
 
-    Map<Integer,Item> selectedItems = new HashMap<>();
-
+    private Map<Integer,Item> selectedItems = new HashMap<>();
 
     @Inject
     ItemService itemCategoryService;
 
-    List<Item> dataset;
+    private List<Item> dataset;
 
     Context context;
     ItemRemakeFragment activity;
