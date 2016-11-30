@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts;
+package org.nearbyshops.serviceprovider.zDistributorAccounts;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifySort;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.Utility.UtilitySortDistributor;
 

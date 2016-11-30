@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -15,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +21,17 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.UtilityItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.ModelStats.ItemStats;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,10 +105,11 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
         holder.categoryName.setText(dataset.get(position).getItemName());
 
         ItemStats itemStats = dataset.get(position).getItemStats();
+        Item item = dataset.get(position);
 
 
-        holder.priceRange.setText("Price Range : Rs." + itemStats.getMin_price() + " - " + itemStats.getMax_price());
-        holder.priceAverage.setText("Price (Average) : " + itemStats.getAvg_price());
+        holder.priceRange.setText("Price Range :\nRs." + itemStats.getMin_price() + " - " + itemStats.getMax_price() + " per " + item.getQuantityUnit());
+        holder.priceAverage.setText("Price Average : Rs." + itemStats.getAvg_price() + " per " + item.getQuantityUnit());
         holder.shopCount.setText("Available in " + itemStats.getShopCount() + " Shops");
         holder.itemRating.setText(String.format("%.2f",itemStats.getRating_avg()));
         holder.ratingCount.setText("( " + String.valueOf(itemStats.getRatingCount()) + " Ratings )");
@@ -128,8 +132,9 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 
 
 
-        String imagePath = UtilityGeneral.getImageEndpointURL(context)
-                + dataset.get(position).getItemImageURL();
+        String imagePath = UtilityGeneral.getServiceURL(context)
+                + "/api/v1/Item/Image/three_hundred_" + dataset.get(position).getItemImageURL() + ".jpg";
+
 
         Drawable drawable = VectorDrawableCompat
                 .create(context.getResources(),
@@ -248,7 +253,10 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 
 //            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
 
-            Call<ResponseBody> call = itemCategoryService.deleteItem(dataset.get(getLayoutPosition()).getItemID());
+            Call<ResponseBody> call = itemCategoryService.deleteItem(
+                    UtilityLogin.getAuthorizationHeaders(context),
+                    dataset.get(getLayoutPosition()).getItemID()
+            );
 
 
             call.enqueue(new Callback<ResponseBody>() {
@@ -330,8 +338,10 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 //                    intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //                    context.startActivity(intent);
 
+                    UtilityItem.saveItem(dataset.get(getLayoutPosition()),context);
+
                     Intent intentEdit = new Intent(context,EditItem.class);
-                    intentEdit.putExtra(EditItem.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
+                    intentEdit.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY,EditItemFragment.MODE_UPDATE);
                     context.startActivity(intentEdit);
 
                     break;

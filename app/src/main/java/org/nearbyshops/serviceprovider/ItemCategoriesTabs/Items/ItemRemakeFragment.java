@@ -23,13 +23,16 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.AddItem;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
-import org.nearbyshops.serviceprovider.Utility.UtilitySortDistributor;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 import org.nearbyshops.serviceprovider.Utility.UtilitySortItem;
 
 import java.util.ArrayList;
@@ -427,7 +430,8 @@ public class ItemRemakeFragment extends Fragment
 
 //        Call<ResponseBody> call2 = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
 
-        Call<ResponseBody> call = itemService.updateItem(item,item.getItemID());
+        Call<ResponseBody> call = itemService.updateItem(UtilityLogin.getAuthorizationHeaders(getContext()),
+                item,item.getItemID());
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -486,7 +490,8 @@ public class ItemRemakeFragment extends Fragment
     {
 //        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);
 
-        Call<ResponseBody> call = itemService.updateItemBulk(list);
+        Call<ResponseBody> call = itemService.updateItemBulk(UtilityLogin.getAuthorizationHeaders(getContext()),
+                list);
 //        Call<ResponseBody> call = null;
 //
 //
@@ -661,9 +666,14 @@ public class ItemRemakeFragment extends Fragment
 
     void addItemClick()
     {
-        Intent addIntent = new Intent(getActivity(), AddItem.class);
-        addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
-        startActivity(addIntent);
+//        Intent addIntent = new Intent(getActivity(), AddItem.class);
+//        addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
+//        startActivity(addIntent);
+
+        Intent intent = new Intent(getActivity(),EditItem.class);
+        intent.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY,EditItemFragment.MODE_ADD);
+        intent.putExtra(EditItemFragment.ITEM_CATEGORY_INTENT_KEY,notifiedCurrentCategory);
+        startActivity(intent);
     }
 
     @Override

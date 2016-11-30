@@ -19,13 +19,14 @@ import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
 import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
 import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.AddItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.AddItem;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import icepick.Icepick;
 import icepick.State;
 import okhttp3.ResponseBody;
@@ -393,7 +393,8 @@ public class DetachedItemFragment extends Fragment
     void makeUpdateRequest(Item item)
     {
 
-        Call<ResponseBody> call = itemService.updateItem(item,item.getItemID());
+        Call<ResponseBody> call = itemService.updateItem(UtilityLogin.getAuthorizationHeaders(getContext()),
+                item,item.getItemID());
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -452,7 +453,8 @@ public class DetachedItemFragment extends Fragment
     {
 
 
-        Call<ResponseBody> call = itemService.updateItemBulk(list);
+        Call<ResponseBody> call = itemService.updateItemBulk(UtilityLogin
+                .getAuthorizationHeaders(getActivity()),list);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

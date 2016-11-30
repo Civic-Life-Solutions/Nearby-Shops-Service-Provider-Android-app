@@ -1,15 +1,13 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts.DistributorDetail;
+package org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorDetail;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 

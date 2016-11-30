@@ -5,11 +5,12 @@ import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemC
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
-import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorAccountFragment;
-import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorDetail.DistributorDetail;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountFragment;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorDetail.DistributorDetail;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.AddItem;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.AddItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemAdapterTwo;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeAdapter;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
@@ -71,7 +72,7 @@ public interface NetComponent {
 
     void Inject(AddItem addItem);
 
-    void Inject(EditItem editItem);
+    void Inject(EditItemOld editItemOld);
 
     void Inject(DetachedItemCatFragment detachedItemCatFragment);
 
@@ -100,6 +101,8 @@ public interface NetComponent {
     void Inject(EditStaffFragment editStaffFragment);
 
     void Inject(FragmentStaffAccounts fragmentStaffAccounts);
+
+    void Inject(EditItemFragment editItemFragment);
 
 
 //    void Inject(LoginDialog loginDialog);

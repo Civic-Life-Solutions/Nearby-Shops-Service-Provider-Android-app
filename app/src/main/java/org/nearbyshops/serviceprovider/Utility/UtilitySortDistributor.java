@@ -3,8 +3,7 @@ package org.nearbyshops.serviceprovider.Utility;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.nearbyshops.serviceprovider.ApplicationState.ApplicationState;
-import org.nearbyshops.serviceprovider.DistributorAccounts.SlidingLayerDistributor;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.SlidingLayerDistributor;
 import org.nearbyshops.serviceprovider.MyApplication;
 import org.nearbyshops.serviceprovider.R;
 

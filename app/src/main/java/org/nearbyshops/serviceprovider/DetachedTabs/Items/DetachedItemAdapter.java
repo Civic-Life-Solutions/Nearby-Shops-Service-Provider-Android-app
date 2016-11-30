@@ -19,12 +19,13 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -221,7 +222,8 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
 
 //            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
 
-            Call<ResponseBody> call = itemCategoryService.deleteItem(dataset.get(getLayoutPosition()).getItemID());
+            Call<ResponseBody> call = itemCategoryService.deleteItem(UtilityLogin.getAuthorizationHeaders(context),
+                    dataset.get(getLayoutPosition()).getItemID());
 
 
             call.enqueue(new Callback<ResponseBody>() {
@@ -303,8 +305,8 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
 //                    intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //                    context.startActivity(intent);
 
-                    Intent intentEdit = new Intent(context,EditItem.class);
-                    intentEdit.putExtra(EditItem.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
+                    Intent intentEdit = new Intent(context,EditItemOld.class);
+                    intentEdit.putExtra(EditItemOld.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
                     context.startActivity(intentEdit);
 
                     break;

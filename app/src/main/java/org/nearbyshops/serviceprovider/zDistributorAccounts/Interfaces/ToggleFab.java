@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces;
+package org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces;
 
 /**
  * Created by sumeet on 14/9/16.

@@ -1,16 +1,19 @@
 package org.nearbyshops.serviceprovider.RetrofitRESTContract;
 
+import org.nearbyshops.serviceprovider.Model.Image;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -22,11 +25,22 @@ import retrofit2.http.Query;
 public interface ItemService
 {
 
-    @GET("/api/v1/Item/Depricated")
-    Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID, @Query("ShopID") int shopID);
+    @POST("/api/v1/Item")
+    Call<Item> insertItem(@Header("Authorization") String headers,
+                          @Body Item item);
 
-    @GET("/api/v1/Item/Depricated")
-    Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID);
+    @PUT("/api/v1/Item/{id}")
+    Call<ResponseBody> updateItem(@Header("Authorization") String headers,
+                                  @Body Item item,
+                                  @Path("id") int id);
+
+    @PUT("/api/v1/Item/")
+    Call<ResponseBody> updateItemBulk(@Header("Authorization") String headers,
+                                      @Body List<Item> itemList);
+
+    @DELETE("/api/v1/Item/{id}")
+    Call<ResponseBody> deleteItem(@Header("Authorization") String headers,
+                                  @Path("id") int id);
 
 
     @GET("/api/v1/Item")
@@ -55,16 +69,32 @@ public interface ItemService
     @GET("/api/v1/Item/{id}")
     Call<Item> getItem(@Path("id") int ItemID);
 
-    @POST("/api/v1/Item")
-    Call<Item> insertItem(@Body Item item);
 
-    @PUT("/api/v1/Item/{id}")
-    Call<ResponseBody> updateItem(@Body Item item, @Path("id") int id);
 
-    @PUT("/api/v1/Item/")
-    Call<ResponseBody> updateItemBulk(@Body List<Item> itemList);
+    // Image Calls
 
-    @DELETE("/api/v1/Item/{id}")
-    Call<ResponseBody> deleteItem(@Path("id") int id);
+    @POST("/api/v1/Item/Image")
+    Call<Image> uploadImage(@Header("Authorization") String headers,
+                            @Body RequestBody image);
+
+
+    @DELETE("/api/v1/Item/Image/{name}")
+    Call<ResponseBody> deleteImage(@Header("Authorization") String headers,
+                                   @Path("name") String fileName);
+
+
+
+
+
+
+    // Deprecated
+
+
+
+    @GET("/api/v1/Item/Depricated")
+    Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID, @Query("ShopID") int shopID);
+
+    @GET("/api/v1/Item/Depricated")
+    Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID);
 
 }

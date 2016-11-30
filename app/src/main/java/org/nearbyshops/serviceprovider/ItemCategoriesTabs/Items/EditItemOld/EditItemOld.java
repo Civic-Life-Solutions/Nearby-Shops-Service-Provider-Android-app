@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld;
 
 
 import android.content.Intent;
@@ -24,6 +24,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.Utility.ImageCalls;
 import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 
@@ -38,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class EditItem extends AppCompatActivity implements Callback<Image> {
+public class EditItemOld extends AppCompatActivity implements Callback<Image> {
 
 
     @Inject
@@ -67,7 +68,7 @@ public class EditItem extends AppCompatActivity implements Callback<Image> {
 
 
 
-    public EditItem() {
+    public EditItemOld() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
@@ -201,7 +202,7 @@ public class EditItem extends AppCompatActivity implements Callback<Image> {
         getDataFromEditText(itemForEdit);
 
 
-        Call<ResponseBody> itemCall = itemService.updateItem(
+        Call<ResponseBody> itemCall = itemService.updateItem(UtilityLogin.getAuthorizationHeaders(this),
                                         itemForEdit,
                                         itemForEdit.getItemID());
 
@@ -214,7 +215,7 @@ public class EditItem extends AppCompatActivity implements Callback<Image> {
 
                 if (response.code() == 200)
                 {
-                    Toast.makeText(EditItem.this,"Update Successful !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditItemOld.this,"Update Successful !",Toast.LENGTH_SHORT).show();
                 }
             }
 

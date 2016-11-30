@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts;
+package org.nearbyshops.serviceprovider.zDistributorAccounts;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.DistributorAccounts.DistributorDetail.DistributorDetail;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorDetail.DistributorDetail;
 import org.nearbyshops.serviceprovider.ModelRoles.Distributor;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;

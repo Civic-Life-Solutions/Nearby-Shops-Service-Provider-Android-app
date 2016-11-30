@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts;
+package org.nearbyshops.serviceprovider.zDistributorAccounts;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 
-import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifyTitleChanged;
-import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.ToggleFab;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ModelRoles.Distributor;
 import org.nearbyshops.serviceprovider.ModelRoles.DistributorEndPoint;
 import org.nearbyshops.serviceprovider.R;

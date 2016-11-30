@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +19,7 @@ import com.yalantis.ucrop.UCrop;
 
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
 import org.nearbyshops.serviceprovider.Model.Image;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -27,6 +28,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.Utility.ImageCalls;
 import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 
@@ -135,7 +137,7 @@ public class AddItem extends AppCompatActivity implements Callback<Image> {
 
         */
 
-        Call<Item> itemCall = itemService.insertItem(itemForEdit);
+        Call<Item> itemCall = itemService.insertItem(UtilityLogin.getAuthorizationHeaders(this),itemForEdit);
 
 
         itemCall.enqueue(new Callback<Item>() {
@@ -466,7 +468,7 @@ public class AddItem extends AppCompatActivity implements Callback<Image> {
 
 
                 if (response.code() != 201) {
-                    showMessageSnackBar("Unable to upload Image. Try changing the image by in the Edit Screen !");
+                    showMessageSnackBar("Unable to upload Image. Try changing the image by in the  Screen !");
 
                     result.setText("Unable to upload Image. Try changing the image by in the Edit Screen !");
                 }

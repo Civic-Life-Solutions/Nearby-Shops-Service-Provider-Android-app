@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts;
+package org.nearbyshops.serviceprovider.zDistributorAccounts;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

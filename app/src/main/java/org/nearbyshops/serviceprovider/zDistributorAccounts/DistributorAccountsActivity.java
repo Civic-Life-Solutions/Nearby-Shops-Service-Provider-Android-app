@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.DistributorAccounts;
+package org.nearbyshops.serviceprovider.zDistributorAccounts;
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,9 +14,9 @@ import android.view.MenuItem;
 
 import com.wunderlist.slidinglayer.SlidingLayer;
 
-import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifySort;
-import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.NotifyTitleChanged;
-import org.nearbyshops.serviceprovider.DistributorAccounts.Interfaces.ToggleFab;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.NotifySort;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.R;
 
 import butterknife.Bind;
