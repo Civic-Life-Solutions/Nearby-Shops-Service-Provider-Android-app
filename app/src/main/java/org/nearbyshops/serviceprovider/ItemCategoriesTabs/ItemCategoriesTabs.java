@@ -280,7 +280,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
     @Override
     public void hideFab() {
-        fab_menu.animate().translationY(120);
+        fab_menu.animate().translationY(fab_menu.getHeight());
     }
 
 

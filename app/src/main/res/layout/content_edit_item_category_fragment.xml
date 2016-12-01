@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,10 +8,10 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
     <LinearLayout
-        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -19,9 +19,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
 
-
         <RelativeLayout
-            android:layout_gravity="right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -32,9 +30,6 @@
                 android:id="@+id/uploadImage"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/image_view_height" />
-
-
-
 
 
             <TextView
@@ -73,8 +68,9 @@
             android:id="@+id/removePicture"
             android:textStyle="normal"
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:textSize="20sp"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -135,9 +131,6 @@
         </android.support.design.widget.TextInputLayout>
 
 
-
-
-
         <CheckBox
             android:id="@+id/isLeafNode"
             android:layout_marginTop="10dp"
@@ -186,36 +179,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        
+
+
+        <TextView
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:text="@string/abstract_category_usage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+<!--
         <ScrollView
             android:id="@+id/scrollview_abstract_node_explanation"
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="200dp">
+        </ScrollView>-->
 
-        <TextView
-            android:layout_marginBottom="10dp"
-            android:text="@string/abstract_category_usage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        </ScrollView>
+
+
+        <!--
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="#33000000"
+                    android:text="Shop Address Fields"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />-->
+
 
 
         <Button
-            android:textSize="25dp"
-            android:layout_gravity="right"
-            android:textAllCaps="false"
-            android:layout_marginTop="10dp"
-            android:id="@+id/updateItemCategory"
-            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:elevation="10dp"
+            android:id="@+id/saveButton"
+            android:textSize="20sp"
+            android:textAllCaps="true"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/blueGrey800"
             android:textColor="@color/white"
             android:text="Save"/>
 
 
-
     </LinearLayout>
 
-
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

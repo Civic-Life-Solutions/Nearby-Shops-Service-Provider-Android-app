@@ -311,8 +311,8 @@ public class ItemRemakeAdapter extends RecyclerView.Adapter<ItemRemakeAdapter.Vi
 
                 case R.id.action_edit:
 
-//                    Intent intent = new Intent(context,EditItemCategory.class);
-//                    intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    Intent intent = new Intent(context,EditItemCategoryOld.class);
+//                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //                    context.startActivity(intent);
 
                     Intent intentEdit = new Intent(context,EditItemOld.class);

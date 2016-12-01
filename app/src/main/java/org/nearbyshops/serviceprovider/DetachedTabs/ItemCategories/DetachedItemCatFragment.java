@@ -27,6 +27,7 @@ import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,24 +173,33 @@ public class DetachedItemCatFragment extends Fragment
 
         itemCategoriesList.setAdapter(listAdapter);
 
-        layoutManager = new GridLayoutManager(getActivity(),1, LinearLayoutManager.VERTICAL,false);
+        layoutManager = new GridLayoutManager(getActivity(),2, LinearLayoutManager.VERTICAL,false);
         itemCategoriesList.setLayoutManager(layoutManager);
 
 
-        /*layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
+
                 return (position % 3 == 0 ? 2 : 1);
             }
         });
-*/
 
 
-        final DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//        final DisplayMetrics metrics = new DisplayMetrics();
+//        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
-        layoutManager.setSpanCount(metrics.widthPixels/350);
+//        layoutManager.setSpanCount(metrics.widthPixels/350);
+
+
+//        int spanCount = (int) (metrics.widthPixels/(150 * metrics.density));
+
+//        if(spanCount==0){
+//            spanCount = 1;
+//        }
+
+//        layoutManager.setSpanCount(spanCount);
 
 
 
@@ -429,7 +439,8 @@ public class DetachedItemCatFragment extends Fragment
 
     void makeUpdateRequest(ItemCategory itemCategory)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
+        Call<ResponseBody> call = itemCategoryService.updateItemCategory(UtilityLogin.getAuthorizationHeaders(getActivity()),
+                itemCategory,itemCategory.getItemCategoryID());
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -487,7 +498,8 @@ public class DetachedItemCatFragment extends Fragment
 
     void makeRequestBulk(final List<ItemCategory> list)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(list);
+        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(UtilityLogin.getAuthorizationHeaders(getActivity()),
+                list);
 
 
         call.enqueue(new Callback<ResponseBody>() {

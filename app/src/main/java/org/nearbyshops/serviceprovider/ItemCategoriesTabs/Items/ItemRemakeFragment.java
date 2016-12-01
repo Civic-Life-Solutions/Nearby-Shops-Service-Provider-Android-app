@@ -486,6 +486,7 @@ public class ItemRemakeFragment extends Fragment
     }
 
 
+
     void makeRequestBulk(final List<Item> list)
     {
 //        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);
@@ -519,7 +520,6 @@ public class ItemRemakeFragment extends Fragment
                 {
                     showToastMessage("Unknown server error or response !");
                 }
-
 
 
 //                makeRequestRetrofit();
@@ -675,6 +675,7 @@ public class ItemRemakeFragment extends Fragment
         intent.putExtra(EditItemFragment.ITEM_CATEGORY_INTENT_KEY,notifiedCurrentCategory);
         startActivity(intent);
     }
+
 
     @Override
     public void notifySortChanged() {

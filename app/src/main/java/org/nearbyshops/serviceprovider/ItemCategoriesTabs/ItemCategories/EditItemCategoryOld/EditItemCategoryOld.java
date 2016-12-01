@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -28,6 +28,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.Utility.ImageCalls;
 import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 
@@ -41,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditItemCategory extends AppCompatActivity implements Callback<Image> {
+public class EditItemCategoryOld extends AppCompatActivity implements Callback<Image> {
 
 
     @Inject
@@ -55,15 +56,14 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
     TextView changePicture;
 
     @Bind(R.id.itemCategoryID) EditText itemCategoryID;
-
-    @Bind(R.id.itemCategoryName)
-    TextInputEditText itemCategoryName;
-
+    @Bind(R.id.itemCategoryName) TextInputEditText itemCategoryName;
     @Bind(R.id.itemCategoryDescription) EditText itemCategoryDescription;
+    @Bind(R.id.descriptionShort) EditText descriptionShort;
+    @Bind(R.id.isAbstractNode) CheckBox isAbstractNode;
+    @Bind(R.id.isLeafNode) CheckBox isLeafNode;
+
 
     @Bind(R.id.updateItemCategory) Button updateItemCategory;
-
-    @Bind(R.id.isLeafNode) CheckBox isLeafNode;
 
 
 
@@ -87,11 +87,6 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
     // recently added
 
-    @Bind(R.id.descriptionShort)
-    EditText descriptionShort;
-
-    @Bind(R.id.isAbstractNode)
-    CheckBox isAbstractNode;
 
     boolean isLeafExplainationOpen= false;
     boolean isAbstractExplainationOpen = false;
@@ -104,7 +99,7 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
 
 
-    public EditItemCategory() {
+    public EditItemCategoryOld() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
@@ -206,11 +201,11 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
             itemCategoryID.setText(String.valueOf(itemCategoryForEdit.getItemCategoryID()));
             itemCategoryName.setText(itemCategoryForEdit.getCategoryName());
             itemCategoryDescription.setText(itemCategoryForEdit.getCategoryDescription());
+            descriptionShort.setText(itemCategoryForEdit.getDescriptionShort());
 
             isLeafNode.setChecked(itemCategoryForEdit.getIsLeafNode());
-
             isAbstractNode.setChecked(itemCategoryForEdit.getAbstractNode());
-            descriptionShort.setText(itemCategoryForEdit.getDescriptionShort());
+
         }
     }
 
@@ -313,7 +308,8 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
 
         Call<ResponseBody> itemCategoryCall = itemCategoryService
-                                                    .updateItemCategory(itemCategoryForEdit,
+                                                    .updateItemCategory(UtilityLogin.getAuthorizationHeaders(this),
+                                                            itemCategoryForEdit,
                                                             itemCategoryForEdit.getItemCategoryID());
 
 
@@ -325,7 +321,7 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
                 if (response.code() == 200)
                 {
-                    Toast.makeText(EditItemCategory.this,"Update Successful !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditItemCategoryOld.this,"Update Successful !",Toast.LENGTH_SHORT).show();
                 }
 
             }

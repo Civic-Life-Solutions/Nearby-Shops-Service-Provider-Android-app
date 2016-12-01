@@ -28,6 +28,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.Utility.ImageCalls;
 import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 
@@ -313,7 +314,8 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
 
         Call<ResponseBody> itemCategoryCall = itemCategoryService
-                                                    .updateItemCategory(itemCategoryForEdit,
+                                                    .updateItemCategory(UtilityLogin.getAuthorizationHeaders(this),
+                                                            itemCategoryForEdit,
                                                             itemCategoryForEdit.getItemCategoryID());
 
 

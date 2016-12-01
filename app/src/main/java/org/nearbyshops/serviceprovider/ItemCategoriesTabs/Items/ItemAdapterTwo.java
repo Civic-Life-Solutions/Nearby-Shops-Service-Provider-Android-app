@@ -109,7 +109,7 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 
 
         holder.priceRange.setText("Price Range :\nRs." + itemStats.getMin_price() + " - " + itemStats.getMax_price() + " per " + item.getQuantityUnit());
-        holder.priceAverage.setText("Price Average : Rs." + itemStats.getAvg_price() + " per " + item.getQuantityUnit());
+        holder.priceAverage.setText("Price Average :\nRs." + itemStats.getAvg_price() + " per " + item.getQuantityUnit());
         holder.shopCount.setText("Available in " + itemStats.getShopCount() + " Shops");
         holder.itemRating.setText(String.format("%.2f",itemStats.getRating_avg()));
         holder.ratingCount.setText("( " + String.valueOf(itemStats.getRatingCount()) + " Ratings )");
@@ -334,8 +334,8 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 
                 case R.id.action_edit:
 
-//                    Intent intent = new Intent(context,EditItemCategory.class);
-//                    intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    Intent intent = new Intent(context,EditItemCategoryOld.class);
+//                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //                    context.startActivity(intent);
 
                     UtilityItem.saveItem(dataset.get(getLayoutPosition()),context);

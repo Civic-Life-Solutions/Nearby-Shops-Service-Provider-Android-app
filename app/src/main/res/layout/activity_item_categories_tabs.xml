@@ -77,7 +77,6 @@
             android:id="@+id/tablayoutPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="scrollable"
             app:tabIndicatorHeight="2dp"

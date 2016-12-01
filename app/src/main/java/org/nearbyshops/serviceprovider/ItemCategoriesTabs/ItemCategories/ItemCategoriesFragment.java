@@ -24,6 +24,9 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabCl
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.AddItemCategory;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -31,6 +34,7 @@ import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,7 +208,7 @@ public class ItemCategoriesFragment extends Fragment
 //        layoutManager.setSpanCount(metrics.widthPixels/350);
 
 
-        int spanCount = (int) (metrics.widthPixels/(230 * metrics.density));
+        int spanCount = (int) (metrics.widthPixels/(150 * metrics.density));
 
         if(spanCount==0){
             spanCount = 1;
@@ -332,7 +336,11 @@ public class ItemCategoriesFragment extends Fragment
                         if(currentCategory!=null)
                         {
 
-                            ((NotifyCategoryChanged)getActivity()).itemCategoryChanged(currentCategory,backPressed);
+                            if(getActivity() instanceof NotifyCategoryChanged)
+                            {
+                                ((NotifyCategoryChanged)getActivity()).itemCategoryChanged(currentCategory,backPressed);
+                            }
+                            // throws null pointer exception
                         }
                     }
 
@@ -400,6 +408,7 @@ public class ItemCategoriesFragment extends Fragment
                     listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
 
                     makeRequestUpdate(listAdapter.getRequestedChangeParent());
+
                 }
             }
         }
@@ -432,7 +441,8 @@ public class ItemCategoriesFragment extends Fragment
 
     void makeRequestUpdate(ItemCategory itemCategory)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
+        Call<ResponseBody> call = itemCategoryService.changeParent(UtilityLogin.getAuthorizationHeaders(getContext()),
+                itemCategory,itemCategory.getItemCategoryID());
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -440,7 +450,7 @@ public class ItemCategoriesFragment extends Fragment
 
                 if(response.code() == 200)
                 {
-                    showToastMessage("Change Parent Successful !");
+                    showToastMessage("Successful !");
 
                     dataset.clear();
                     offset = 0 ; // reset the offset
@@ -448,7 +458,7 @@ public class ItemCategoriesFragment extends Fragment
 
                 }else
                 {
-                    showToastMessage("Change Parent Failed !");
+                    showToastMessage("Failed Code : " + String.valueOf(response.code()));
                 }
 
                 listAdapter.setRequestedChangeParent(null);
@@ -469,7 +479,8 @@ public class ItemCategoriesFragment extends Fragment
 
     void makeRequestUpdateBulk(final List<ItemCategory> list)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(list);
+        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(UtilityLogin.getAuthorizationHeaders(getActivity()),
+                list);
 
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -536,9 +547,6 @@ public class ItemCategoriesFragment extends Fragment
             ((ToggleFab)getActivity()).showFab();
         }
     }
-
-
-
 
 
     @Override
@@ -700,6 +708,31 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
+    @Override
+    public void detachItem(final ItemCategory itemCategory) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Confirm Detach Item Categories !")
+                .setMessage("Are you sure you want to detach selected category ? ")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        itemCategory.setParentCategoryID(-1);
+                        makeRequestUpdate(itemCategory);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showToastMessage("Cancelled !");
+                    }
+                })
+                .show();
+    }
+
+
+
     void detachedSelectedDialog()
     {
 
@@ -717,7 +750,9 @@ public class ItemCategoriesFragment extends Fragment
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                         detachSelected();
+
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -757,9 +792,14 @@ public class ItemCategoriesFragment extends Fragment
 
     void addItemCategoryClick()
     {
-        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
-        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-        startActivity(addIntent);
+//        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
+//        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
+//        startActivity(addIntent);
+
+        Intent intent = new Intent(getActivity(),EditItemCategory.class);
+        intent.putExtra(EditItemCategoryFragment.ITEM_CATEGORY_INTENT_KEY,currentCategory);
+        intent.putExtra(EditItemCategoryFragment.EDIT_MODE_INTENT_KEY,EditItemCategoryFragment.MODE_ADD);
+        startActivity(intent);
     }
 
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -21,12 +22,17 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.UtilityItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.EditItemCategoryOld;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,8 +120,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
 
 
-        String imagePath = UtilityGeneral.getImageEndpointURL(context)
-                + dataset.get(position).getImagePath();
+        String imagePath = UtilityGeneral.getServiceURL(context) + "/api/v1/ItemCategory/Image/five_hundred_"
+                + dataset.get(position).getImagePath() + ".jpg";
 
         Drawable placeholder = VectorDrawableCompat
                 .create(context.getResources(),
@@ -146,16 +152,10 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
     public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
 
-        private TextView categoryName;
-
-//                TextView categoryDescription;
-
-        @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
-
+        @Bind(R.id.name) TextView categoryName;
+        @Bind(R.id.itemCategoryListItem) ConstraintLayout itemCategoryListItem;
         @Bind(R.id.categoryImage) ImageView categoryImage;
-
-        @Bind(R.id.cardview)
-        CardView cardView;
+        @Bind(R.id.cardview) CardView cardView;
 
 
         public ViewHolder(View itemView) {
@@ -163,11 +163,11 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
             ButterKnife.bind(this,itemView);
 
-            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
-            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
+//            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
+//            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
 //            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
 
-            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
+//            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
         }
 
 
@@ -257,7 +257,8 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         {
 
 
-            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
+            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(UtilityLogin.getAuthorizationHeaders(context),
+                    dataset.get(getLayoutPosition()).getItemCategoryID());
 
             call.enqueue(new Callback<ResponseBody>() {
 
@@ -328,15 +329,23 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
                                 }
                             })
                             .show();
-
-
                     break;
+
+
 
                 case R.id.action_edit:
 
+//                    Intent intent = new Intent(context,EditItemCategoryOld.class);
+//                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    context.startActivity(intent);
+
+                    UtilityItemCategory.saveItemCategory(dataset.get(getLayoutPosition()),context);
+
                     Intent intent = new Intent(context,EditItemCategory.class);
-                    intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+                    intent.putExtra(EditItemCategoryFragment.EDIT_MODE_INTENT_KEY,EditItemCategoryFragment.MODE_UPDATE);
                     context.startActivity(intent);
+
+
 
                     break;
 
@@ -344,7 +353,9 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
                 case R.id.action_detach:
 
-                    showToastMessage("Detach");
+//                    showToastMessage("Detach");
+
+                    notificationReceiver.detachItem(dataset.get(getLayoutPosition()));
 
                     break;
 
@@ -401,6 +412,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
         // method for notifying the list object to request sub category
         public void notifyRequestSubCategory(ItemCategory itemCategory);
         public void notifyItemCategorySelected();
+        void detachItem(ItemCategory itemCategory);
     }
 
 

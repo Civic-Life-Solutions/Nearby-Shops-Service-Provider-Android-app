@@ -19,12 +19,13 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.EditItemCategoryOld;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,7 +257,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
 
             Call<ResponseBody> call = itemCategoryService
-                    .deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
+                    .deleteItemCategory(UtilityLogin.getAuthorizationHeaders(context),
+                            dataset.get(getLayoutPosition()).getItemCategoryID());
 
             call.enqueue(new Callback<ResponseBody>() {
 
@@ -334,8 +336,8 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
                 case R.id.action_edit:
 
-                    Intent intent = new Intent(context,EditItemCategory.class);
-                    intent.putExtra(EditItemCategory.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+                    Intent intent = new Intent(context,EditItemCategoryOld.class);
+                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
                     context.startActivity(intent);
 
                     break;

@@ -5,6 +5,8 @@ import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemC
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.EditItemCategoryOld;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountFragment;
@@ -18,7 +20,6 @@ import org.nearbyshops.serviceprovider.LoginScreen;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParentAdapter;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesAdapter;
 import org.nearbyshops.serviceprovider.DaggerModules.AppModule;
 import org.nearbyshops.serviceprovider.DaggerModules.NetModule;
@@ -50,7 +51,7 @@ public interface NetComponent {
 
     void Inject(EditServiceConfiguration editServiceConfiguration);
 
-    void Inject(EditItemCategory editItemCategory);
+    void Inject(EditItemCategoryOld editItemCategoryOld);
 
     void Inject(ItemCategoriesFragment itemCategoriesFragment);
 
@@ -103,6 +104,8 @@ public interface NetComponent {
     void Inject(FragmentStaffAccounts fragmentStaffAccounts);
 
     void Inject(EditItemFragment editItemFragment);
+
+    void Inject(EditItemCategoryFragment editItemCategoryFragment);
 
 
 //    void Inject(LoginDialog loginDialog);
