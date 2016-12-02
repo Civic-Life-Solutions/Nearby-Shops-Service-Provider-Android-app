@@ -24,7 +24,6 @@ import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.UtilityItem;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.ModelStats.ItemStats;
 import org.nearbyshops.serviceprovider.R;
@@ -64,14 +63,14 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
 
     private List<Item> dataset;
     private Context context;
-    private ItemRemakeFragment activity;
+    private ItemFragmentTwo activity;
     private Item requestedChangeParent = null;
     private NotificationReceiver notificationReceiver;
 
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
 
-    ItemAdapterTwo(List<Item> dataset, Context context, ItemRemakeFragment activity, ItemAdapterTwo.NotificationReceiver notificationReceiver) {
+    ItemAdapterTwo(List<Item> dataset, Context context, ItemFragmentTwo activity, ItemAdapterTwo.NotificationReceiver notificationReceiver) {
 
 
         DaggerComponentBuilder.getInstance()
@@ -351,7 +350,9 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
                 case R.id.action_detach:
 
 
-                    showToastMessage("Detach");
+//                    showToastMessage("Detach");
+
+                    notificationReceiver.detachItem(dataset.get(getLayoutPosition()));
 
 
                     break;
@@ -417,7 +418,8 @@ public class ItemAdapterTwo extends RecyclerView.Adapter<ItemAdapterTwo.ViewHold
         // method for notifying the list object to request sub category
 //        public void notifyRequestSubCategory(ItemCategory itemCategory);
 
-        public void notifyItemSelected();
+        void notifyItemSelected();
+        void detachItem(Item item);
 
     }
 

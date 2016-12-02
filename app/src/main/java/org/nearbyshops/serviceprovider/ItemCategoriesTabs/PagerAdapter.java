@@ -5,9 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.PlaceholderFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 
 /**
  * Created by sumeet on 27/6/16.
@@ -30,7 +29,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     private ItemCategoriesFragment itemCategoriesFragment = new ItemCategoriesFragment();
 
-    private ItemRemakeFragment itemRemakeFragment = new ItemRemakeFragment();;
+    private ItemFragmentTwo itemFragmentTwo = new ItemFragmentTwo();;
 
     @Override
     public Fragment getItem(int position) {
@@ -48,7 +47,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         else if (position == 1)
         {
 
-            return itemRemakeFragment;
+            return itemFragmentTwo;
         }
 
 

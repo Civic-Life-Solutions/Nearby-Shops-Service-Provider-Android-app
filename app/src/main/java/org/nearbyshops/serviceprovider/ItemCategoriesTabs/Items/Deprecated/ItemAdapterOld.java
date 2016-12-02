@@ -1,14 +1,11 @@
-package org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -16,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +21,10 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.UtilityItemCategory;
-import org.nearbyshops.serviceprovider.Model.ItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
+import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
@@ -53,25 +49,29 @@ import retrofit2.Response;
  */
 
 
-public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCatAdapter.ViewHolder>{
+public class ItemAdapterOld extends RecyclerView.Adapter<ItemAdapterOld.ViewHolder>{
 
 
-    Map<Integer,ItemCategory> selectedItems = new HashMap<>();
-
+    private Map<Integer,Item> selectedItems = new HashMap<>();
 
     @Inject
-    ItemCategoryService itemCategoryService;
+    ItemService itemCategoryService;
 
-    private List<ItemCategory> dataset;
-    private Context context;
-//    private DetachedItemCatFragment activity;
-//    private ItemCategory requestedChangeParent = null;
-    private NotifyFromAdapter notificationReceiver;
+    private List<Item> dataset;
+
+    Context context;
+    ItemFragmentTwo activity;
+
+
+    Item requestedChangeParent = null;
+
+
+    NotificationReceiver notificationReceiver;
 
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
 
-    public DetachedItemCatAdapter(List<ItemCategory> dataset, Context context, NotifyFromAdapter notificationReceiver) {
+    public ItemAdapterOld(List<Item> dataset, Context context, ItemFragmentTwo activity, ItemAdapterOld.NotificationReceiver notificationReceiver) {
 
 
         DaggerComponentBuilder.getInstance()
@@ -81,74 +81,56 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
         this.notificationReceiver = notificationReceiver;
         this.dataset = dataset;
         this.context = context;
-//        this.activity = activity;
+        this.activity = activity;
 
         if(this.dataset == null)
         {
-            this.dataset = new ArrayList<ItemCategory>();
+            this.dataset = new ArrayList<Item>();
         }
 
     }
 
     @Override
-    public DetachedItemCatAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemAdapterOld.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_item_category,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_item_remake,parent,false);
 
         return new ViewHolder(v);
     }
 
 
     @Override
-    public void onBindViewHolder(DetachedItemCatAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ItemAdapterOld.ViewHolder holder, final int position) {
 
-        //String.valueOf(dataset.get(position).getItemCategoryID()) + ". "
+        holder.categoryName.setText(dataset.get(position).getItemName());
+        holder.categoryDescription.setText(dataset.get(position).getItemDescription());
 
-        holder.categoryName.setText(dataset.get(position).getCategoryName());
-//        holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
-
-        if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
+        if(selectedItems.containsKey(dataset.get(position).getItemID()))
         {
-            // context.getResources().getColor(R.color.gplus_color_2)
-            holder.itemCategoryListItem.setBackgroundColor(ContextCompat.getColor(context,R.color.gplus_color_2));
+            holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.gplus_color_2));
         }
         else
         {
-            holder.itemCategoryListItem.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
+            holder.itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.white));
         }
 
 
 
-//        String imagePath = UtilityGeneral.getImageEndpointURL(context)
-//                + dataset.get(position).getImagePath();
+        String imagePath = UtilityGeneral.getImageEndpointURL(context)
+                + dataset.get(position).getItemImageURL();
 
-//        if(dataset.get(position).getImagePath()!=null && !dataset.get(position).getImagePath().equals(""))
-//        {
-
-//        }
-
-
-        String imagePath = UtilityGeneral.getServiceURL(context) + "/api/v1/ItemCategory/Image/five_hundred_"
-                + dataset.get(position).getImagePath() + ".jpg";
-
-        Drawable placeholder = VectorDrawableCompat
+        Drawable drawable = VectorDrawableCompat
                 .create(context.getResources(),
                         R.drawable.ic_nature_people_white_48px, context.getTheme());
 
-        Picasso.with(context)
-                .load(imagePath)
-                .placeholder(placeholder)
+        Picasso.with(context).load(imagePath)
+                .placeholder(drawable)
                 .into(holder.categoryImage);
 
-    }
-
-
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-
+//        Log.d("applog",imagePath);
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -160,19 +142,25 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
 
     public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
-        //        TextView categoryDescription;
 
-        @Bind(R.id.name) TextView categoryName;
-        @Bind(R.id.itemCategoryListItem) ConstraintLayout itemCategoryListItem;
+        private TextView categoryName,categoryDescription;
+
+        @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
+
         @Bind(R.id.categoryImage) ImageView categoryImage;
-        @Bind(R.id.cardview) CardView cardView;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
-        }
 
+            ButterKnife.bind(this,itemView);
+
+            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
+            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
+            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
+
+            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
+        }
 
 
 
@@ -185,77 +173,68 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
 
             if(selectedItems.containsKey(
                     dataset.get(getLayoutPosition())
-                            .getItemCategoryID()
+                            .getItemID()
             )
                     )
 
             {
-                selectedItems.remove(dataset.get(getLayoutPosition()).getItemCategoryID());
+                selectedItems.remove(dataset.get(getLayoutPosition()).getItemID());
 
             }else
             {
 
-                selectedItems.put(dataset.get(getLayoutPosition()).getItemCategoryID(),dataset.get(getLayoutPosition()));
+                selectedItems.put(dataset.get(getLayoutPosition()).getItemID(),dataset.get(getLayoutPosition()));
 
-                notificationReceiver.notifyItemCategorySelected();
+                notificationReceiver.notifyItemSelected();
             }
 
 
             notifyItemChanged(getLayoutPosition());
+
+//            showToastMessage(String.valueOf(selectedItems.size()));
+
+
+//            itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.cyan900));
+
 
         }
 
 
 
 
-//        public void itemCategoryListItemClick()
-//        {
-//
-//            if (dataset == null) {
-//
-//                return;
-//            }
-//
-//            if(dataset.size()==0)
-//            {
-//                return;
-//            }
-//
-//
-////            itemCategoryListItem.animate()
-////                    .y(100)
-////                    .x(100);
-//
-//
-////            notificationReceiver.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+        /*@OnClick(R.id.itemCategoryListItem)
+        public void itemCategoryListItemClick()
+        {
+
+            if (dataset == null) {
+
+                return;
+            }
+
+            if(dataset.size()==0)
+            {
+                return;
+            }
+
+
+
+//            notificationReceiver.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
+
 //            selectedItems.clear();
-//
-//
-//
-//
-//            if (dataset.get(getLayoutPosition()).getIsLeafNode()) {
-//
-////                Intent intent = new Intent(context, Items.class);
-////
-////                intent.putExtra(Items.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
-////
-////                context.startActivity(intent);
-//
-//            }
-//            else
-//            {
-//
-//            }
-//
-//        }
+
+        }
 
 
+*/
         public void deleteItemCategory()
         {
 
 
-            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(UtilityLogin.getAuthorizationHeaders(context),
-                    dataset.get(getLayoutPosition()).getItemCategoryID());
+//            Call<ResponseBody> call = itemCategoryService.deleteItemCategory(dataset.get(getLayoutPosition()).getItemCategoryID());
+
+            Call<ResponseBody> call = itemCategoryService.deleteItem(UtilityLogin.getAuthorizationHeaders(context),
+                    dataset.get(getLayoutPosition()).getItemID());
+
 
             call.enqueue(new Callback<ResponseBody>() {
 
@@ -293,7 +272,7 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
         {
             PopupMenu popup = new PopupMenu(context, v);
             MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.item_category_item_overflow_detached, popup.getMenu());
+            inflater.inflate(R.menu.item_category_item_overflow, popup.getMenu());
             popup.setOnMenuItemClickListener(this);
             popup.show();
         }
@@ -336,20 +315,42 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
 //                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //                    context.startActivity(intent);
 
-                    UtilityItemCategory.saveItemCategory(dataset.get(getLayoutPosition()),context);
-
-                    Intent intent = new Intent(context,EditItemCategory.class);
-                    intent.putExtra(EditItemCategoryFragment.EDIT_MODE_INTENT_KEY,EditItemCategoryFragment.MODE_UPDATE);
-                    context.startActivity(intent);
-
+                    Intent intentEdit = new Intent(context,EditItemOld.class);
+                    intentEdit.putExtra(EditItemOld.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
+                    context.startActivity(intentEdit);
 
                     break;
 
 
+
+                case R.id.action_detach:
+
+
+                    showToastMessage("Detach");
+
+
+                    break;
+
                 case R.id.action_change_parent:
 
 
-                    notificationReceiver.changeParentSingle(dataset.get(getLayoutPosition()));
+//                    showToastMessage("Change parent !");
+
+                    Intent intentParent = new Intent(context, ItemCategoriesParent.class);
+
+                    requestedChangeParent = dataset.get(getLayoutPosition());
+
+                    // add the selected item category in the exclude list so that it does not get showed up as an option.
+                    // This is required to prevent an item category to assign itself or its children as its parent.
+                    // This should not happen because it would be erratic.
+
+                    ItemCategoriesParent.clearExcludeList(); // it is a safe to clear the list before adding any items in it.
+
+//                    ItemCategoriesParent.excludeList
+//                            .put(requestedChangeParent.getItemID(),requestedChangeParent);
+
+
+                    activity.startActivityForResult(intentParent,1,null);
 
 
                     break;
@@ -381,28 +382,28 @@ public class DetachedItemCatAdapter extends RecyclerView.Adapter<DetachedItemCat
 
     public void notifyDelete()
     {
-        notificationReceiver.notifyDeleted();
+        activity.notifyDelete();
+
     }
 
 
-
-    interface NotifyFromAdapter
+    public interface NotificationReceiver
     {
         // method for notifying the list object to request sub category
 //        public void notifyRequestSubCategory(ItemCategory itemCategory);
-        void notifyItemCategorySelected();
-        void notifyDeleted();
-        void changeParentSingle(ItemCategory itemCategory);
+
+        public void notifyItemSelected();
+
     }
 
 
-//    public void setRequestedChangeParent(ItemCategory requestedChangeParent) {
-//        this.requestedChangeParent = requestedChangeParent;
-//    }
 
-//    public ItemCategory getRequestedChangeParent() {
-//        return requestedChangeParent;
-//    }
+    public Item getRequestedChangeParent() {
+        return requestedChangeParent;
+    }
 
 
+    public void setRequestedChangeParent(Item requestedChangeParent) {
+        this.requestedChangeParent = requestedChangeParent;
+    }
 }

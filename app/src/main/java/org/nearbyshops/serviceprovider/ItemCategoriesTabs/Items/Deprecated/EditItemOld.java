@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated;
 
 
 import android.content.Intent;

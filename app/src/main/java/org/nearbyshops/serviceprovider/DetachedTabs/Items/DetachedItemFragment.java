@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.AddItem;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyAssignParent;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyScroll;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.AddItem;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
@@ -44,7 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DetachedItemFragment extends Fragment
-        implements  DetachedItemAdapter.NotificationReceiver, SwipeRefreshLayout.OnRefreshListener, DetachedTabs.ReceiveNotificationFromTabsForItems {
+        implements  DetachedItemAdapter.NotificationReceiver, SwipeRefreshLayout.OnRefreshListener, NotifyAssignParent{
 
     public static final String ADD_ITEM_INTENT_KEY = "add_item_intent_key";
 
@@ -65,8 +65,10 @@ public class DetachedItemFragment extends Fragment
     ItemService itemService;
 
 
-    FragmentsNotificationReceiver notificationReceiverFragment;
-    NotifyPagerAdapter notifyPagerAdapter;
+//    Deprecated notificationReceiverFragment;
+//    NotifyTitleChanged notifyPagerAdapter;
+
+
     @State ItemCategory notifiedCurrentCategory = null;
 
 
@@ -85,10 +87,6 @@ public class DetachedItemFragment extends Fragment
     }
 
 
-    int getMaxChildCount(int spanCount, int heightPixels)
-    {
-       return (spanCount * (heightPixels/250));
-    }
 
 
     @Nullable
@@ -96,6 +94,8 @@ public class DetachedItemFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
+
+        setRetainInstance(true);
 
 
         View rootView = inflater.inflate(R.layout.fragment_item_detached, container, false);
@@ -109,22 +109,22 @@ public class DetachedItemFragment extends Fragment
 
 
 
-        if(getActivity() instanceof DetachedTabs)
-        {
-            DetachedTabs activity = (DetachedTabs)getActivity();
-            activity.setTabsNotificationReceiver(this);
-        }
+//        if(getActivity() instanceof DetachedTabs)
+//        {
+//            DetachedTabs activity = (DetachedTabs)getActivity();
+//            activity.setTabsNotificationReceiver(this);
+//        }
 
-        if(getActivity() instanceof FragmentsNotificationReceiver)
-        {
-            DetachedTabs activity = (DetachedTabs)getActivity();
-            this.notificationReceiverFragment = (FragmentsNotificationReceiver) activity;
-        }
+//        if(getActivity() instanceof Deprecated)
+//        {
+//            DetachedTabs activity = (DetachedTabs)getActivity();
+//            this.notificationReceiverFragment = (Deprecated) activity;
+//        }
 
-        if(getActivity() instanceof NotifyPagerAdapter)
-        {
-            notifyPagerAdapter = (NotifyPagerAdapter)getActivity();
-        }
+//        if(getActivity() instanceof NotifyTitleChanged)
+//        {
+//            notifyPagerAdapter = (NotifyTitleChanged)getActivity();
+//        }
 
 
         if(savedInstanceState==null)
@@ -136,6 +136,7 @@ public class DetachedItemFragment extends Fragment
                     swipeContainer.setRefreshing(true);
 
                         dataset.clear();
+                        offset=0;
                         makeRequestRetrofit();
 
                 }
@@ -164,9 +165,16 @@ public class DetachedItemFragment extends Fragment
 
         final DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//        layoutManager.setSpanCount(metrics.widthPixels/350);
 
+        int spanCount = (int) (metrics.widthPixels/(230 * metrics.density));
 
-        layoutManager.setSpanCount(metrics.widthPixels/350);
+        if(spanCount==0){
+            spanCount = 1;
+        }
+
+        layoutManager.setSpanCount(spanCount);
+
 
 
         itemCategoriesList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -192,6 +200,14 @@ public class DetachedItemFragment extends Fragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+
+
+                if(getActivity() instanceof NotifyScroll)
+                {
+                    ((NotifyScroll) getActivity()).scrolled(dx,dy);
+                }
+
 
 
                 if(dy > 20)
@@ -257,19 +273,22 @@ public class DetachedItemFragment extends Fragment
 
     public void makeRequestRetrofit()
     {
-        if(notifiedCurrentCategory==null)
-        {
-
-            swipeContainer.setRefreshing(false);
-
-            return;
-        }
 
 
-        Call<ItemEndPoint> endPointCall = itemService.getItems(notifiedCurrentCategory.getItemCategoryID(),
-                null,null,null,null,null,null,null,
-                limit,offset,
-                null);
+//        if(notifiedCurrentCategory==null)
+//        {
+//            swipeContainer.setRefreshing(false);
+//            return;
+//        }
+
+
+        Call<ItemEndPoint> endPointCall = itemService
+                .getItemsOuterJoin(null,true, null,limit,offset,null);
+
+//                null,null,null,null,null,null,null,
+//                limit,offset,
+//                null);
+
 
         endPointCall.enqueue(new Callback<ItemEndPoint>() {
             @Override
@@ -286,12 +305,13 @@ public class DetachedItemFragment extends Fragment
                 swipeContainer.setRefreshing(false);
                 listAdapter.notifyDataSetChanged();
 
-                if(notifyPagerAdapter!=null)
-                {
+//                if(notifyPagerAdapter!=null)
+//                {
 //                    notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(item_count) + ")",1);
-                    notifyTitleChanged();
-                }
 
+//                }
+
+                notifyTitleChanged();
             }
 
             @Override
@@ -393,7 +413,7 @@ public class DetachedItemFragment extends Fragment
     void makeUpdateRequest(Item item)
     {
 
-        Call<ResponseBody> call = itemService.updateItem(UtilityLogin.getAuthorizationHeaders(getContext()),
+        Call<ResponseBody> call = itemService.changeParent(UtilityLogin.getAuthorizationHeaders(getContext()),
                 item,item.getItemID());
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -453,7 +473,7 @@ public class DetachedItemFragment extends Fragment
     {
 
 
-        Call<ResponseBody> call = itemService.updateItemBulk(UtilityLogin
+        Call<ResponseBody> call = itemService.changeParentBulk(UtilityLogin
                 .getAuthorizationHeaders(getActivity()),list);
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -509,6 +529,10 @@ public class DetachedItemFragment extends Fragment
 
     }
 
+    @Override
+    public void changeParentRequested() {
+
+    }
 
 
     @Override
@@ -539,22 +563,22 @@ public class DetachedItemFragment extends Fragment
     }
 
 
-    @Override
-    public void itemCategoryChanged(ItemCategory currentCategory) {
-
-        notifiedCurrentCategory = currentCategory;
-        onRefresh();
-    }
-
-
-
     void notifyTitleChanged()
     {
-        if(notifyPagerAdapter!=null)
+//        if(notifyPagerAdapter!=null)
+//        {
+//            notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count) + ")",1);
+//        }
+
+
+        if(getActivity() instanceof NotifyTitleChanged)
         {
-            notifyPagerAdapter.NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count) + ")",1);
+            ((NotifyTitleChanged) getActivity())
+                    .NotifyTitleChanged("Items (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count) + ")",1);
         }
     }
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -562,9 +586,9 @@ public class DetachedItemFragment extends Fragment
 
         Icepick.saveInstanceState(this,outState);
 
-        outState.putParcelable("currentCategory",notifiedCurrentCategory);
+//        outState.putParcelable("currentCategory",notifiedCurrentCategory);
 
-        outState.putParcelableArrayList("dataset",dataset);
+//        outState.putParcelableArrayList("dataset",dataset);
 
     }
 
@@ -575,16 +599,22 @@ public class DetachedItemFragment extends Fragment
 
         Icepick.restoreInstanceState(this,savedInstanceState);
 
-        if(savedInstanceState!=null)
-        {
-            notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
+//        if(savedInstanceState!=null)
+//        {
+//            notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
 
-            ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
-            dataset.clear();
-            dataset.addAll(tempCat);
-            notifyTitleChanged();
-            listAdapter.notifyDataSetChanged();
-        }
+//            ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
 
+//            dataset.clear();
+//            dataset.addAll(tempCat);
+//            notifyTitleChanged();
+//            listAdapter.notifyDataSetChanged();
+//        }
+
+    }
+
+    @Override
+    public void assignParentClick() {
+        changeParentBulk();
     }
 }

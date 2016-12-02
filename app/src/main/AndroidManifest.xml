@@ -61,7 +61,7 @@
                 android:value=".zSavedConfigurations.ServiceConfigurationActivity" />
         </activity>
         <activity
-            android:name=".ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.AddItemCategory"
+            android:name=".ItemCategoriesTabs.ItemCategories.Deprecated.AddItemCategory"
             android:label="Add Item Category"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -70,7 +70,7 @@
                 android:value=".Home" />
         </activity>
         <activity
-            android:name=".ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.EditItemCategoryOld"
+            android:name=".ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld"
             android:label="Edit Item Category"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -126,7 +126,7 @@
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
         <activity
-            android:name=".ItemCategoriesTabs.Items.EditItemOld.AddItem"
+            android:name=".ItemCategoriesTabs.Items.Deprecated.AddItem"
             android:label="Add Item"
             android:parentActivityName=".ItemCategoriesTabs.ItemCategoriesTabs"
             android:theme="@style/AppTheme.NoActionBar">
@@ -135,7 +135,7 @@
                 android:value="org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs" />
         </activity>
         <activity
-            android:name=".ItemCategoriesTabs.Items.EditItemOld.EditItemOld"
+            android:name=".ItemCategoriesTabs.Items.Deprecated.EditItemOld"
             android:label="Edit Item"
             android:parentActivityName=".ItemCategoriesTabs.ItemCategoriesTabs"
             android:theme="@style/AppTheme.NoActionBar">

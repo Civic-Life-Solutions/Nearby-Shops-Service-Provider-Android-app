@@ -3,6 +3,9 @@ package org.nearbyshops.serviceprovider.SelectParent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +22,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.EditItemCategoryOld;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.UtilityItemCategory;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
@@ -53,17 +58,11 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
     @Inject
     ItemCategoryService itemCategoryService;
 
-
-    List<ItemCategory> dataset;
-
-    Context context;
-    ItemCategoriesParent itemCategoriesParent;
-
-
-    Integer selectedPosition = null;
-
-
-    NotificationReceiver notificationReceiver;
+    private List<ItemCategory> dataset;
+    private Context context;
+    private ItemCategoriesParent itemCategoriesParent;
+    private Integer selectedPosition = null;
+    private NotificationReceiver notificationReceiver;
 
 
     final String IMAGE_ENDPOINT_URL = "/api/Images";
@@ -100,7 +99,7 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
     public void onBindViewHolder(ItemCategoriesParentAdapter.ViewHolder holder, final int position) {
 
         holder.categoryName.setText(dataset.get(position).getCategoryName());
-        holder.categoryDescription.setText(dataset.get(position).getCategoryDescription());
+//        holder.categoryDescription.setText(dataset.get(position).getCategoryDescription());
 
         if(selectedPosition!=null)
         {
@@ -119,10 +118,30 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
         }
 
-        String imagePath = UtilityGeneral.getImageEndpointURL(context)
-                + dataset.get(position).getImagePath();
 
-        Picasso.with(context).load(imagePath).into(holder.categoryImage);
+
+
+//        String imagePath = UtilityGeneral.getImageEndpointURL(context)
+//                + dataset.get(position).getImagePath();
+
+
+
+
+        String imagePath = UtilityGeneral.getServiceURL(context) + "/api/v1/ItemCategory/Image/five_hundred_"
+                + dataset.get(position).getImagePath() + ".jpg";
+
+
+        Drawable placeholder = VectorDrawableCompat
+                .create(context.getResources(),
+                        R.drawable.ic_nature_people_white_48px, context.getTheme());
+
+        Drawable compat = ContextCompat.getDrawable(context,R.drawable.ic_nature_people_white_48px);
+
+        Picasso.with(context)
+                .load(imagePath)
+                .placeholder(compat)
+                .into(holder.categoryImage);
+
 
         Log.d("applog",imagePath);
 
@@ -140,10 +159,11 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
     public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
 
-        private TextView categoryName,categoryDescription;
 
+//        TextView categoryDescription;
+
+        @Bind(R.id.categoryName) TextView categoryName;
         @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
-
         @Bind(R.id.categoryImage) ImageView categoryImage;
 
 
@@ -152,11 +172,11 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
             ButterKnife.bind(this,itemView);
 
-            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
-            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
-            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
+//            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
+//            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
+//            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
 
-            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
+//            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
         }
 
 
@@ -336,9 +356,17 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
 
                 case R.id.action_edit:
 
-                    Intent intent = new Intent(context,EditItemCategoryOld.class);
-                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    Intent intent = new Intent(context,EditItemCategoryOld.class);
+//                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    context.startActivity(intent);
+
+
+                    UtilityItemCategory.saveItemCategory(dataset.get(getLayoutPosition()),context);
+
+                    Intent intent = new Intent(context,EditItemCategory.class);
+                    intent.putExtra(EditItemCategoryFragment.EDIT_MODE_INTENT_KEY,EditItemCategoryFragment.MODE_UPDATE);
                     context.startActivity(intent);
+
 
                     break;
 
@@ -408,7 +436,6 @@ public class ItemCategoriesParentAdapter extends RecyclerView.Adapter<ItemCatego
     interface NotificationReceiver{
 
         void notifyItemSelected();
-
         void notifyItemDeleted();
     }
 

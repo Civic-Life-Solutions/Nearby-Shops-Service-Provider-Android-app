@@ -6,16 +6,16 @@ import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemC
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.EditItemCategoryOld;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.EditItemOld;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountFragment;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorDetail.DistributorDetail;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.AddItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.AddItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemAdapterTwo;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeAdapter;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.ItemAdapterOld;
 import org.nearbyshops.serviceprovider.LoginScreen;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
@@ -67,9 +67,9 @@ public interface NetComponent {
 
     void Inject(org.nearbyshops.serviceprovider.zAddItems.ItemCategories.EditItemCategory editItemCategory);
 
-    void Inject(ItemRemakeFragment itemRemakeFragment);
+    void Inject(ItemFragmentTwo itemFragmentTwo);
 
-    void Inject(ItemRemakeAdapter itemRemakeAdapter);
+    void Inject(ItemAdapterOld itemAdapterOld);
 
     void Inject(AddItem addItem);
 

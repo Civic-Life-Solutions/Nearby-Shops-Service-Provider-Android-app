@@ -1,11 +1,13 @@
 package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -25,7 +27,6 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.AddItem;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
@@ -50,7 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ItemRemakeFragment extends Fragment
+public class ItemFragmentTwo extends Fragment
         implements  ItemAdapterTwo.NotificationReceiver,
         SwipeRefreshLayout.OnRefreshListener,
         NotifyCategoryChanged, NotifyFabClick_Item, NotifySort{
@@ -87,7 +88,7 @@ public class ItemRemakeFragment extends Fragment
 
 
 
-    public ItemRemakeFragment() {
+    public ItemFragmentTwo() {
         super();
 
         // Inject the dependencies using Dependency Injection
@@ -350,7 +351,7 @@ public class ItemRemakeFragment extends Fragment
 
 
 
-    void notifyDelete()
+    public void notifyDelete()
     {
         onRefresh();
     }
@@ -430,7 +431,7 @@ public class ItemRemakeFragment extends Fragment
 
 //        Call<ResponseBody> call2 = itemCategoryService.updateItemCategory(itemCategory,itemCategory.getItemCategoryID());
 
-        Call<ResponseBody> call = itemService.updateItem(UtilityLogin.getAuthorizationHeaders(getContext()),
+        Call<ResponseBody> call = itemService.changeParent(UtilityLogin.getAuthorizationHeaders(getContext()),
                 item,item.getItemID());
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -491,7 +492,7 @@ public class ItemRemakeFragment extends Fragment
     {
 //        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);
 
-        Call<ResponseBody> call = itemService.updateItemBulk(UtilityLogin.getAuthorizationHeaders(getContext()),
+        Call<ResponseBody> call = itemService.changeParentBulk(UtilityLogin.getAuthorizationHeaders(getContext()),
                 list);
 //        Call<ResponseBody> call = null;
 //
@@ -557,6 +558,33 @@ public class ItemRemakeFragment extends Fragment
         }
     }
 
+
+
+    @Override
+    public void detachItem(final Item item) {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Confirm Detach Item Categories !")
+                .setMessage("Are you sure you want to detach selected category ? ")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        item.setItemCategoryID(-1);
+//                        makeRequestUpdate(itemCategory);
+                        makeUpdateRequest(item);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showToastMessage("Cancelled !");
+                    }
+                })
+                .show();
+
+    }
 
 
     @Override
@@ -642,9 +670,67 @@ public class ItemRemakeFragment extends Fragment
 
     }
 
+
+    void detachedSelectedDialog()
+    {
+
+        if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("Confirm Detach Item Categories !")
+                .setMessage("Are you sure you want to remove / detach parent for the selected Categories ? ")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        detachSelected();
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showToastMessage("Cancelled !");
+                    }
+                })
+                .show();
+    }
+
+
+
+
+    void detachSelected()
+    {
+
+        /*if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }*/
+
+        List<Item> tempList = new ArrayList<>();
+
+        for(Map.Entry<Integer,Item> entry : listAdapter.selectedItems.entrySet())
+        {
+            entry.getValue().setItemCategoryID(-1);
+            tempList.add(entry.getValue());
+        }
+
+//        makeRequestUpdateBulk(tempList);
+        makeRequestBulk(tempList);
+    }
+
+
     @Override
     public void detachSelectedClick() {
-
+        detachedSelectedDialog();
     }
 
     @Override

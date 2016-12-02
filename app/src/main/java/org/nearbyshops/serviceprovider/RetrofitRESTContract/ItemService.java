@@ -29,6 +29,20 @@ public interface ItemService
     Call<Item> insertItem(@Header("Authorization") String headers,
                           @Body Item item);
 
+
+
+    @PUT("/api/v1/Item/ChangeParent/{id}")
+    Call<ResponseBody> changeParent(@Header("Authorization") String headers,
+                                    @Body Item item,
+                                    @Path("id") int id);
+
+
+    @PUT ("/api/v1/Item/ChangeParent")
+    Call<ResponseBody> changeParentBulk(@Header("Authorization") String headers,
+                                        @Body List<Item> itemsList);
+
+
+
     @PUT("/api/v1/Item/{id}")
     Call<ResponseBody> updateItem(@Header("Authorization") String headers,
                                   @Body Item item,
@@ -64,6 +78,18 @@ public interface ItemService
             @Query("Limit")Integer limit, @Query("Offset")Integer offset,
             @Query("metadata_only")Boolean metaonly
     );
+
+
+
+    @GET("/api/v1/Item/OuterJoin")
+    Call<ItemEndPoint> getItemsOuterJoin(
+            @Query("ItemCategoryID")Integer itemCategoryID,
+            @Query("IsDetached")Boolean parentIsNull,
+            @Query("SortBy") String sortBy,
+            @Query("Limit")Integer limit, @Query("Offset")Integer offset,
+            @Query("metadata_only")Boolean metaonly
+    );
+
 
 
     @GET("/api/v1/Item/{id}")

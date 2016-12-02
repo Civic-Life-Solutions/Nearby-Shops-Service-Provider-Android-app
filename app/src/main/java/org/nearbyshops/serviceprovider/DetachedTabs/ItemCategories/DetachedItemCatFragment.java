@@ -17,10 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
 import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyAssignParent;
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyScroll;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
@@ -37,43 +35,38 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import icepick.Icepick;
 import icepick.State;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetachedItemCatFragment extends Fragment
-        implements DetachedItemCatAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,NotifyAssignParent{
+public class DetachedItemCatFragment extends Fragment implements DetachedItemCatAdapter.NotifyFromAdapter,
+        SwipeRefreshLayout.OnRefreshListener,
+        NotifyAssignParent
+{
+
+    ItemCategory changeParentRequested;
 
 
     ArrayList<ItemCategory> dataset = new ArrayList<>();
     RecyclerView itemCategoriesList;
-    DetachedItemCatAdapter listAdapter;
     GridLayoutManager layoutManager;
+    DetachedItemCatAdapter listAdapter;
 
     @State boolean show = false;
+    @Inject ItemCategoryService itemCategoryService;
 
-    @Inject
-    ItemCategoryService itemCategoryService;
+//    @Bind(R.id.appbar) AppBarLayout appBar;
 
-//    @Bind(R.id.tablayout)
-//    TabLayout tabLayout;
-
-//    @Bind(R.id.options)
-//    RelativeLayout options;
-
-    @Bind(R.id.appbar)
-    AppBarLayout appBar;
+    private int limit = 30;
+    @State int offset = 0;
+    @State int item_count = 0;
 
 
-    FragmentsNotificationReceiver notificationReceiverFragment;
-    NotifyPagerAdapter notifyPagerAdapter;
+    @Bind(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
 
-
-
-    int currentCategoryID = 1; // the ID of root category is always supposed to be 1
 
 
     @State
@@ -93,10 +86,6 @@ public class DetachedItemCatFragment extends Fragment
     }
 
 
-    int getMaxChildCount(int spanCount, int heightPixels)
-    {
-       return (spanCount * (heightPixels/250));
-    }
 
 
     @Nullable
@@ -104,6 +93,7 @@ public class DetachedItemCatFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
+        setRetainInstance(true);
 
 
         View rootView = inflater.inflate(R.layout.fragment_detached_item_cat, container, false);
@@ -120,27 +110,6 @@ public class DetachedItemCatFragment extends Fragment
         setupSwipeContainer();
 
 
-
-        if(getActivity() instanceof DetachedTabs)
-        {
-            DetachedTabs activity = (DetachedTabs)getActivity();
-            activity.assignParentItemCategory = this;
-        }
-
-
-        if(getActivity() instanceof FragmentsNotificationReceiver)
-        {
-            DetachedTabs activity = (DetachedTabs)getActivity();
-            this.notificationReceiverFragment = (FragmentsNotificationReceiver) activity;
-        }
-
-        if(getActivity() instanceof NotifyPagerAdapter)
-        {
-            notifyPagerAdapter = (NotifyPagerAdapter)getActivity();
-        }
-
-
-
         if(savedInstanceState==null)
         {
             // make request to the network only for the first time and not the second time or when the context is changed.
@@ -152,24 +121,17 @@ public class DetachedItemCatFragment extends Fragment
         }
 
 
-
         return  rootView;
-
     }
 
 
-
-    private int limit = 30;
-    @State int offset = 0;
-
-    @State int item_count = 0;
 
 
     void setupRecyclerView()
     {
 
 
-        listAdapter = new DetachedItemCatAdapter(dataset,getActivity(),this,this);
+        listAdapter = new DetachedItemCatAdapter(dataset,getActivity(),this);
 
         itemCategoriesList.setAdapter(listAdapter);
 
@@ -177,29 +139,29 @@ public class DetachedItemCatFragment extends Fragment
         itemCategoriesList.setLayoutManager(layoutManager);
 
 
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
+//        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//            @Override
+//            public int getSpanSize(int position) {
+//
+//                return (position % 3 == 0 ? 2 : 1);
+//            }
+//        });
 
-                return (position % 3 == 0 ? 2 : 1);
-            }
-        });
 
-
-//        final DisplayMetrics metrics = new DisplayMetrics();
-//        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        final DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
 //        layoutManager.setSpanCount(metrics.widthPixels/350);
 
 
-//        int spanCount = (int) (metrics.widthPixels/(150 * metrics.density));
+        int spanCount = (int) (metrics.widthPixels/(150 * metrics.density));
 
-//        if(spanCount==0){
-//            spanCount = 1;
-//        }
-
-//        layoutManager.setSpanCount(spanCount);
+        if(spanCount==0){
+            spanCount = 1;
+        }
+//
+        layoutManager.setSpanCount(spanCount);
 
 
 
@@ -235,6 +197,7 @@ public class DetachedItemCatFragment extends Fragment
                 }
 
 
+/*
                 if(dy > 20)
                 {
 
@@ -247,7 +210,7 @@ public class DetachedItemCatFragment extends Fragment
                         // changed
                         Log.d("scrolllog","show");
 
-                        notificationReceiverFragment.showAppBar();
+//                        notificationReceiverFragment.showAppBar();
                     }
 
                 }else if(dy < -20)
@@ -269,9 +232,10 @@ public class DetachedItemCatFragment extends Fragment
 //                        options.animate().translationY(0);
 
 
-                        notificationReceiverFragment.hideAppBar();
+//                        notificationReceiverFragment.hideAppBar();
                     }
                 }
+*/
 
 
             }
@@ -280,8 +244,6 @@ public class DetachedItemCatFragment extends Fragment
 
     }
 
-    @Bind(R.id.swipeContainer)
-    SwipeRefreshLayout swipeContainer;
 
     void setupSwipeContainer()
     {
@@ -328,19 +290,8 @@ public class DetachedItemCatFragment extends Fragment
 
                     listAdapter.notifyDataSetChanged();
 
-                    if(currentCategory!=null)
-                    {
-                        notificationReceiverFragment.itemCategoryChanged(currentCategory);
-                    }
+                    notifyTitleChanged();
 
-
-                    if(notifyPagerAdapter!=null)
-                    {
-//                        notifyPagerAdapter.NotifyTitleChanged("Subcategories ( " +  String.valueOf(dataset.size())
-//                                + " / " + item_count + " )",0);
-
-                        notifyTitleChanged();
-                    }
 
                 }else
                 {
@@ -380,16 +331,6 @@ public class DetachedItemCatFragment extends Fragment
 
 
 
-    void notifyDelete()
-    {
-        dataset.clear();
-        offset = 0 ; // reset the offset
-        makeRequestRetrofit(true);
-    }
-
-
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -404,9 +345,12 @@ public class DetachedItemCatFragment extends Fragment
                 if(parentCategory!=null)
                 {
 
-                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
+                    changeParentRequested.setParentCategoryID(parentCategory.getItemCategoryID());
+                    makeUpdateRequest(changeParentRequested);
 
-                    makeUpdateRequest(listAdapter.getRequestedChangeParent());
+//                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
+
+//                    makeUpdateRequest(listAdapter.getRequestedChangeParent());
                 }
             }
         }
@@ -439,7 +383,7 @@ public class DetachedItemCatFragment extends Fragment
 
     void makeUpdateRequest(ItemCategory itemCategory)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategory(UtilityLogin.getAuthorizationHeaders(getActivity()),
+        Call<ResponseBody> call = itemCategoryService.changeParent(UtilityLogin.getAuthorizationHeaders(getActivity()),
                 itemCategory,itemCategory.getItemCategoryID());
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -459,7 +403,8 @@ public class DetachedItemCatFragment extends Fragment
                     showToastMessage("Change Parent Failed !");
                 }
 
-                listAdapter.setRequestedChangeParent(null);
+//                listAdapter.setRequestedChangeParent(null);
+                changeParentRequested= null;
             }
 
             @Override
@@ -467,7 +412,9 @@ public class DetachedItemCatFragment extends Fragment
 
                 showToastMessage("Network request failed. Please check your connection !");
 
-                listAdapter.setRequestedChangeParent(null);
+//                listAdapter.setRequestedChangeParent(null);
+
+                changeParentRequested= null;
             }
         });
     }
@@ -498,7 +445,7 @@ public class DetachedItemCatFragment extends Fragment
 
     void makeRequestBulk(final List<ItemCategory> list)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(UtilityLogin.getAuthorizationHeaders(getActivity()),
+        Call<ResponseBody> call = itemCategoryService.changeParentBulk(UtilityLogin.getAuthorizationHeaders(getActivity()),
                 list);
 
 
@@ -559,24 +506,40 @@ public class DetachedItemCatFragment extends Fragment
     @Override
     public void notifyItemCategorySelected() {
 
-        exitFullscreen();
+//        exitFullscreen();
+    }
+
+    @Override
+    public void notifyDeleted() {
+        onRefresh();
     }
 
 
-    void exitFullscreen()
-    {
 
-        notificationReceiverFragment.showAppBar();
 
-        if(show)
-        {
-            show= false;
-        }else
-        {
-            show=true;
-        }
 
+    @Override
+    public void changeParentSingle(ItemCategory itemCategory) {
+
+        //                    showToastMessage("Change parent !");
+
+        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
+
+
+        changeParentRequested = itemCategory;
+//        requestedChangeParent = dataset.get(getLayoutPosition());
+
+        // add the selected item category in the exclude list so that it does not get showed up as an option.
+        // This is required to prevent an item category to assign itself or its children as its parent.
+        // This should not happen because it would be erratic.
+
+        ItemCategoriesParent.clearExcludeList(); // it is a safe to clear the list before adding any items in it.
+        ItemCategoriesParent.excludeList
+                .put(itemCategory.getItemCategoryID(),itemCategory);
+
+        startActivityForResult(intentParent,1,null);
     }
+
 
 
 
@@ -601,53 +564,14 @@ public class DetachedItemCatFragment extends Fragment
 
 
 
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-
-        Icepick.saveInstanceState(this, outState);
-
-
-        outState.putParcelableArrayList("dataset",dataset);
-//        outState.putParcelable("currentCat",currentCategory);
-
-    }
-
-
-
     void notifyTitleChanged()
     {
-        if(notifyPagerAdapter!=null)
+        if(getActivity() instanceof NotifyTitleChanged)
         {
-//            notifyPagerAdapter.NotifyTitleChanged("Subcategories (" +  String.valueOf(itemCount) + ")",0);
-
-            notifyPagerAdapter
-                    .NotifyTitleChanged("Subcategories (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count )+ ")",0);
+            ((NotifyTitleChanged) getActivity()).NotifyTitleChanged("Subcategories (" + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count )+ ")",0);
         }
-
     }
 
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-
-        if (savedInstanceState != null) {
-            Icepick.restoreInstanceState(this, savedInstanceState);
-            ArrayList<ItemCategory> tempList = savedInstanceState.getParcelableArrayList("dataset");
-            dataset.clear();
-            dataset.addAll(tempList);
-            notifyTitleChanged();
-            listAdapter.notifyDataSetChanged();
-//
-//            currentCategory = savedInstanceState.getParcelable("currentCat");
-        }
-
-    }
 
 
 

@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.PlaceholderFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
 
@@ -27,9 +26,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     }
 
 
-    DetachedItemCatFragment detachedItemCatFragment;
-
-    DetachedItemFragment detachedItemFragment;
+//    DetachedItemCatFragment detachedItemCatFragment;
+//
+//    DetachedItemFragment detachedItemFragment;
 
     @Override
     public Fragment getItem(int position) {
@@ -40,23 +39,24 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
         if(position == 0)
         {
-            detachedItemCatFragment = new DetachedItemCatFragment();
+//            detachedItemCatFragment = ;
 
 //            activity.setNotificationReceiver(detachedItemCatFragment);
 
-            return detachedItemCatFragment;
+            return new DetachedItemCatFragment();
         }
         else if (position == 1)
         {
 
-            detachedItemFragment = new DetachedItemFragment();
+//            detachedItemFragment = new DetachedItemFragment();
 
-            return detachedItemFragment;
+            return new DetachedItemFragment();
         }
 
 
-        return PlaceholderFragment.newInstance(position + 1);
+        return null;
     }
+
 
     @Override
     public int getCount() {
@@ -82,10 +82,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
 
 
-    String titleCategories = "Sub-Categories (0)";
-    String titleItems = "Items (0)";
-    String titleDetachedItemCategories = "Detached Item-Categories (0/0)";
-    String titleDetachedItems = "Detached Items (0/0)";
+    private String titleCategories = "Categories(0)";
+    private String titleItems = "Items(0/0)";
+    private String titleDetachedItemCategories = "Detached Item-Categories (0/0)";
+    private String titleDetachedItems = "Detached Items (0/0)";
 
 
     public void setTitle(String title, int tabPosition)

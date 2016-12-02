@@ -26,7 +26,6 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitle
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategoryOld.AddItemCategory;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -479,7 +478,7 @@ public class ItemCategoriesFragment extends Fragment
 
     void makeRequestUpdateBulk(final List<ItemCategory> list)
     {
-        Call<ResponseBody> call = itemCategoryService.updateItemCategoryBulk(UtilityLogin.getAuthorizationHeaders(getActivity()),
+        Call<ResponseBody> call = itemCategoryService.changeParentBulk(UtilityLogin.getAuthorizationHeaders(getActivity()),
                 list);
 
 

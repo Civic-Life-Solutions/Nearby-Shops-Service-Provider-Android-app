@@ -6,6 +6,8 @@ import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
+
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -37,19 +39,28 @@ public interface ItemCategoryService {
                                           @Body ItemCategory itemCategory,
                                           @Path("id") int id);
 
+
+    @PUT ("/api/v1/ItemCategory/ChangeParent")
+    Call<ResponseBody> changeParentBulk(@Header("Authorization") String headers,
+                                        @Body List<ItemCategory> itemCategoryList);
+
+
     @PUT("/api/v1/ItemCategory/{id}")
     Call<ResponseBody> updateItemCategory(@Header("Authorization") String headers,
                                           @Body ItemCategory itemCategory,
-                                          @Path("id") int id);
-
-    @DELETE("/api/v1/ItemCategory/{id}")
-    Call<ResponseBody> deleteItemCategory(@Header("Authorization") String headers,
                                           @Path("id") int id);
 
 
     @PUT("/api/v1/ItemCategory/")
     Call<ResponseBody> updateItemCategoryBulk(@Header("Authorization") String headers,
                                               @Body List<ItemCategory> itemCategoryList);
+
+
+
+    @DELETE("/api/v1/ItemCategory/{id}")
+    Call<ResponseBody> deleteItemCategory(@Header("Authorization") String headers,
+                                          @Path("id") int id);
+
 
 
     @GET("api/v1/ItemCategory")

@@ -3,7 +3,10 @@ package org.nearbyshops.serviceprovider.DetachedTabs.Items;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -11,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,8 +21,11 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld.EditItemOld;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.UtilityItem;
 import org.nearbyshops.serviceprovider.Model.Item;
+import org.nearbyshops.serviceprovider.ModelStats.ItemStats;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
@@ -64,8 +69,6 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
     private NotificationReceiver notificationReceiver;
 
 
-    final String IMAGE_ENDPOINT_URL = "/api/Images";
-
     public DetachedItemAdapter(List<Item> dataset, Context context, DetachedItemFragment activity, DetachedItemAdapter.NotificationReceiver notificationReceiver) {
 
 
@@ -88,7 +91,7 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
     @Override
     public DetachedItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_item_remake,parent,false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_item_guide,parent,false);
 
         return new ViewHolder(v);
     }
@@ -98,7 +101,17 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
     public void onBindViewHolder(DetachedItemAdapter.ViewHolder holder, final int position) {
 
         holder.categoryName.setText(dataset.get(position).getItemName());
-        holder.categoryDescription.setText(dataset.get(position).getItemDescription());
+
+        ItemStats itemStats = dataset.get(position).getItemStats();
+        Item item = dataset.get(position);
+
+
+        holder.priceRange.setText("Price Range :\nRs." + itemStats.getMin_price() + " - " + itemStats.getMax_price() + " per " + item.getQuantityUnit());
+        holder.priceAverage.setText("Price Average :\nRs." + itemStats.getAvg_price() + " per " + item.getQuantityUnit());
+        holder.shopCount.setText("Available in " + itemStats.getShopCount() + " Shops");
+        holder.itemRating.setText(String.format("%.2f",itemStats.getRating_avg()));
+        holder.ratingCount.setText("( " + String.valueOf(itemStats.getRatingCount()) + " Ratings )");
+
 
         if(selectedItems.containsKey(dataset.get(position).getItemID()))
         {
@@ -111,13 +124,18 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
 
 
 
-        String imagePath = UtilityGeneral.getImageEndpointURL(context)
-                + dataset.get(position).getItemImageURL();
 
-        Picasso.with(context).load(imagePath).into(holder.categoryImage);
+        String imagePath = UtilityGeneral.getServiceURL(context)
+                + "/api/v1/Item/Image/three_hundred_" + dataset.get(position).getItemImageURL() + ".jpg";
 
 
-//        Log.d("applog",imagePath);
+        Drawable drawable = VectorDrawableCompat
+                .create(context.getResources(),
+                        R.drawable.ic_nature_people_white_48px, context.getTheme());
+
+        Picasso.with(context).load(imagePath)
+                .placeholder(drawable)
+                .into(holder.categoryImage);
 
     }
 
@@ -132,12 +150,21 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
+        @Bind(R.id.itemName) TextView categoryName;
+//        TextView categoryDescription;
 
-        private TextView categoryName,categoryDescription;
+        @Bind(R.id.items_list_item) CardView itemCategoryListItem;
+        @Bind(R.id.itemImage) ImageView categoryImage;
+        @Bind(R.id.price_range) TextView priceRange;
+        @Bind(R.id.price_average) TextView priceAverage;
+        @Bind(R.id.shop_count) TextView shopCount;
+        @Bind(R.id.item_rating) TextView itemRating;
+        @Bind(R.id.rating_count) TextView ratingCount;
 
-        @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
 
-        @Bind(R.id.categoryImage) ImageView categoryImage;
+//        private TextView categoryName,categoryDescription;
+//        @Bind(R.id.itemCategoryListItem) LinearLayout itemCategoryListItem;
+//        @Bind(R.id.categoryImage) ImageView categoryImage;
 
 
         public ViewHolder(View itemView) {
@@ -145,16 +172,16 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
 
             ButterKnife.bind(this,itemView);
 
-            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
-            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
-            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
+//            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
+//            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
+//            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
 
-            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
+//            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
         }
 
 
 
-        @OnClick(R.id.itemCategoryListItem)
+        @OnClick(R.id.items_list_item)
         public void listItemClick()
         {
 
@@ -262,7 +289,7 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
         {
             PopupMenu popup = new PopupMenu(context, v);
             MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.item_category_item_overflow, popup.getMenu());
+            inflater.inflate(R.menu.item_category_item_overflow_detached, popup.getMenu());
             popup.setOnMenuItemClickListener(this);
             popup.show();
         }
@@ -305,21 +332,20 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
 //                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
 //                    context.startActivity(intent);
 
-                    Intent intentEdit = new Intent(context,EditItemOld.class);
-                    intentEdit.putExtra(EditItemOld.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    Intent intentEdit = new Intent(context,EditItemOld.class);
+//                    intentEdit.putExtra(EditItemOld.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    context.startActivity(intentEdit);
+
+
+
+                    UtilityItem.saveItem(dataset.get(getLayoutPosition()),context);
+
+                    Intent intentEdit = new Intent(context,EditItem.class);
+                    intentEdit.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY,EditItemFragment.MODE_UPDATE);
                     context.startActivity(intentEdit);
 
                     break;
 
-
-
-                case R.id.action_detach:
-
-
-                    showToastMessage("Detach");
-
-
-                    break;
 
                 case R.id.action_change_parent:
 
@@ -382,7 +408,8 @@ public class DetachedItemAdapter extends RecyclerView.Adapter<DetachedItemAdapte
         // method for notifying the list object to request sub category
 //        public void notifyRequestSubCategory(ItemCategory itemCategory);
 
-        public void notifyItemCategorySelected();
+        void notifyItemCategorySelected();
+        void changeParentRequested();
 
     }
 

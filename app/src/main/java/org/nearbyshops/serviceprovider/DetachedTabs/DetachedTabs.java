@@ -1,35 +1,33 @@
 package org.nearbyshops.serviceprovider.DetachedTabs;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.RelativeLayout;
 
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.FragmentsNotificationReceiver;
 import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyAssignParent;
-import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyPagerAdapter;
+import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.DetachedTabs.Interfaces.NotifyScroll;
-import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DetachedTabs extends AppCompatActivity implements FragmentsNotificationReceiver, NotifyPagerAdapter, NotifyScroll {
+public class DetachedTabs extends AppCompatActivity implements NotifyTitleChanged, NotifyScroll {
+
+
+    @Bind(R.id.options) RelativeLayout options;
+
 
     private PagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-//    private ReceiveNotificationFromTabsForItemCat notificationReceiver;
-    private ReceiveNotificationFromTabsForItems tabsNotificationReceiver;
 
     @Bind(R.id.tablayout)
     TabLayout tabLayout;
@@ -37,8 +35,6 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
     @Bind(R.id.tablayoutPager)
     TabLayout tabLayoutPager;
 
-    public NotifyAssignParent assignParentItemCategory;
-    public NotifyAssignParent assignParentItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,45 +94,12 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
 
     @Override
     public void onBackPressed() {
-
-
         super.onBackPressed();
-
-        /*if(notificationReceiver!=null)
-        {
-            if(notificationReceiver.backPressed())
-            {
-                super.onBackPressed();
-            }else
-            {
-                mViewPager.setCurrentItem(0,true);
-            }
-        }
-        else
-        {
-            super.onBackPressed();
-
-
-
-        }*/
-
     }
 
 
 
 
-
-
-
-
-    /*public ReceiveNotificationFromTabsForItemCat getNotificationReceiver() {
-        return notificationReceiver;
-    }
-
-    public void setNotificationReceiver(ReceiveNotificationFromTabsForItemCat notificationReceiver) {
-        this.notificationReceiver = notificationReceiver;
-    }
-*/
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -147,113 +110,38 @@ public class DetachedTabs extends AppCompatActivity implements FragmentsNotifica
 
 
 
-
-    @Bind(R.id.appbar)
-    AppBarLayout appBar;
-
-
-    @Override
-    public void itemCategoryChanged(ItemCategory currentCategory) {
-
-        Log.d("applog","Item Category Changed : " + currentCategory.getCategoryName() + " : " + String.valueOf(currentCategory.getItemCategoryID()));
-
-
-        if(tabsNotificationReceiver!=null)
-        {
-            tabsNotificationReceiver.itemCategoryChanged(currentCategory);
-        }
-    }
-
-
-    @Override
-    public void showAppBar() {
-
-//        appBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideAppBar() {
-
-
-//        appBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void insertTab(String categoryName) {
-
-        if(tabLayout.getVisibility()==View.GONE)
-        {
-            tabLayout.setVisibility(View.VISIBLE);
-        }
-
-        tabLayout.addTab(tabLayout.newTab().setText("" + categoryName + " : : "));
-        tabLayout.setScrollPosition(tabLayout.getTabCount()-1,0,true);
-    }
-
-    @Override
-    public void removeLastTab() {
-
-
-        tabLayout.removeTabAt(tabLayout.getTabCount()-1);
-        tabLayout.setScrollPosition(tabLayout.getTabCount()-1,0,true);
-
-        if(tabLayout.getTabCount()==0)
-        {
-            tabLayout.setVisibility(View.GONE);
-        }
-
-    }
-
-    @Override
-    public void notifySwipeToright() {
-
-        mViewPager.setCurrentItem(1);
-    }
-
-
-
-
-    public interface ReceiveNotificationFromTabsForItems {
-
-        void itemCategoryChanged(ItemCategory currentCategory);
-    }
-
-
-
-    /*public interface ReceiveNotificationFromTabsForItemCat {
-
-        boolean backPressed();
-    }
-*/
-
-
-    public ReceiveNotificationFromTabsForItems getTabsNotificationReceiver() {
-        return tabsNotificationReceiver;
-    }
-
-    public void setTabsNotificationReceiver(ReceiveNotificationFromTabsForItems tabsNotificationReceiver) {
-        this.tabsNotificationReceiver = tabsNotificationReceiver;
-    }
-
-
-
-
     @OnClick(R.id.changeParentBulk)
     void assignParentButtonClick()
     {
-        if(mViewPager.getCurrentItem()==0)
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem()));
+
+        if(fragment instanceof NotifyAssignParent)
         {
-            if(assignParentItemCategory!=null)
-            {
-                assignParentItemCategory.assignParentClick();
-            }
+            ((NotifyAssignParent) fragment).assignParentClick();
         }
+
+
+
+//        if(mViewPager.getCurrentItem()==0)
+//        {
+
+//            if(assignParentItemCategory!=null)
+//            {
+//                assignParentItemCategory.assignParentClick();
+//            }
+
+//        }
+
     }
 
 
 
-    @Bind(R.id.options)
-    RelativeLayout options;
+    private static String makeFragmentName(int viewId, int index) {
+        return "android:switcher:" + viewId + ":" + index;
+    }
+
+
 
 
     @Override

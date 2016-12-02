@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItemOld;
+package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,7 +19,7 @@ import com.yalantis.ucrop.UCrop;
 
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemRemakeFragment;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 import org.nearbyshops.serviceprovider.Model.Image;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -91,7 +91,7 @@ public class AddItem extends AppCompatActivity implements Callback<Image> {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        itemCategory = getIntent().getParcelableExtra(ItemRemakeFragment.ADD_ITEM_INTENT_KEY);
+        itemCategory = getIntent().getParcelableExtra(ItemFragmentTwo.ADD_ITEM_INTENT_KEY);
 
 
         if (savedInstanceState == null) {
