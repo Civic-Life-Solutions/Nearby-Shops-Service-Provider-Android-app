@@ -24,7 +24,6 @@ import com.squareup.picasso.Picasso;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.UtilityItemCategory;
-import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
@@ -64,30 +63,18 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
     private List<ItemCategory> dataset;
     private Context context;
-    private ItemCategoriesFragment activity;
-    private ItemCategory requestedChangeParent = null;
-    private ReceiveNotificationsFromAdapter notificationReceiver;
+    private NotificationsFromAdapter notificationReceiver;
 
 
-    final String IMAGE_ENDPOINT_URL = "/api/Images";
-
-    public ItemCategoriesAdapter(List<ItemCategory> dataset, Context context, ItemCategoriesFragment activity, ReceiveNotificationsFromAdapter notificationReceiver) {
+    public ItemCategoriesAdapter(List<ItemCategory> dataset, Context context, NotificationsFromAdapter notificationReceiver) {
 
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
 
-
         this.notificationReceiver = notificationReceiver;
         this.dataset = dataset;
         this.context = context;
-        this.activity = activity;
-
-        if(this.dataset == null)
-        {
-            this.dataset = new ArrayList<ItemCategory>();
-        }
-
     }
 
     @Override
@@ -104,8 +91,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
 
         holder.categoryName.setText(String.valueOf(dataset.get(position).getCategoryName()));
-//        holder.categoryDescription.setText(dataset.get(position).getDescriptionShort());
-
 
         if(selectedItems.containsKey(dataset.get(position).getItemCategoryID()))
         {
@@ -158,20 +143,13 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this,itemView);
-
-//            categoryImage = (ImageView) itemView.findViewById(R.id.categoryImage);
-//            categoryName = (TextView) itemView.findViewById(R.id.categoryName);
-//            categoryDescription = (TextView) itemView.findViewById(R.id.categoryDescription);
-
-//            itemCategoryListItem = (LinearLayout) itemView.findViewById(R.id.itemCategoryListItem);
         }
 
 
 
         @OnLongClick(R.id.itemCategoryListItem)
-        public boolean listItemLongClick()
+        boolean listItemLongClick()
         {
 
 //            showToastMessage("Long Click !");
@@ -196,11 +174,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
 
             notifyItemChanged(getLayoutPosition());
-
-//            showToastMessage(String.valueOf(selectedItems.size()));
-
-
-//            itemCategoryListItem.setBackgroundColor(context.getResources().getColor(R.color.cyan900));
 
             return true;
         }
@@ -229,24 +202,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
             notificationReceiver.notifyRequestSubCategory(dataset.get(getLayoutPosition()));
             selectedItems.clear();
-
-
-
-
-            /*if (dataset.get(getLayoutPosition()).getIsLeafNode()) {
-
-//                Intent intent = new Intent(context, Items.class);
-//
-//                intent.putExtra(Items.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
-//
-//                context.startActivity(intent);
-
-            }
-            else
-            {
-
-            }*/
-
         }
 
 
@@ -333,10 +288,6 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
                 case R.id.action_edit:
 
-//                    Intent intent = new Intent(context,EditItemCategoryOld.class);
-//                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
-//                    context.startActivity(intent);
-
                     UtilityItemCategory.saveItemCategory(dataset.get(getLayoutPosition()),context);
 
                     Intent intent = new Intent(context,EditItemCategory.class);
@@ -360,21 +311,10 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
                 case R.id.action_change_parent:
 
 
+                    notificationReceiver.changeParent(dataset.get(getLayoutPosition()));
+
 //                    showToastMessage("Change parent !");
 
-                    Intent intentParent = new Intent(context, ItemCategoriesParent.class);
-
-                    requestedChangeParent = dataset.get(getLayoutPosition());
-
-                    // add the selected item category in the exclude list so that it does not get showed up as an option.
-                    // This is required to prevent an item category to assign itself or its children as its parent.
-                    // This should not happen because it would be erratic.
-
-                    ItemCategoriesParent.clearExcludeList(); // it is a safe to clear the list before adding any items in it.
-                    ItemCategoriesParent.excludeList
-                            .put(requestedChangeParent.getItemCategoryID(),requestedChangeParent);
-
-                    activity.startActivityForResult(intentParent,1,null);
                     break;
 
                 default:
@@ -393,7 +333,7 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
 
 
-    void showToastMessage(String message)
+    private void showToastMessage(String message)
     {
         Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
     }
@@ -401,25 +341,19 @@ public class ItemCategoriesAdapter extends RecyclerView.Adapter<ItemCategoriesAd
 
     public void notifyDelete()
     {
-        activity.notifyDelete();
+        notificationReceiver.notifyDelete();
     }
 
 
-    public interface ReceiveNotificationsFromAdapter
+    interface NotificationsFromAdapter
     {
         // method for notifying the list object to request sub category
-        public void notifyRequestSubCategory(ItemCategory itemCategory);
-        public void notifyItemCategorySelected();
+        void notifyRequestSubCategory(ItemCategory itemCategory);
+        void notifyItemCategorySelected();
         void detachItem(ItemCategory itemCategory);
+        void notifyDelete();
+        void changeParent(ItemCategory itemCategory);
     }
 
-
-    public void setRequestedChangeParent(ItemCategory requestedChangeParent) {
-        this.requestedChangeParent = requestedChangeParent;
-    }
-
-    public ItemCategory getRequestedChangeParent() {
-        return requestedChangeParent;
-    }
 
 }

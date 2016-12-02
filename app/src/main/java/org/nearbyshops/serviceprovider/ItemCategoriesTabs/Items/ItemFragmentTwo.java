@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyInsertTab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySwipeToRight;
@@ -51,11 +50,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemFragmentTwo extends Fragment
-        implements  ItemAdapterTwo.NotificationReceiver,
+        implements ItemAdapterTwo.NotificationsFromAdapter,
         SwipeRefreshLayout.OnRefreshListener,
         NotifyCategoryChanged, NotifyFabClick_Item, NotifySort{
 
     public static final String ADD_ITEM_INTENT_KEY = "add_item_intent_key";
+
+
+    Item changeParentRequested;
 
     @State
     ArrayList<Item> dataset = new ArrayList<>();
@@ -119,28 +121,6 @@ public class ItemFragmentTwo extends Fragment
 
 
 
-//        if(getActivity() instanceof ItemCategoriesTabs)
-//        {
-//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-//            activity.notifyCategoryChanged = this;
-//            activity.notifyFabClick_item = this;
-//        }
-
-//        if(getActivity() instanceof NotifyInsertTab)
-//        {
-//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-
-//            this.notificationReceiverFragment = (NotifyInsertTab) activity;
-//        }
-
-/*
-        if(getActivity() instanceof NotifyTitleChanged)
-        {
-            notifyTitleChanged = (NotifyTitleChanged)getActivity();
-        }
-*/
-
-
         if(savedInstanceState==null)
         {
 
@@ -149,9 +129,9 @@ public class ItemFragmentTwo extends Fragment
                 public void run() {
                     swipeContainer.setRefreshing(true);
 
-                        dataset.clear();
+//                        dataset.clear();
                         offset=0;
-                        makeRequestRetrofit(false);
+                        makeRequestRetrofit(false,true);
 
                 }
             });
@@ -177,7 +157,7 @@ public class ItemFragmentTwo extends Fragment
     {
 
 
-        listAdapter = new ItemAdapterTwo(dataset,getActivity(),this,this);
+        listAdapter = new ItemAdapterTwo(dataset,getActivity(),this);
         itemCategoriesList.setAdapter(listAdapter);
 
         layoutManager = new GridLayoutManager(getActivity(),1);
@@ -207,16 +187,35 @@ public class ItemFragmentTwo extends Fragment
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(layoutManager.findLastVisibleItemPosition() == dataset.size()-1)
+//                if(layoutManager.findLastVisibleItemPosition() == dataset.size()-1)
+//                {
+//                     trigger fetch next page
+//
+//                    if((offset+limit)<=item_count)
+//                    {
+//                        offset = offset + limit;
+//                        makeRequestRetrofit(false);
+//                    }
+//
+//                }
+
+
+                if(layoutManager.findLastVisibleItemPosition()==dataset.size()-1)
                 {
                     // trigger fetch next page
+
+                    if(layoutManager.findLastVisibleItemPosition() == previous_position)
+                    {
+                        return;
+                    }
 
                     if((offset+limit)<=item_count)
                     {
                         offset = offset + limit;
-                        makeRequestRetrofit(false);
+                        makeRequestRetrofit(false,false);
                     }
 
+                    previous_position = layoutManager.findLastVisibleItemPosition();
                 }
 
             }
@@ -264,8 +263,11 @@ public class ItemFragmentTwo extends Fragment
             }
 
         });
-
     }
+
+    int previous_position = -1;
+
+
 
     @Bind(R.id.swipeContainer)
     SwipeRefreshLayout swipeContainer;
@@ -288,7 +290,7 @@ public class ItemFragmentTwo extends Fragment
 
 
 
-    public void makeRequestRetrofit(final boolean isbackPressed)
+    public void makeRequestRetrofit(final boolean isbackPressed, final boolean clearDataset)
     {
         if(notifiedCurrentCategory==null)
         {
@@ -321,6 +323,10 @@ public class ItemFragmentTwo extends Fragment
 
                 if(response.body()!=null) {
 
+                    if(clearDataset)
+                    {
+                        dataset.clear();
+                    }
                     dataset.addAll(response.body().getResults());
                     item_count = response.body().getItemCount();
                 }
@@ -365,9 +371,17 @@ public class ItemFragmentTwo extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         isDestroyed= true;
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isDestroyed = false;
+    }
+
+
 
     private void showToastMessage(String message)
     {
@@ -385,7 +399,30 @@ public class ItemFragmentTwo extends Fragment
     }
 
 
+    @Override
+    public void changeParent(Item item) {
 
+
+//                    showToastMessage("Change parent !");
+
+        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
+
+        changeParentRequested = item;
+
+//        requestedChangeParent = dataset.get(getLayoutPosition());
+
+        // add the selected item category in the exclude list so that it does not get showed up as an option.
+        // This is required to prevent an item category to assign itself or its children as its parent.
+        // This should not happen because it would be erratic.
+
+        ItemCategoriesParent.clearExcludeList(); // it is a safe to clear the list before adding any items in it.
+
+//                    ItemCategoriesParent.excludeList
+//                            .put(requestedChangeParent.getItemID(),requestedChangeParent);
+
+        startActivityForResult(intentParent,1,null);
+
+    }
 
 
     @Override
@@ -410,10 +447,12 @@ public class ItemFragmentTwo extends Fragment
                     }
 //                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
 
-                    listAdapter.getRequestedChangeParent().setItemCategoryID(parentCategory.getItemCategoryID());
+//                    listAdapter.getRequestedChangeParent().setItemCategoryID(parentCategory.getItemCategoryID());
+//                    makeUpdateRequest(listAdapter.getRequestedChangeParent());
 
-                    makeUpdateRequest(listAdapter.getRequestedChangeParent());
 
+                    changeParentRequested.setItemCategoryID(parentCategory.getItemCategoryID());
+                    makeUpdateRequest(changeParentRequested);
 
 
                 }
@@ -477,7 +516,8 @@ public class ItemFragmentTwo extends Fragment
                     showToastMessage("Change Parent Failed !");
                 }
 
-                listAdapter.setRequestedChangeParent(null);
+//                listAdapter.setRequestedChangeParent(null);
+                changeParentRequested=null;
             }
 
             @Override
@@ -485,7 +525,8 @@ public class ItemFragmentTwo extends Fragment
 
                 showToastMessage("Network request failed. Please check your connection !");
 
-                listAdapter.setRequestedChangeParent(null);
+//                listAdapter.setRequestedChangeParent(null);
+                changeParentRequested=null;
 
             }
         });
@@ -628,10 +669,9 @@ public class ItemFragmentTwo extends Fragment
     @Override
     public void onRefresh() {
 
-        dataset.clear();
+//        dataset.clear();
         offset = 0 ; // reset the offset
-        makeRequestRetrofit(false);
-
+        makeRequestRetrofit(false,true);
 
         Log.d("applog","refreshed");
     }
@@ -648,9 +688,9 @@ public class ItemFragmentTwo extends Fragment
             public void run() {
                 swipeContainer.setRefreshing(true);
 
-                dataset.clear();
+//                dataset.clear();
                 offset = 0 ; // reset the offset
-                makeRequestRetrofit(isBackPressed);
+                makeRequestRetrofit(isBackPressed,true);
 
             }
         });

@@ -72,8 +72,8 @@
             app:tabIndicatorColor="@color/colorAccent"/>
 
 
+        <!--//app:layout_scrollFlags = "scroll|enterAlways"-->
         <android.support.design.widget.TabLayout
-            app:layout_scrollFlags = "scroll|enterAlways"
             android:background="@color/blueGrey800"
             android:id="@+id/tablayoutPager"
             android:layout_width="match_parent"

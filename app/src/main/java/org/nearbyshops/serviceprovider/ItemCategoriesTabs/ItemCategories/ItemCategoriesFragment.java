@@ -50,10 +50,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ItemCategoriesFragment extends Fragment
-        implements ItemCategoriesAdapter.ReceiveNotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,
+        implements ItemCategoriesAdapter.NotificationsFromAdapter, SwipeRefreshLayout.OnRefreshListener,
         NotifyBackPressed,
         NotifyFabClick_ItemCategories , NotifySort{
 
+
+    ItemCategory changeParentRequested;
 
 
     @State
@@ -143,8 +145,8 @@ public class ItemCategoriesFragment extends Fragment
 
                     // make a network call
                     offset = 0;
-                    dataset.clear();
-                    makeRequestRetrofit(false,false);
+//                    dataset.clear();
+                    makeRequestRetrofit(false,false,true);
                 }
             });
 
@@ -183,7 +185,7 @@ public class ItemCategoriesFragment extends Fragment
     void setupRecyclerView()
     {
 
-        listAdapter = new ItemCategoriesAdapter(dataset,getActivity(),this,this);
+        listAdapter = new ItemCategoriesAdapter(dataset,getActivity(),this);
         itemCategoriesList.setAdapter(listAdapter);
         layoutManager = new GridLayoutManager(getActivity(),1, LinearLayoutManager.VERTICAL,false);
         itemCategoriesList.setLayoutManager(layoutManager);
@@ -228,7 +230,7 @@ public class ItemCategoriesFragment extends Fragment
                     if((offset+limit)<=item_count)
                     {
                         offset = offset + limit;
-                        makeRequestRetrofit(false,false);
+                        makeRequestRetrofit(false,false,false);
                     }
 
                 }
@@ -307,7 +309,7 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-    public void makeRequestRetrofit(boolean notifyItemCategoryChanged, final boolean backPressed)
+    public void makeRequestRetrofit(boolean notifyItemCategoryChanged, final boolean backPressed, final boolean clearDataset)
     {
 
 //        Call<ItemCategoryEndPoint> endPointCall2 = itemCategoryService.getItemCategories(
@@ -341,10 +343,20 @@ public class ItemCategoriesFragment extends Fragment
             @Override
             public void onResponse(Call<ItemCategoryEndPoint> call, Response<ItemCategoryEndPoint> response) {
 
+                if(isDestroyed)
+                {
+                    return;
+                }
+
                 if(response.body()!=null)
                 {
                     ItemCategoryEndPoint endPoint = response.body();
                     item_count = endPoint.getItemCount();
+
+                    if(clearDataset)
+                    {
+                        dataset.clear();
+                    }
                     dataset.addAll(endPoint.getResults());
                     listAdapter.notifyDataSetChanged();
 
@@ -360,6 +372,11 @@ public class ItemCategoriesFragment extends Fragment
             @Override
             public void onFailure(Call<ItemCategoryEndPoint> call, Throwable t) {
 
+                if(isDestroyed)
+                {
+                    return;
+                }
+
                 showToastMessage("Network request failed. Please check your connection !");
                 if(swipeContainer!=null)
                 {
@@ -371,7 +388,19 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
+    boolean isDestroyed = false;
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isDestroyed = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isDestroyed=false;
+    }
 
     private void showToastMessage(String message)
     {
@@ -383,8 +412,10 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-    void notifyDelete()
-    {
+    @Override
+    public void notifyDelete() {
+
+
 //        dataset.clear();
 //        offset = 0 ; // reset the offset
 //        makeRequestRetrofit(false,false);
@@ -395,19 +426,35 @@ public class ItemCategoriesFragment extends Fragment
 
                 swipeContainer.setRefreshing(true);
 
-                // make a network call
-                offset = 0;
-                dataset.clear();
-                makeRequestRetrofit(false,false);
+                // make a refresh network call
+                onRefresh();
             }
         });
 
     }
 
 
+    @Override
+    public void changeParent(ItemCategory itemCategory) {
+
+        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
+
+//        requestedChangeParent = dataset.get(getLayoutPosition());
+
+        changeParentRequested = itemCategory;
 
 
+        // add the selected item category in the exclude list so that it does not get showed up as an option.
+        // This is required to prevent an item category to assign itself or its children as its parent.
+        // This should not happen because it would be erratic.
 
+        ItemCategoriesParent.clearExcludeList(); // it is a safe to clear the list before adding any items in it.
+        ItemCategoriesParent.excludeList
+                .put(itemCategory.getItemCategoryID(),itemCategory);
+
+        startActivityForResult(intentParent,1,null);
+
+    }
 
 
     @Override
@@ -423,9 +470,11 @@ public class ItemCategoriesFragment extends Fragment
                 if(parentCategory!=null)
                 {
 
-                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
+//                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
+//                    makeRequestUpdate(listAdapter.getRequestedChangeParent());
 
-                    makeRequestUpdate(listAdapter.getRequestedChangeParent());
+                    changeParentRequested.setParentCategoryID(parentCategory.getItemCategoryID());
+                    makeRequestUpdate(changeParentRequested);
 
                 }
             }
@@ -466,28 +515,44 @@ public class ItemCategoriesFragment extends Fragment
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
                 if(response.code() == 200)
                 {
                     showToastMessage("Successful !");
 
-                    dataset.clear();
+//                    dataset.clear();
                     offset = 0 ; // reset the offset
-                    makeRequestRetrofit(false,false);
+                    makeRequestRetrofit(false,false,true);
 
                 }else
                 {
                     showToastMessage("Failed Code : " + String.valueOf(response.code()));
                 }
 
-                listAdapter.setRequestedChangeParent(null);
+//                listAdapter.setRequestedChangeParent(null);
+
+                changeParentRequested=null;
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
                 showToastMessage("Network request failed. Please check your connection !");
 
-                listAdapter.setRequestedChangeParent(null);
+//                listAdapter.setRequestedChangeParent(null);
+                changeParentRequested=null;
+
             }
         });
     }
@@ -504,6 +569,13 @@ public class ItemCategoriesFragment extends Fragment
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
                 if(response.code() == 200)
                 {
                     showToastMessage("Update Successful !");
@@ -537,6 +609,10 @@ public class ItemCategoriesFragment extends Fragment
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+                if(isDestroyed)
+                {
+                    return;
+                }
 
                 showToastMessage("Network Request failed. Check your internet / network connection !");
 
@@ -580,8 +656,8 @@ public class ItemCategoriesFragment extends Fragment
 
         // reset the offset and make a network call
         offset = 0;
-        dataset.clear();
-        makeRequestRetrofit(false,false);
+//        dataset.clear();
+        makeRequestRetrofit(false,false,true);
     }
 
 
@@ -618,9 +694,9 @@ public class ItemCategoriesFragment extends Fragment
 
                 // make a network call
 
-                dataset.clear();
+//                dataset.clear();
                 offset = 0 ; // reset the offset
-                makeRequestRetrofit(true,false);
+                makeRequestRetrofit(true,false,true);
             }
         });
 
@@ -682,9 +758,9 @@ public class ItemCategoriesFragment extends Fragment
 
                         // make a network call
 
-                        dataset.clear();
+//                        dataset.clear();
                         offset =0; // reset the offset
-                        makeRequestRetrofit(true,true);
+                        makeRequestRetrofit(true,true,true);
                     }
                 });
 
@@ -788,7 +864,6 @@ public class ItemCategoriesFragment extends Fragment
                 })
                 .show();
     }
-
 
 
     void detachedSelectedDialog()
