@@ -22,10 +22,11 @@ import com.wunderlist.slidinglayer.SlidingLayer;
 
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyBackPressed;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyInsertTab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_ItemCategories;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySwipeToRight;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -35,8 +36,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGeneral,
-        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener, NotifyCategoryChanged, NotifySort{
+public class ItemCategoriesTabs extends AppCompatActivity implements NotifyInsertTab,
+        NotifyTitleChanged, ToggleFab, ViewPager.OnPageChangeListener,
+        NotifyCategoryChanged, NotifySort, NotifySwipeToRight{
 
     // Fab Variables
     @Bind(R.id.fab_menu)
@@ -58,16 +60,16 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     FrameLayout slidingFragmentContainer;
 
 
-    public NotifyFabClick_ItemCategories notifyFabClickItemCategories;
-    public NotifyFabClick_Item notifyFabClick_item;
+//    public NotifyFabClick_ItemCategories notifyFabClickItemCategories;
+//    public NotifyFabClick_Item notifyFabClick_item;
     // Fab Variables Ends
 
 
     private PagerAdapter mPagerAdapter;
     private ViewPager mViewPager;
 
-    public NotifyBackPressed notifyBackPressed;
-    public NotifyCategoryChanged notifyCategoryChanged;
+//    public NotifyBackPressed notifyBackPressed;
+//    public NotifyCategoryChanged notifyCategoryChanged;
 
 
     @Bind(R.id.appbar)
@@ -197,11 +199,18 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public void onBackPressed() {
 
-        if(notifyBackPressed !=null)
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(makeFragmentName(mViewPager.getId(),0));
+
+        //notifyBackPressed !=null
+
+        if(fragment instanceof NotifyBackPressed)
         {
-            if(notifyBackPressed.backPressed())
+            if(((NotifyBackPressed) fragment).backPressed())
             {
                 super.onBackPressed();
+
+
             }else
             {
 //                mViewPager.setCurrentItem(0,true);
@@ -230,11 +239,17 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
 
         showFab();
 
-        if(notifyCategoryChanged !=null)
-        {
-            notifyCategoryChanged.itemCategoryChanged(currentCategory,isBackPressed);
-        }
 
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(makeFragmentName(mViewPager.getId(),1));
+
+        //notifyCategoryChanged !=null
+        //            notifyCategoryChanged.itemCategoryChanged(currentCategory,isBackPressed);
+
+        if(fragment instanceof NotifyCategoryChanged)
+        {
+            ((NotifyCategoryChanged) fragment).itemCategoryChanged(currentCategory,isBackPressed);
+        }
     }
 
     @Override
@@ -252,7 +267,7 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public void removeLastTab() {
 
-        if(tabLayout.getTabCount()==0)
+        if(tabLayout.getTabCount()<=1)
         {
             return;
         }
@@ -292,58 +307,104 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @OnClick(R.id.fab_detach)
     void fabDetachClick()
     {
-        if(mViewPager.getCurrentItem()==0)
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem()));
+
+
+        if(fragment instanceof NotifyFabClick_Item)
         {
-            if(notifyFabClickItemCategories!=null)
-            {
-                notifyFabClickItemCategories.detachSelectedClick();
-            }
+            ((NotifyFabClick_Item) fragment).detachSelectedClick();
         }
-        else if(mViewPager.getCurrentItem()==1)
+        else if(fragment instanceof NotifyFabClick_ItemCategories)
         {
-            if(notifyFabClick_item!=null)
-            {
-                notifyFabClick_item.detachSelectedClick();
-            }
+            ((NotifyFabClick_ItemCategories) fragment).detachSelectedClick();
         }
+
+
+//        if(mViewPager.getCurrentItem()==0)
+//        {
+//            if(notifyFabClickItemCategories!=null)
+//            {
+//                notifyFabClickItemCategories.detachSelectedClick();
+//            }
+//        }
+//        else if(mViewPager.getCurrentItem()==1)
+//        {
+//            if(notifyFabClick_item!=null)
+//            {
+//                notifyFabClick_item.detachSelectedClick();
+//            }
+//        }
+
+
     }
 
     @OnClick(R.id.fab_change_parent)
     void fabChangeParentClick()
     {
-        if(mViewPager.getCurrentItem()==0)
+
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem()));
+
+
+        if(fragment instanceof NotifyFabClick_Item)
         {
-            if(notifyFabClickItemCategories!=null)
-            {
-                notifyFabClickItemCategories.changeParentForSelected();
-            }
+            ((NotifyFabClick_Item) fragment).changeParentForSelected();
         }
-        else if(mViewPager.getCurrentItem()==1)
+        else if(fragment instanceof NotifyFabClick_ItemCategories)
         {
-            if(notifyFabClick_item!=null)
-            {
-                notifyFabClick_item.changeParentForSelected();
-            }
+            ((NotifyFabClick_ItemCategories) fragment).changeParentForSelected();
         }
+
+
+
+//        if(mViewPager.getCurrentItem()==0)
+//        {
+//            if(notifyFabClickItemCategories!=null)
+//            {
+//                notifyFabClickItemCategories.changeParentForSelected();
+//            }
+//        }
+//        else if(mViewPager.getCurrentItem()==1)
+//        {
+//            if(notifyFabClick_item!=null)
+//            {
+//                notifyFabClick_item.changeParentForSelected();
+//            }
+//        }
     }
 
     @OnClick(R.id.fab_add)
     void fabAddClick()
     {
-        if(mViewPager.getCurrentItem()==0)
+
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem()));
+
+
+        if(fragment instanceof NotifyFabClick_Item)
         {
-            if(notifyFabClickItemCategories!=null)
-            {
-                notifyFabClickItemCategories.addItemCategory();
-            }
+            ((NotifyFabClick_Item) fragment).addItem();
         }
-        else if (mViewPager.getCurrentItem()==1)
+        else if(fragment instanceof NotifyFabClick_ItemCategories)
         {
-            if(notifyFabClick_item!=null)
-            {
-                notifyFabClick_item.addItem();
-            }
+            ((NotifyFabClick_ItemCategories) fragment).addItemCategory();
         }
+
+//        if(mViewPager.getCurrentItem()==0)
+//        {
+//            if(notifyFabClickItemCategories!=null)
+//            {
+//                notifyFabClickItemCategories.addItemCategory();
+//            }
+//        }
+//        else if (mViewPager.getCurrentItem()==1)
+//        {
+//            if(notifyFabClick_item!=null)
+//            {
+//                notifyFabClick_item.addItem();
+//            }
+//        }
 
 
     }
@@ -352,20 +413,35 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @OnClick(R.id.fab_add_from_global)
     void fabAddFromGlobal()
     {
-        if(mViewPager.getCurrentItem()==0)
+
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem()));
+
+
+        if(fragment instanceof NotifyFabClick_Item)
         {
-            if(notifyFabClickItemCategories!=null)
-            {
-                notifyFabClickItemCategories.addfromGlobal();
-            }
+            ((NotifyFabClick_Item) fragment).addfromGlobal();
         }
-        else if(mViewPager.getCurrentItem()==1)
+        else if(fragment instanceof NotifyFabClick_ItemCategories)
         {
-            if(notifyFabClick_item!=null)
-            {
-                notifyFabClick_item.addfromGlobal();
-            }
+            ((NotifyFabClick_ItemCategories) fragment).addfromGlobal();
         }
+
+
+//        if(mViewPager.getCurrentItem()==0)
+//        {
+//            if(notifyFabClickItemCategories!=null)
+//            {
+//                notifyFabClickItemCategories.addfromGlobal();
+//            }
+//        }
+//        else if(mViewPager.getCurrentItem()==1)
+//        {
+//            if(notifyFabClick_item!=null)
+//            {
+//                notifyFabClick_item.addfromGlobal();
+//            }
+//        }
     }
 
 
@@ -409,6 +485,10 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyGener
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    private static String makeFragmentName(int viewId, int index) {
+        return "android:switcher:" + viewId + ":" + index;
     }
 
 

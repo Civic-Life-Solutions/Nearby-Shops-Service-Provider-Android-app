@@ -63,6 +63,15 @@ public interface ItemCategoryService {
 
 
 
+    @GET("api/v1/ItemCategory/QuerySimple")
+    Call<ItemCategoryEndPoint> getItemCategoriesQuerySimple(
+            @Query("ParentID")Integer parentID,@Query("IsDetached")Boolean parentIsNull,
+            @Query("SortBy") String sortBy,
+            @Query("Limit") Integer limit, @Query("Offset") Integer offset
+    );
+
+
+
     @GET("api/v1/ItemCategory")
     Call<ItemCategoryEndPoint> getItemCategories(
             @Query("ShopID")Integer shopID,

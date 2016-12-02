@@ -16,7 +16,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class PagerAdapter extends FragmentPagerAdapter {
 
 //    DetachedTabs activity;
 
@@ -27,9 +27,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
 
-    private ItemCategoriesFragment itemCategoriesFragment = new ItemCategoriesFragment();
+//    private ItemCategoriesFragment itemCategoriesFragment = new ItemCategoriesFragment();
 
-    private ItemFragmentTwo itemFragmentTwo = new ItemFragmentTwo();;
+//    private ItemFragmentTwo itemFragmentTwo = new ItemFragmentTwo();;
 
     @Override
     public Fragment getItem(int position) {
@@ -42,16 +42,22 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         {
 //            activity.setNotificationReceiver(itemCategoriesFragment);
 
-            return itemCategoriesFragment;
+//            return itemCategoriesFragment;
+
+            return new ItemCategoriesFragment();
         }
         else if (position == 1)
         {
 
-            return itemFragmentTwo;
+//            return itemFragmentTwo;
+
+            return new ItemFragmentTwo();
         }
 
 
-        return PlaceholderFragment.newInstance(position + 1);
+//        return PlaceholderFragment.newInstance(position + 1);
+
+        return null;
     }
 
     @Override

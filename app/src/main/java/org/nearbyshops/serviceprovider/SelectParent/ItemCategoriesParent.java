@@ -267,10 +267,14 @@ public class ItemCategoriesParent extends AppCompatActivity
 //                .getItemCategories(currentCategory.getItemCategoryID());
 
 
-        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
-                null,currentCategory.getItemCategoryID(),
-                null,null,null,null,null,null,"id",limit,offset,null);
+//        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
+//                null,currentCategory.getItemCategoryID(),
+//                null,null,null,null,null,null,"id",limit,offset,null);
 
+
+        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategoriesQuerySimple(
+                currentCategory.getItemCategoryID(),null,"id",limit,offset
+        );
 
         endPointCall.enqueue(new Callback<ItemCategoryEndPoint>() {
             @Override

@@ -26,8 +26,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitle
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyInsertTab;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.R;
@@ -69,7 +68,7 @@ public class ItemCategoriesFragment extends Fragment
     @Inject
     ItemCategoryService itemCategoryService;
 
-    NotifyGeneral notificationReceiverFragment;
+//    NotifyInsertTab notificationReceiverFragment;
 
     @State
     ItemCategory currentCategory = null;
@@ -94,8 +93,9 @@ public class ItemCategoriesFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         super.onCreateView(inflater, container, savedInstanceState);
+
+        setRetainInstance(true);
 
 
         View rootView = inflater.inflate(R.layout.fragment_item_categories, container, false);
@@ -111,20 +111,20 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-        if(getActivity() instanceof ItemCategoriesTabs)
-        {
-            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
+//        if(getActivity() instanceof ItemCategoriesTabs)
+//        {
+//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
 //            Log.d("applog","DetachedItemFragment: Fragment Recreated");
-            activity.notifyFabClickItemCategories = this;
-            activity.notifyBackPressed = this;
-        }
+//            activity.notifyFabClickItemCategories = this;
+//            activity.notifyBackPressed = this;
+//        }
 
 
-        if(getActivity() instanceof NotifyGeneral)
-        {
-            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-            this.notificationReceiverFragment = (NotifyGeneral) activity;
-        }
+//        if(getActivity() instanceof NotifyInsertTab)
+//        {
+//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
+//            this.notificationReceiverFragment = (NotifyInsertTab) activity;
+//        }
 
 
 
@@ -138,31 +138,29 @@ public class ItemCategoriesFragment extends Fragment
             swipeContainer.post(new Runnable() {
                 @Override
                 public void run() {
+
                     swipeContainer.setRefreshing(true);
 
-                    try {
-
-
-                        // make a network call
-                        offset = 0;
-                        dataset.clear();
-                        makeRequestRetrofit(false,false);
-
-
-                    } catch (IllegalArgumentException ex)
-                    {
-                        ex.printStackTrace();
-
-                    }
+                    // make a network call
+                    offset = 0;
+                    dataset.clear();
+                    makeRequestRetrofit(false,false);
                 }
             });
 
 
+//            try {
+//            } catch (IllegalArgumentException ex)
+//            {
+//                ex.printStackTrace();
+//            }
+
+
         }
-        else
-        {
-            onViewStateRestored(savedInstanceState);
-        }
+//        else
+//        {
+//            onViewStateRestored(savedInstanceState);
+//        }
 
 
 
@@ -309,15 +307,35 @@ public class ItemCategoriesFragment extends Fragment
 
 
 
-    public void makeRequestRetrofit(final boolean notifyItemCategoryChanged, final boolean backPressed)
+    public void makeRequestRetrofit(boolean notifyItemCategoryChanged, final boolean backPressed)
     {
 
-        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
-                null,currentCategory.getItemCategoryID(),
-                null,null,null,null,null,null,"id",limit,offset,false);
+//        Call<ItemCategoryEndPoint> endPointCall2 = itemCategoryService.getItemCategories(
+//                null,currentCategory.getItemCategoryID(),
+//                null,null,null,null,null,null,"id",limit,offset,false);
+
+
+        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategoriesQuerySimple(
+                currentCategory.getItemCategoryID(),null,"id",limit,offset
+        );
+
+
+        if(notifyItemCategoryChanged)
+        {
+            if(currentCategory!=null)
+            {
+
+                if(getActivity() instanceof NotifyCategoryChanged)
+                {
+                    ((NotifyCategoryChanged)getActivity()).itemCategoryChanged(currentCategory,backPressed);
+                }
+                // throws null pointer exception
+            }
+        }
+
+
 
         Log.d("applog","DetachedTabs: Network call made !");
-
 
         endPointCall.enqueue(new Callback<ItemCategoryEndPoint>() {
             @Override
@@ -329,19 +347,6 @@ public class ItemCategoriesFragment extends Fragment
                     item_count = endPoint.getItemCount();
                     dataset.addAll(endPoint.getResults());
                     listAdapter.notifyDataSetChanged();
-
-                    if(notifyItemCategoryChanged)
-                    {
-                        if(currentCategory!=null)
-                        {
-
-                            if(getActivity() instanceof NotifyCategoryChanged)
-                            {
-                                ((NotifyCategoryChanged)getActivity()).itemCategoryChanged(currentCategory,backPressed);
-                            }
-                            // throws null pointer exception
-                        }
-                    }
 
                     notifyTitleChanged();
 
@@ -380,9 +385,23 @@ public class ItemCategoriesFragment extends Fragment
 
     void notifyDelete()
     {
-        dataset.clear();
-        offset = 0 ; // reset the offset
-        makeRequestRetrofit(false,false);
+//        dataset.clear();
+//        offset = 0 ; // reset the offset
+//        makeRequestRetrofit(false,false);
+
+        swipeContainer.post(new Runnable() {
+            @Override
+            public void run() {
+
+                swipeContainer.setRefreshing(true);
+
+                // make a network call
+                offset = 0;
+                dataset.clear();
+                makeRequestRetrofit(false,false);
+            }
+        });
+
     }
 
 
@@ -580,15 +599,32 @@ public class ItemCategoriesFragment extends Fragment
         currentCategory.setParentCategory(temp);
 
 
-        if(notificationReceiverFragment!=null)
+//        if(notificationReceiverFragment!=null)
+//        {
+//            notificationReceiverFragment.insertTab(currentCategory.getCategoryName());
+//        }
+
+        if(getActivity() instanceof NotifyInsertTab)
         {
-            notificationReceiverFragment.insertTab(currentCategory.getCategoryName());
+            ((NotifyInsertTab) getActivity()).insertTab(currentCategory.getCategoryName());
         }
 
 
-        dataset.clear();
-        offset = 0 ; // reset the offset
-        makeRequestRetrofit(true,false);
+        swipeContainer.post(new Runnable() {
+            @Override
+            public void run() {
+
+                swipeContainer.setRefreshing(true);
+
+                // make a network call
+
+                dataset.clear();
+                offset = 0 ; // reset the offset
+                makeRequestRetrofit(true,false);
+            }
+        });
+
+
 
 /*
         if(!currentCategory.getAbstractNode())
@@ -609,9 +645,15 @@ public class ItemCategoriesFragment extends Fragment
 
         if(currentCategory!=null) {
 
-            if (notificationReceiverFragment != null) {
-                notificationReceiverFragment.removeLastTab();
+//            if (notificationReceiverFragment != null) {
+//                notificationReceiverFragment.removeLastTab();
+//            }
+
+            if(getActivity() instanceof NotifyInsertTab)
+            {
+                ((NotifyInsertTab) getActivity()).removeLastTab();
             }
+
 
             if (currentCategory.getParentCategory() != null) {
 
@@ -630,9 +672,23 @@ public class ItemCategoriesFragment extends Fragment
 
 //                exitFullscreen();
 
-                dataset.clear();
-                offset =0; // reset the offset
-                makeRequestRetrofit(true,true);
+
+
+                swipeContainer.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        swipeContainer.setRefreshing(true);
+
+                        // make a network call
+
+                        dataset.clear();
+                        offset =0; // reset the offset
+                        makeRequestRetrofit(true,true);
+                    }
+                });
+
+
             }
 
         }
@@ -671,11 +727,14 @@ public class ItemCategoriesFragment extends Fragment
             name = currentCategory.getCategoryName();
         }*/
 
+
+        //currentCategory.getCategoryName()
+
         if(getActivity() instanceof NotifyTitleChanged)
         {
             ((NotifyTitleChanged) getActivity())
-                    .NotifyTitleChanged(currentCategory.getCategoryName()
-                             + " Subcategories ("
+                    .NotifyTitleChanged(
+                              "Subcategories ("
                             + String.valueOf(dataset.size()) + "/" + String.valueOf(item_count )+ ")",0
                     );
         }

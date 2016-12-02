@@ -266,9 +266,14 @@ public class DetachedItemCatFragment extends Fragment implements DetachedItemCat
     public void makeRequestRetrofit(Boolean parentIsNull)
     {
 
-        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
-                null,null,
-                parentIsNull,null,null,null,null,null,"id",limit,offset,false);
+//        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategories(
+//                null,null,
+//                parentIsNull,null,null,null,null,null,"id",limit,offset,false);
+
+        Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategoriesQuerySimple(
+                null,parentIsNull,"id",limit,offset
+        );
+
 
         Log.d("applog","DetachedTabs: Network call made !");
 

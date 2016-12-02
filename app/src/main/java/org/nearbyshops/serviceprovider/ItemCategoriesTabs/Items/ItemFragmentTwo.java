@@ -19,12 +19,12 @@ import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyCategoryChanged;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyGeneral;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyInsertTab;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyFabClick_Item;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySwipeToRight;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.Model.Item;
@@ -44,7 +44,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import icepick.Icepick;
 import icepick.State;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -73,7 +72,7 @@ public class ItemFragmentTwo extends Fragment
     ItemService itemService;
 
 
-    NotifyGeneral notificationReceiverFragment;
+//    NotifyInsertTab notificationReceiverFragment;
 
 //    NotifyTitleChanged notifyTitleChanged;
 
@@ -98,10 +97,10 @@ public class ItemFragmentTwo extends Fragment
     }
 
 
-    int getMaxChildCount(int spanCount, int heightPixels)
-    {
-       return (spanCount * (heightPixels/250));
-    }
+//    int getMaxChildCount(int spanCount, int heightPixels)
+//    {
+//       return (spanCount * (heightPixels/250));
+//    }
 
 
 
@@ -111,29 +110,28 @@ public class ItemFragmentTwo extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
+        setRetainInstance(true);
 
 
         View rootView = inflater.inflate(R.layout.fragment_item_remake, container, false);
-
         ButterKnife.bind(this,rootView);
-
         itemCategoriesList = (RecyclerView)rootView.findViewById(R.id.recyclerViewItemCategories);
 
 
 
-        if(getActivity() instanceof ItemCategoriesTabs)
-        {
-            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-            activity.notifyCategoryChanged = this;
-            activity.notifyFabClick_item = this;
-        }
+//        if(getActivity() instanceof ItemCategoriesTabs)
+//        {
+//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
+//            activity.notifyCategoryChanged = this;
+//            activity.notifyFabClick_item = this;
+//        }
 
-        if(getActivity() instanceof NotifyGeneral)
-        {
-            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
+//        if(getActivity() instanceof NotifyInsertTab)
+//        {
+//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
 
-            this.notificationReceiverFragment = (NotifyGeneral) activity;
-        }
+//            this.notificationReceiverFragment = (NotifyInsertTab) activity;
+//        }
 
 /*
         if(getActivity() instanceof NotifyTitleChanged)
@@ -152,16 +150,17 @@ public class ItemFragmentTwo extends Fragment
                     swipeContainer.setRefreshing(true);
 
                         dataset.clear();
+                        offset=0;
                         makeRequestRetrofit(false);
 
                 }
             });
 
         }
-        else
-        {
-            onViewStateRestored(savedInstanceState);
-        }
+//        else
+//        {
+//            onViewStateRestored(savedInstanceState);
+//        }
 
 
         setupRecyclerView();
@@ -298,6 +297,10 @@ public class ItemFragmentTwo extends Fragment
         }
 
 
+
+
+
+
         String current_sort = "";
 
         current_sort = UtilitySortItem.getSort(getContext()) + " " + UtilitySortItem.getAscending(getContext());
@@ -308,6 +311,13 @@ public class ItemFragmentTwo extends Fragment
         endPointCall.enqueue(new Callback<ItemEndPoint>() {
             @Override
             public void onResponse(Call<ItemEndPoint> call, Response<ItemEndPoint> response) {
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
 
                 if(response.body()!=null) {
 
@@ -320,15 +330,26 @@ public class ItemFragmentTwo extends Fragment
                 notifyTitleChanged();
 
 
-                if(!notifiedCurrentCategory.getAbstractNode() && item_count>0 && !isbackPressed)
+                //&& item_count>0
+                if(!notifiedCurrentCategory.getAbstractNode()&& item_count>0 && !isbackPressed)
                 {
-                    notificationReceiverFragment.notifySwipeToright();
+                    if(getActivity() instanceof NotifySwipeToRight)
+                    {
+                        ((NotifySwipeToRight) getActivity()).notifySwipeToright();
+                    }
+//                    notificationReceiverFragment.notifySwipeToright();
                 }
+
 
             }
 
             @Override
             public void onFailure(Call<ItemEndPoint> call, Throwable t) {
+
+                if(isDestroyed)
+                {
+                    return;
+                }
 
                 showToastMessage("Network request failed. Please check your connection !");
 
@@ -339,7 +360,14 @@ public class ItemFragmentTwo extends Fragment
         });
     }
 
+    boolean isDestroyed = false;
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        isDestroyed= true;
+    }
 
     private void showToastMessage(String message)
     {
@@ -417,7 +445,7 @@ public class ItemFragmentTwo extends Fragment
                         tempList.add(entry.getValue());
                     }
 
-                    makeRequestBulk(tempList);
+                    makeUpdateRequestBulk(tempList);
                 }
 
             }
@@ -488,7 +516,7 @@ public class ItemFragmentTwo extends Fragment
 
 
 
-    void makeRequestBulk(final List<Item> list)
+    void makeUpdateRequestBulk(final List<Item> list)
     {
 //        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);
 
@@ -610,12 +638,23 @@ public class ItemFragmentTwo extends Fragment
 
 
     @Override
-    public void itemCategoryChanged(ItemCategory currentCategory, Boolean isBackPressed) {
+    public void itemCategoryChanged(ItemCategory currentCategory, final Boolean isBackPressed) {
 
         notifiedCurrentCategory = currentCategory;
-        dataset.clear();
-        offset = 0 ; // reset the offset
-        makeRequestRetrofit(isBackPressed);
+
+
+        swipeContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeContainer.setRefreshing(true);
+
+                dataset.clear();
+                offset = 0 ; // reset the offset
+                makeRequestRetrofit(isBackPressed);
+
+            }
+        });
+
     }
 
 
@@ -630,45 +669,44 @@ public class ItemFragmentTwo extends Fragment
             name = notifiedCurrentCategory.getCategoryName();
         }
 
-
         if(getActivity() instanceof NotifyTitleChanged)
         {
             ((NotifyTitleChanged)getActivity())
-                    .NotifyTitleChanged( name +
-                            " Items (" + String.valueOf(dataset.size())
+                    .NotifyTitleChanged(
+                            "Items (" + String.valueOf(dataset.size())
                                     + "/" + String.valueOf(item_count) + ")",1);
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
 
-        Icepick.saveInstanceState(this,outState);
+//        Icepick.saveInstanceState(this,outState);
 //        outState.putParcelable("currentCategory",notifiedCurrentCategory);
 //        outState.putParcelableArrayList("dataset",dataset);
-    }
+//    }
 
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
 
-        Icepick.restoreInstanceState(this,savedInstanceState);
-        notifyTitleChanged();
+//        Icepick.restoreInstanceState(this,savedInstanceState);
+//        notifyTitleChanged();
 
 //        listAdapter.notifyDataSetChanged();
 //        setupRecyclerView();
 
-        if(savedInstanceState!=null)
-        {
+//        if(savedInstanceState!=null)
+//        {
 //            notifiedCurrentCategory = savedInstanceState.getParcelable("currentCategory");
 //            ArrayList<Item> tempCat = savedInstanceState.getParcelableArrayList("dataset");
 //            dataset.clear();
 //            dataset.addAll(tempCat);
-        }
+//        }
 
-    }
+//    }
 
 
     void detachedSelectedDialog()
@@ -724,7 +762,7 @@ public class ItemFragmentTwo extends Fragment
         }
 
 //        makeRequestUpdateBulk(tempList);
-        makeRequestBulk(tempList);
+        makeUpdateRequestBulk(tempList);
     }
 
 
