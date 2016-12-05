@@ -10,6 +10,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Depreca
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.EditItemOld;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesFragmentSimple;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountFragment;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorDetail.DistributorDetail;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
@@ -106,6 +107,8 @@ public interface NetComponent {
     void Inject(EditItemFragment editItemFragment);
 
     void Inject(EditItemCategoryFragment editItemCategoryFragment);
+
+    void Inject(ItemCategoriesFragmentSimple itemCategoriesFragmentSimple);
 
 
 //    void Inject(LoginDialog loginDialog);

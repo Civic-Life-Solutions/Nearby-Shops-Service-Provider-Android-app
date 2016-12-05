@@ -98,8 +98,6 @@ public class ItemCategoriesFragment extends Fragment
         super.onCreateView(inflater, container, savedInstanceState);
 
         setRetainInstance(true);
-
-
         View rootView = inflater.inflate(R.layout.fragment_item_categories, container, false);
 
         ButterKnife.bind(this,rootView);
@@ -109,26 +107,6 @@ public class ItemCategoriesFragment extends Fragment
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         itemCategoriesList = (RecyclerView)rootView.findViewById(R.id.recyclerViewItemCategories);
-
-
-
-
-//        if(getActivity() instanceof ItemCategoriesTabs)
-//        {
-//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-//            Log.d("applog","DetachedItemFragment: Fragment Recreated");
-//            activity.notifyFabClickItemCategories = this;
-//            activity.notifyBackPressed = this;
-//        }
-
-
-//        if(getActivity() instanceof NotifyInsertTab)
-//        {
-//            ItemCategoriesTabs activity = (ItemCategoriesTabs)getActivity();
-//            this.notificationReceiverFragment = (NotifyInsertTab) activity;
-//        }
-
-
 
         if(savedInstanceState==null)
         {
@@ -312,11 +290,6 @@ public class ItemCategoriesFragment extends Fragment
     public void makeRequestRetrofit(boolean notifyItemCategoryChanged, final boolean backPressed, final boolean clearDataset)
     {
 
-//        Call<ItemCategoryEndPoint> endPointCall2 = itemCategoryService.getItemCategories(
-//                null,currentCategory.getItemCategoryID(),
-//                null,null,null,null,null,null,"id",limit,offset,false);
-
-
         Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategoriesQuerySimple(
                 currentCategory.getItemCategoryID(),null,"id",limit,offset
         );
@@ -415,11 +388,6 @@ public class ItemCategoriesFragment extends Fragment
     @Override
     public void notifyDelete() {
 
-
-//        dataset.clear();
-//        offset = 0 ; // reset the offset
-//        makeRequestRetrofit(false,false);
-
         swipeContainer.post(new Runnable() {
             @Override
             public void run() {
@@ -457,6 +425,30 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
+
+
+
+    void changeParentBulk()
+    {
+
+        if(listAdapter.selectedItems.size()==0)
+        {
+            showToastMessage("No item selected. Please make a selection !");
+
+            return;
+        }
+
+        // make an exclude list. Put selected items to an exclude list. This is done to preven a category to make itself or its
+        // children its parent. This is logically incorrect and should not happen.
+
+        ItemCategoriesParent.clearExcludeList();
+        ItemCategoriesParent.excludeList.putAll(listAdapter.selectedItems);
+
+        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
+        startActivityForResult(intentParent,2,null);
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -469,9 +461,6 @@ public class ItemCategoriesFragment extends Fragment
 
                 if(parentCategory!=null)
                 {
-
-//                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
-//                    makeRequestUpdate(listAdapter.getRequestedChangeParent());
 
                     changeParentRequested.setParentCategoryID(parentCategory.getItemCategoryID());
                     makeRequestUpdate(changeParentRequested);
@@ -661,10 +650,6 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-//    private boolean isRootCategory = true;
-//
-//    private ArrayList<String> categoryTree = new ArrayList<>();
-
 
 
     @Override
@@ -673,12 +658,6 @@ public class ItemCategoriesFragment extends Fragment
         ItemCategory temp = currentCategory;
         currentCategory = itemCategory;
         currentCategory.setParentCategory(temp);
-
-
-//        if(notificationReceiverFragment!=null)
-//        {
-//            notificationReceiverFragment.insertTab(currentCategory.getCategoryName());
-//        }
 
         if(getActivity() instanceof NotifyInsertTab)
         {
@@ -701,12 +680,6 @@ public class ItemCategoriesFragment extends Fragment
         });
 
 
-
-/*
-        if(!currentCategory.getAbstractNode())
-        {
-            notificationReceiverFragment.notifySwipeToright();
-        }*/
 
     }
 
@@ -742,13 +715,6 @@ public class ItemCategoriesFragment extends Fragment
 
 
             if (currentCategoryID != -1) {
-//                options.setVisibility(View.VISIBLE);
-//                appBar.setVisibility(View.VISIBLE);
-//                notificationReceiverFragment.showAppBar();
-
-//                exitFullscreen();
-
-
 
                 swipeContainer.post(new Runnable() {
                     @Override
@@ -781,15 +747,23 @@ public class ItemCategoriesFragment extends Fragment
 
     }
 
+    //    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//
+//        Icepick.restoreInstanceState(this, savedInstanceState);
+//        notifyTitleChanged();
+//    }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        Icepick.saveInstanceState(this, outState);
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        Icepick.saveInstanceState(this, outState);
 //        outState.putParcelableArrayList("dataset",dataset);
 //        outState.putParcelable("currentCat",currentCategory);
-    }
+//    }
 
 
 
@@ -817,29 +791,6 @@ public class ItemCategoriesFragment extends Fragment
     }
 
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-
-        Icepick.restoreInstanceState(this, savedInstanceState);
-        notifyTitleChanged();
-
-        /*
-        if (savedInstanceState != null) {
-
-            ArrayList<ItemCategory> tempList = savedInstanceState.getParcelableArrayList("dataset");
-
-            dataset.clear();
-            dataset.addAll(tempList);
-
-
-
-            listAdapter.notifyDataSetChanged();
-//
-//            currentCategory = savedInstanceState.getParcelable("currentCat");
-        }*/
-
-    }
 
 
     @Override
@@ -925,36 +876,10 @@ public class ItemCategoriesFragment extends Fragment
 
     void addItemCategoryClick()
     {
-//        Intent addIntent = new Intent(getActivity(), AddItemCategory.class);
-//        addIntent.putExtra(AddItemCategory.ADD_ITEM_CATEGORY_INTENT_KEY,currentCategory);
-//        startActivity(addIntent);
-
         Intent intent = new Intent(getActivity(),EditItemCategory.class);
         intent.putExtra(EditItemCategoryFragment.ITEM_CATEGORY_INTENT_KEY,currentCategory);
         intent.putExtra(EditItemCategoryFragment.EDIT_MODE_INTENT_KEY,EditItemCategoryFragment.MODE_ADD);
         startActivity(intent);
-    }
-
-
-
-    void changeParentBulk()
-    {
-
-        if(listAdapter.selectedItems.size()==0)
-        {
-            showToastMessage("No item selected. Please make a selection !");
-
-            return;
-        }
-
-        // make an exclude list. Put selected items to an exclude list. This is done to preven a category to make itself or its
-        // children its parent. This is logically incorrect and should not happen.
-
-        ItemCategoriesParent.clearExcludeList();
-        ItemCategoriesParent.excludeList.putAll(listAdapter.selectedItems);
-
-        Intent intentParent = new Intent(getActivity(), ItemCategoriesParent.class);
-        startActivityForResult(intentParent,2,null);
     }
 
 

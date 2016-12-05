@@ -178,7 +178,7 @@ public class EditStaffFragment extends Fragment {
 
         if(current_mode==MODE_ADD)
         {
-            buttonUpdateItem.setText("Sign Up");
+            buttonUpdateItem.setText("Create Account");
             item_id.setVisibility(View.GONE);
         }
         else if(current_mode== MODE_UPDATE)

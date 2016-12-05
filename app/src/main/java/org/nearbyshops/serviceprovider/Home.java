@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesSimple;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.ShopAdminApprovals;
@@ -88,6 +89,13 @@ public class Home extends AppCompatActivity
     void optionDetachedClick()
     {
         startActivity(new Intent(this, DetachedTabs.class));
+    }
+
+
+    @OnClick(R.id.option_item_category_approval)
+    void optionItemCatApprovals()
+    {
+        startActivity(new Intent(this, ItemCategoriesSimple.class));
     }
 
 

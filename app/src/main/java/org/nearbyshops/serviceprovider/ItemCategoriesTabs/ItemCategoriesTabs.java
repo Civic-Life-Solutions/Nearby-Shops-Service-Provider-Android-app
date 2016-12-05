@@ -288,6 +288,12 @@ public class ItemCategoriesTabs extends AppCompatActivity implements NotifyInser
         mViewPager.setCurrentItem(1);
     }
 
+
+
+
+
+
+
     @Override
     public void showFab() {
         fab_menu.animate().translationY(0);

@@ -242,6 +242,15 @@
 
 
 
+        <activity
+            android:name=".ItemsByCategorySimple.ItemCategoriesSimple"
+            android:label="Items by Category"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
 
 
     </application>
