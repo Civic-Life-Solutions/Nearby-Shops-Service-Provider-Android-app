@@ -325,16 +325,6 @@ public class ItemCategoriesParent extends AppCompatActivity
 
 
 
-    @Override
-    protected void onResume() {
-
-        super.onResume();
-
-//        makeRequestRetrofit();
-
-        Log.d("applog","curent category ID " + currentCategory.getItemCategoryID());
-    }
-
 
 
 

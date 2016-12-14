@@ -164,7 +164,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
         listAdapter = new AdapterSimple(dataset,getActivity(),this);
         itemCategoriesList.setAdapter(listAdapter);
 
-        layoutManager = new GridLayoutManager(getActivity(),4, LinearLayoutManager.VERTICAL,false);
+        layoutManager = new GridLayoutManager(getActivity(),6, LinearLayoutManager.VERTICAL,false);
         itemCategoriesList.setLayoutManager(layoutManager);
 
 
@@ -178,17 +178,27 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
 
                 if(dataset.get(position) instanceof ItemCategory)
                 {
-                    return 2;
+
+                    final DisplayMetrics metrics = new DisplayMetrics();
+                    getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                    int spanCount = (int) (metrics.widthPixels/(180 * metrics.density));
+
+                    if(spanCount==0){
+                        spanCount = 1;
+                    }
+
+                    return (6/spanCount);
 
                 }
                 else if(dataset.get(position) instanceof Item)
                 {
 
-                    return 4;
+                    return 6;
                 }
                 else if(dataset.get(position) instanceof HeaderItemsList)
                 {
-                    return 4;
+                    return 6;
                 }
 
                 return 3;
@@ -621,6 +631,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
         if(getActivity() instanceof ToggleFab)
         {
             ((ToggleFab)getActivity()).showFab();
+            show=true;
         }
 
     }
@@ -631,6 +642,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
         if(getActivity() instanceof ToggleFab)
         {
             ((ToggleFab)getActivity()).showFab();
+            show=true;
         }
     }
 

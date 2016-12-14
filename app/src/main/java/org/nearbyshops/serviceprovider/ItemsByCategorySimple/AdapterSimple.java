@@ -536,7 +536,7 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 case R.id.action_change_parent:
 
-                    if (dataset.get(getLayoutPosition()) instanceof ItemCategory)
+                    if (dataset.get(getLayoutPosition()) instanceof Item)
                     {
                         notificationReceiver.changeParentItem((Item) dataset.get(getLayoutPosition()));
                     }

@@ -34,6 +34,18 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         android:paddingTop="@dimen/activity_vertical_margin">
 
 
+        <TextView
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/header_items"
+            android:text="Items"
+            android:textSize="17sp"
+            android:background="@color/light_grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
         <LinearLayout
             android:weightSum="2"
             android:id="@+id/row_zero"

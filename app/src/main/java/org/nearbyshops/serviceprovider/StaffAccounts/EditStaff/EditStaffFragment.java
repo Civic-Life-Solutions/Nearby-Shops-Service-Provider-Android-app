@@ -12,17 +12,22 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
@@ -40,6 +45,7 @@ import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -53,6 +59,12 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -92,8 +104,19 @@ public class EditStaffFragment extends Fragment {
 
     @Bind(R.id.phone_number) EditText phone;
     @Bind(R.id.designation) EditText designation;
-    @Bind(R.id.switch_enable) Switch aSwitch;
-//    @Bind(R.id.switch_waitlist) Switch switchWaitlist;
+    @Bind(R.id.switch_enable) Switch switchEnable;
+
+    @Bind(R.id.make_account_private) CheckBox makeAccountPrivate;
+
+    @Bind(R.id.govt_id_name) EditText govtIDName;
+    @Bind(R.id.govt_id_number) EditText govtIDNumber;
+
+    @Bind(R.id.permit_create_update_item_cat) CheckBox createUpdateItemCat;
+    @Bind(R.id.permit_create_update_items) CheckBox createUpdateItems;
+    @Bind(R.id.approve_shop_admin_accounts) CheckBox approveShopAdminAccounts;
+    @Bind(R.id.approve_shops) CheckBox approveShops;
+    @Bind(R.id.approve_end_user_accounts) CheckBox approveEndUserAccounts;
+
 
     @Bind(R.id.saveButton)
     Button buttonUpdateItem;
@@ -108,7 +131,7 @@ public class EditStaffFragment extends Fragment {
     int current_mode = MODE_ADD;
 
 //    DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
-    Staff staff = new Staff();
+    Staff staff = null;
 
 
     public EditStaffFragment() {
@@ -118,6 +141,7 @@ public class EditStaffFragment extends Fragment {
     }
 
 
+    Subscription editTextSub;
 
 
     @Nullable
@@ -169,6 +193,35 @@ public class EditStaffFragment extends Fragment {
 
 
         showLogMessage("Inside On Create View !");
+
+
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .unsubscribeOn(AndroidSchedulers.mainThread())
+
+//        EditText user = (EditText) rootView.findViewById(R.id.username);
+
+        editTextSub = RxTextView
+                .textChanges(username)
+                .debounce(700, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<CharSequence>() {
+                    @Override
+                    public void call(CharSequence value) {
+                        // do some work with new text
+                        usernameCheck();
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                        System.out.println(throwable.toString());
+
+                    }
+                });
+
+
 
         return rootView;
     }
@@ -276,7 +329,23 @@ public class EditStaffFragment extends Fragment {
     }
 
 
-    @OnTextChanged(R.id.username)
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(editTextSub!=null && !editTextSub.isUnsubscribed())
+        {
+            editTextSub.unsubscribe();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+//    @OnTextChanged(R.id.username)
     void usernameCheck()
     {
 
@@ -396,8 +465,20 @@ public class EditStaffFragment extends Fragment {
             about.setText(staff.getAbout());
             phone.setText(staff.getPhone());
             designation.setText(staff.getDesignation());
-            aSwitch.setChecked(staff.getEnabled());
-//            switchWaitlist.setChecked(sshopAdmin.getWaitlisted());
+            switchEnable.setChecked(staff.getEnabled());
+
+
+            makeAccountPrivate.setChecked(staff.isAccountPrivate());
+            govtIDName.setText(staff.getGovtIDName());
+            govtIDNumber.setText(staff.getGovtIDNumber());
+
+            createUpdateItemCat.setChecked(staff.isCreateUpdateItemCategory());
+            createUpdateItems.setChecked(staff.isCreateUpdateItems());
+
+            approveShopAdminAccounts.setChecked(staff.isApproveShopAdminAccounts());
+            approveShops.setChecked(staff.isApproveShops());
+            approveEndUserAccounts.setChecked(staff.isApproveEndUserAccounts());
+
         }
     }
 
@@ -428,9 +509,18 @@ public class EditStaffFragment extends Fragment {
         staff.setPhone(phone.getText().toString());
         staff.setDesignation(designation.getText().toString());
 
-        staff.setEnabled(aSwitch.isChecked());
-//        staff.setWaitlisted(switchWaitlist.isChecked());
+        staff.setEnabled(switchEnable.isChecked());
 
+        staff.setAccountPrivate(makeAccountPrivate.isChecked());
+        staff.setGovtIDName(govtIDName.getText().toString());
+        staff.setGovtIDNumber(govtIDNumber.getText().toString());
+
+        staff.setCreateUpdateItemCategory(createUpdateItemCat.isChecked());
+        staff.setCreateUpdateItems(createUpdateItems.isChecked());
+
+        staff.setApproveShopAdminAccounts(approveShopAdminAccounts.isChecked());
+        staff.setApproveShops(approveShops.isChecked());
+        staff.setApproveEndUserAccounts(approveEndUserAccounts.isChecked());
     }
 
 
@@ -630,6 +720,7 @@ public class EditStaffFragment extends Fragment {
 
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
 
+            resultView.setImageURI(null);
             resultView.setImageURI(UCrop.getOutput(result));
 
             isImageChanged = true;

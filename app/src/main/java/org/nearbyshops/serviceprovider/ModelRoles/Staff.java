@@ -24,55 +24,141 @@ public class Staff {
 
     // to be Implemented
     public static final String IS_ENABLED = "IS_ENABLED";
-//    public static final String IS_WAITLISTED = "IS_WAITLISTED";
+
+    // privacy
+    // private accounts will be hidden from public displays in the end user app
+    public static final String ACCOUNT_PRIVATE = "ACCOUNT_PRIVATE";
 
     public static final String GOVERNMENT_ID_NUMBER = "GOVERNMENT_ID_NUMBER";
     public static final String GOVERNMENT_ID_NAME = "GOVERNMENT_ID_NAME";
     public static final String TIMESTAMP_CREATED = "TIMESTAMP_CREATED";
+
+    // permissions
+    public static final String CREATE_UPDATE_ITEM_CATEGORY = "CREATE_UPDATE_ITEM_CATEGORY";
+    public static final String CREATE_UPDATE_ITEMS = "CREATE_UPDATE_ITEMS";
+
+//    public static final String APPROVE_ITEM_CATEGORY_SUBMISSIONS = "APPROVE_ITEM_CATEGORY_SUBMISSIONS";
+//    public static final String APPROVE_ITEM_SUBMISSIONS = "APPROVE_ITEM_SUBMISSIONS";
+
+    public static final String APPROVE_SHOP_ADMIN_ACCOUNTS = "APPROVE_SHOP_ADMIN_ACCOUNTS";
+    public static final String APPROVE_SHOPS = "APPROVE_SHOPS";
+    public static final String APPROVE_END_USER_ACCOUNTS = "APPROVE_END_USER_ACCOUNTS";
+
+
+
+
+
 
 
     // Create Table CurrentServiceConfiguration Provider
     public static final String createTableStaffPostgres =
             "CREATE TABLE IF NOT EXISTS " + Staff.TABLE_NAME + "("
             + " " + Staff.STAFF_ID + " SERIAL PRIMARY KEY,"
+
+            + " " + Staff.STAFF_NAME + " text,"
             + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Staff.PASSWORD + " text NOT NULL,"
 
-            + " " + Staff.DESIGNATION + " text,"
+                  + Staff.ABOUT + " text,"
+                  + Staff.PROFILE_IMAGE_URL + " text,"
 
             + " " + Staff.PHONE_NUMBER + " text,"
+            + " " + Staff.DESIGNATION + " text,"
+            + " " + Staff.IS_ENABLED + " boolean NOT NULL,"
+            + " " + Staff.ACCOUNT_PRIVATE + " boolean,"
+
 
             + " " + Staff.GOVERNMENT_ID_NAME + " text,"
             + " " + Staff.GOVERNMENT_ID_NUMBER + " text,"
             + " " + Staff.TIMESTAMP_CREATED + " timestamp with time zone NOT NULL DEFAULT now(),"
 
-                    + Staff.ABOUT + " text,"
-                    + Staff.PROFILE_IMAGE_URL + " text,"
-
-            + " " + Staff.IS_ENABLED + " boolean NOT NULL,"
-//            + " " + Staff.IS_WAITLISTED + " boolean,"
-            + " " + Staff.STAFF_NAME + " text"
-                    + ")";
+            + " " + Staff.CREATE_UPDATE_ITEM_CATEGORY + " boolean ,"
+            + " " + Staff.CREATE_UPDATE_ITEMS + " boolean ,"
+            + " " + Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + " boolean ,"
+            + " " + Staff.APPROVE_SHOPS + " boolean ,"
+            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean " + ")";
 
 
     
     // Instance Variables
     private int staffID;
+
     private String staffName;
     private String username;
     private String password;
-    private String designation;
+
+    private String about;
+    private String profileImageURL;
+
     private String phone;
+    private String designation;
+
+    private boolean isEnabled;
+    private boolean accountPrivate;
+
     private String govtIDName;
     private String govtIDNumber;
     private Timestamp timestampCreated;
-    private String about;
-    private String profileImageURL;
-    private boolean isEnabled;
-//    private Boolean isWaitlisted;
+
+    // permission fields
+    private boolean createUpdateItemCategory;
+    private boolean createUpdateItems;
+    private boolean approveShopAdminAccounts;
+    private boolean approveShops;
+    private boolean approveEndUserAccounts;
+
 
 
     // Getter and Setters
+
+
+    public boolean isAccountPrivate() {
+        return accountPrivate;
+    }
+
+    public void setAccountPrivate(boolean accountPrivate) {
+        this.accountPrivate = accountPrivate;
+    }
+
+    public boolean isCreateUpdateItemCategory() {
+        return createUpdateItemCategory;
+    }
+
+    public void setCreateUpdateItemCategory(boolean createUpdateItemCategory) {
+        this.createUpdateItemCategory = createUpdateItemCategory;
+    }
+
+    public boolean isCreateUpdateItems() {
+        return createUpdateItems;
+    }
+
+    public void setCreateUpdateItems(boolean createUpdateItems) {
+        this.createUpdateItems = createUpdateItems;
+    }
+
+    public boolean isApproveShopAdminAccounts() {
+        return approveShopAdminAccounts;
+    }
+
+    public void setApproveShopAdminAccounts(boolean approveShopAdminAccounts) {
+        this.approveShopAdminAccounts = approveShopAdminAccounts;
+    }
+
+    public boolean isApproveShops() {
+        return approveShops;
+    }
+
+    public void setApproveShops(boolean approveShops) {
+        this.approveShops = approveShops;
+    }
+
+    public boolean isApproveEndUserAccounts() {
+        return approveEndUserAccounts;
+    }
+
+    public void setApproveEndUserAccounts(boolean approveEndUserAccounts) {
+        this.approveEndUserAccounts = approveEndUserAccounts;
+    }
 
 
     public String getPhone() {
