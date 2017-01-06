@@ -7,6 +7,7 @@ import android.util.Base64;
 import com.google.gson.Gson;
 
 import org.nearbyshops.serviceprovider.ModelRoles.Admin;
+import org.nearbyshops.serviceprovider.ModelRoles.Staff;
 import org.nearbyshops.serviceprovider.MyApplication;
 import org.nearbyshops.serviceprovider.R;
 
@@ -29,18 +30,6 @@ public class UtilityLogin {
     {
         return UtilityLogin
                 .baseEncoding(UtilityLogin.getUsername(context), UtilityLogin.getPassword(context));
-
-
-//        if(getRoleID(context)==ROLE_DISTRIBUTOR)
-//        {
-//            Distributor distributor = UtilityLogin.getDistributor(context);
-//
-//            if(distributor!=null)
-//            {
-//            }
-//        }
-//        return null;
-
     }
 
 
@@ -167,5 +156,45 @@ public class UtilityLogin {
         }
 
     }
+
+
+
+
+    public static void saveStaff(Staff staff, Context context)
+    {
+
+        //Creating a shared preference
+
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
+
+        SharedPreferences.Editor prefsEditor = sharedPref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(staff);
+        prefsEditor.putString("staff", json);
+        prefsEditor.commit();
+    }
+
+
+    public static Staff getStaff(Context context)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = sharedPref.getString("staff", "null");
+
+        if(json.equals("null"))
+        {
+
+            return null;
+
+        }else
+        {
+            return gson.fromJson(json, Staff.class);
+        }
+
+    }
+
+
+
 
 }

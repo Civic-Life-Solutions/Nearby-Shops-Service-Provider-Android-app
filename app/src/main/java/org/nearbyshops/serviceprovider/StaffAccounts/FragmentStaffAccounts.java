@@ -295,7 +295,7 @@ public class FragmentStaffAccounts extends Fragment implements Adapter.NotifyCon
     public void notifyEditClick(Staff staff) {
 
         Intent intent = new Intent(getContext(), EditStaff.class);
-//        intent.putExtra(EditStaffFragment.STAFF_INTENT_KEY,staff);
+//        intent.putExtra(EditStaffSelfFragment.STAFF_INTENT_KEY,staff);
         UtilityStaff.saveStaff(staff,getContext());
 
         intent.putExtra(EditStaffFragment.EDIT_MODE_INTENT_KEY,EditStaffFragment.MODE_UPDATE);

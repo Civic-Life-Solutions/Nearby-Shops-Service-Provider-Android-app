@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+<!--
+android:id="@+id/addRemoveItemsButton"
+
+android:id="@+id/addStockButton"
+
+-->
+
+<!--
+ android:paddingBottom="@dimen/activity_vertical_margin"
+android:paddingLeft="@dimen/activity_horizontal_margin"
+android:paddingRight="@dimen/activity_horizontal_margin"
+android:paddingTop="@dimen/activity_vertical_margin"   -->
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+
+
+        <TextView
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/header_items"
+            android:text="Items"
+            android:textSize="17sp"
+            android:background="@color/light_grey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+        <LinearLayout
+            android:weightSum="2"
+            android:id="@+id/row_zero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_add_items"
+                android:background="@color/phonographyBlue"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    app:srcCompat="@drawable/ic_nature_people_white_48px"
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_add_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_add_items"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Item Categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_detached"
+                android:background="@color/gplus_color_1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_add_stock"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_add_stock"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Detached Items"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/borderOne"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/row_zero"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/row_two"
+            android:weightSum="2"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/borderOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:id="@+id/option_item_submissions"
+                android:background="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_cancel"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+
+                    android:text="Item Category Updates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/option_item_updates"
+                android:background="@color/colorAccent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_item_updates"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_item_updates"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Item Updates"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/row_two_one"
+            android:weightSum="2"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/row_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:layout_marginRight="10dp"
+                android:id="@+id/option_item_category_approval"
+                android:background="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_item_category_submissions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_item_category_submissions"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Item Category Submissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/option_suggested_categories"
+                android:background="@color/colorAccent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_item_category_updates"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_item_category_updates"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Item Submissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/border_settings"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/row_two_one"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+        <TextView
+            android:layout_below="@id/border_settings"
+            android:id="@+id/label_settings"
+            android:textSize="24sp"
+            android:text="Settings and Configuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/borderthree"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/label_settings"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/row_three"
+            android:layout_below="@id/borderthree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_settings"
+                android:background="@color/blueGrey800"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_shop_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:id="@+id/text_shop_stats"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+
+
+            <RelativeLayout
+                android:layout_marginLeft="5dp"
+                android:id="@+id/option_saved_configuration"
+                android:background="@color/deepOrange800"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_saved_configurations"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_saved_configurations"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Service Configuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:orientation="horizontal"
+            android:id="@+id/bordertwo"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/row_three"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/row_four"
+            android:layout_below="@id/bordertwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_service_stats"
+                android:background="@color/blueGrey800"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_service_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_service_stats"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Service Stats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+
+
+            <RelativeLayout
+                android:layout_marginLeft="5dp"
+                android:id="@+id/option_billing"
+                android:background="@color/cyan900"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_billing"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_billing"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Billing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/row_five"
+            android:weightSum="2"
+            android:layout_below="@id/row_four"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/border_six"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/row_five"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/row_six"
+            android:layout_below="@id/border_six"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+            <RelativeLayout
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_comments_messages"
+                android:background="@color/blueGrey800"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_comments_messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_comments_messages"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Comments and Messages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_reported_complaints"
+                android:background="@color/gplus_color_4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_reported_complaints"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_reported_complaints"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Reports and Complaints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:textSize="24sp"
+            android:text="User Accounts"
+            android:id="@+id/label_accounts"
+            android:layout_below="@id/row_six"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/border_seven"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/label_accounts"
+            android:background="#88000000"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+
+
+        <LinearLayout
+            android:id="@+id/row_seven"
+            android:layout_below="@id/border_seven"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_enduser_accounts"
+                android:background="@color/buttonColorDark"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_enduser_accounts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_enduser_accounts"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="EndUser Approvals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+
+
+            <RelativeLayout
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:id="@+id/option_shop_approvals"
+                android:background="@color/phonographyBlue"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_shop_approvals"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_shop_approvals"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Shop Admin Approvals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/row_eight"
+            android:layout_below="@id/row_seven"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:id="@+id/option_staff_accounts"
+                android:background="@color/blueGrey800"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_staff_accounts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_staff_accounts"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Staff Accounts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+
+
+
+            <RelativeLayout
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:id="@+id/option_admin_accounts"
+                android:background="@color/colorAccent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/menu_item_width">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:tint="#ffffff"
+                    android:padding="10dp"
+                    android:layout_above="@+id/text_admin_approvals"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:padding="10dp"
+                    android:id="@+id/text_admin_approvals"
+                    android:textSize="@dimen/menu_item_text_size"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#ffffff"
+                    android:text="Shop Approvals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

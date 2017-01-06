@@ -21,12 +21,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.UtilityItemCategory;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.UtilityItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.UtilityItemCategory;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.UtilityItem;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Utility.HeaderItemsList;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -220,14 +220,11 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     class ViewHolderItemCategory extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
 
-        @Bind(R.id.name)
-        TextView categoryName;
-        @Bind(R.id.itemCategoryListItem)
-        ConstraintLayout itemCategoryListItem;
-        @Bind(R.id.categoryImage)
-        ImageView categoryImage;
-        @Bind(R.id.cardview)
-        CardView cardView;
+        @Bind(R.id.name) TextView categoryName;
+        @Bind(R.id.itemCategoryListItem) ConstraintLayout itemCategoryListItem;
+        @Bind(R.id.categoryImage) ImageView categoryImage;
+        @Bind(R.id.cardview) CardView cardView;
+
 
         public ViewHolderItemCategory(View itemView) {
             super(itemView);
@@ -422,24 +419,16 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     class ViewHolderItemSimple extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
 
 
-        @Bind(R.id.itemName)
-        TextView categoryName;
+        @Bind(R.id.itemName) TextView categoryName;
 //        TextView categoryDescription;
 
-        @Bind(R.id.items_list_item)
-        CardView itemCategoryListItem;
-        @Bind(R.id.itemImage)
-        ImageView categoryImage;
-        @Bind(R.id.price_range)
-        TextView priceRange;
-        @Bind(R.id.price_average)
-        TextView priceAverage;
-        @Bind(R.id.shop_count)
-        TextView shopCount;
-        @Bind(R.id.item_rating)
-        TextView itemRating;
-        @Bind(R.id.rating_count)
-        TextView ratingCount;
+        @Bind(R.id.items_list_item) CardView itemCategoryListItem;
+        @Bind(R.id.itemImage) ImageView categoryImage;
+        @Bind(R.id.price_range) TextView priceRange;
+        @Bind(R.id.price_average) TextView priceAverage;
+        @Bind(R.id.shop_count) TextView shopCount;
+        @Bind(R.id.item_rating) TextView itemRating;
+        @Bind(R.id.rating_count) TextView ratingCount;
 
 
 
@@ -522,17 +511,15 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         intentEdit.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY, EditItemFragment.MODE_UPDATE);
                         context.startActivity(intentEdit);
                     }
-
                     break;
-
 
                 case R.id.action_detach:
 
                     if (dataset.get(getLayoutPosition()) instanceof Item) {
                         notificationReceiver.detachItem((Item) dataset.get(getLayoutPosition()));
                     }
-
                     break;
+
 
                 case R.id.action_change_parent:
 
@@ -540,22 +527,18 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     {
                         notificationReceiver.changeParentItem((Item) dataset.get(getLayoutPosition()));
                     }
-
                     break;
 
-
-
-
                 default:
-
                     break;
 
             }
 
-
-
             return false;
         }
+
+
+
     }// ViewHolder Class declaration ends
 
 
@@ -571,8 +554,6 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void detachItemCat(ItemCategory itemCategory);
         void notifyDeleteItemCat();
         void changeParentItemCat(ItemCategory itemCategory);
-
-
 
         void detachItem(Item item);
         void changeParentItem(Item item);

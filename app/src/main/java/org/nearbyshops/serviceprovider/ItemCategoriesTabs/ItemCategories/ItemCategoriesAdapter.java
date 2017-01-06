@@ -21,9 +21,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.UtilityItemCategory;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.UtilityItemCategory;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
@@ -31,7 +31,6 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

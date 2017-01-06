@@ -18,6 +18,8 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.SettingsService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopAdminService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemCategoryServiceGIDB;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemServiceGIDB;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import javax.inject.Named;
@@ -76,9 +78,6 @@ public class NetModule {
     Gson provideGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         //gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-
-
-
         return gsonBuilder.create();
     }
 
@@ -86,16 +85,14 @@ public class NetModule {
     @Singleton
     OkHttpClient provideOkHttpClient() {
 
-        OkHttpClient client = new OkHttpClient()
-                .newBuilder()
-                .build();
-
         // Cache cache
 
         // cache is commented out ... you can add cache by putting it back in the builder options
         //.cache(cache)
 
-        return client;
+        return new OkHttpClient()
+                .newBuilder()
+                .build();
     }
 
 
@@ -113,6 +110,24 @@ public class NetModule {
         //        .client(okHttpClient)
 
         Log.d("applog","Retrofit : " + UtilityGeneral.getServiceURL(MyApplication.getAppContext()));
+
+
+        return retrofit;
+    }
+
+
+
+    @Provides @Named("gidb")
+    Retrofit provideRetrofitGIDB(Gson gson, OkHttpClient okHttpClient) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(UtilityGeneral.getServiceURL_GIDB(MyApplication.getAppContext()))
+                .build();
+
+        //        .client(okHttpClient)
+
+        Log.d("applog","Retrofit : " + UtilityGeneral.getServiceURL_GIDB(MyApplication.getAppContext()));
 
 
         return retrofit;
@@ -145,6 +160,20 @@ public class NetModule {
 
 
 
+    @Provides
+    ItemCategoryServiceGIDB provideItemCategoryServiceGIDB(@Named("gidb")Retrofit retrofit)
+    {
+        return retrofit.create(ItemCategoryServiceGIDB.class);
+    }
+
+    @Provides
+    ItemServiceGIDB provideItemServiceGIDB(@Named("gidb")Retrofit retrofit)
+    {
+        return retrofit.create(ItemServiceGIDB.class);
+    }
+
+
+
 
     @Provides
     ServiceConfigurationService provideConfigurationService(@Named("normal")Retrofit retrofit)
@@ -156,7 +185,6 @@ public class NetModule {
 
 
     @Provides
-    @Singleton
     ItemCategoryService provideItemCategoryService(@Named("normal")Retrofit retrofit)
     {
         ItemCategoryService service = retrofit.create(ItemCategoryService.class);

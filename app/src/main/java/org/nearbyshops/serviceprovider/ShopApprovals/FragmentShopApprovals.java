@@ -360,8 +360,8 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
 
 //        UtilityShopAdmin.saveShopAdmin(shopAdmin,getContext());
 //
-//        Intent intent = new Intent(getContext(),EditStaff.class);
-//        intent.putExtra(EditStaffFragment.EDIT_MODE_INTENT_KEY,EditStaffFragment.MODE_UPDATE);
+//        Intent intent = new Intent(getContext(),EditStaffSelf.class);
+//        intent.putExtra(EditStaffSelfFragment.EDIT_MODE_INTENT_KEY,EditStaffSelfFragment.MODE_UPDATE);
 //        startActivity(intent);
     }
 

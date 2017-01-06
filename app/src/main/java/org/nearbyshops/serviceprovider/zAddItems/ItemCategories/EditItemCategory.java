@@ -305,7 +305,7 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 //                .addConverterFactory(GsonConverterFactory.create())
 //                .build();
 //
-//        ItemCategoryService itemCategoryService = retrofit.create(ItemCategoryService.class);
+//        ItemCategoryServiceGIDB itemCategoryService = retrofit.create(ItemCategoryServiceGIDB.class);
 
 
 

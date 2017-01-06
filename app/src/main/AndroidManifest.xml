@@ -206,8 +206,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
-
         <activity
             android:name=".StaffAccounts.EditStaff.EditStaff"
             android:label="Edit Staff"
@@ -217,9 +215,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
         <activity
-            android:name=".ItemCategoriesTabs.Items.EditItem.EditItem"
+            android:name=".ItemsByCategorySimple.EditItem.EditItem"
             android:label="Edit Item"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -227,11 +224,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
-
-
         <activity
-            android:name=".ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory"
+            android:name=".ItemsByCategorySimple.EditItemCategory.EditItemCategory"
             android:label="Edit Item Category"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -239,9 +233,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
-
-
         <activity
             android:name=".ItemsByCategorySimple.ItemCategoriesSimple"
             android:label="Items by Category"
@@ -251,6 +242,47 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
+
+        <activity
+            android:name=".AddFromGlobalSelection.AddFromGlobal"
+            android:label="Add from Global Items DB"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.Home" />
+        </activity>
+
+        <activity
+            android:name=".StaffHome.StaffHome"
+            android:label="@string/title_activity_staff_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".StaffHome.EditStaffSelf.EditStaffSelf"
+            android:label="Edit Profile"
+            android:parentActivityName=".StaffHome.StaffHome"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StaffHome.StaffHome" />
+        </activity>
+
+        <activity
+            android:name=".ServiceConfiguration.EditConfiguration.EditConfiguration"
+            android:label="Edit Profile"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Home" />
+        </activity>
+
+
+        <activity
+            android:name=".StaffHome.StaffDashboard"
+            android:label="@string/title_activity_staff_dashboard"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
 
     </application>

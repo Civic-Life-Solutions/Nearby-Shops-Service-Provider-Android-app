@@ -8,7 +8,7 @@ public interface NotifyFABClick {
     void detachSelectedClick();
     void changeParentForSelected();
     void addItem();
-    void addfromGlobalItem();
+    void addfromGlobal();
     void addItemCategory();
-    void addfromGlobalItemCat();
+//    void addfromGlobalItemCat();
 }

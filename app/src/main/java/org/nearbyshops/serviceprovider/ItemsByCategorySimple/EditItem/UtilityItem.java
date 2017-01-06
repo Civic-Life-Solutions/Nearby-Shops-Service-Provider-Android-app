@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 import org.nearbyshops.serviceprovider.Model.Item;
-import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -17,12 +16,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 
-public class UtilityItemCategory {
+public class UtilityItem {
 
-    public static final String TAG_ITEM_PREF = "tag_item_category";
+    public static final String TAG_ITEM_PREF = "tag_item";
 
 
-    public static void saveItemCategory(ItemCategory itemCategory, Context context)
+    public static void saveItem(Item item, Context context)
     {
 
         //Creating a shared preference
@@ -31,7 +30,7 @@ public class UtilityItemCategory {
 
         SharedPreferences.Editor prefsEditor = sharedPref.edit();
 
-        if(itemCategory == null)
+        if(item == null)
         {
             prefsEditor.putString(TAG_ITEM_PREF, "null");
 
@@ -39,7 +38,7 @@ public class UtilityItemCategory {
         else
         {
             Gson gson = new Gson();
-            String json = gson.toJson(itemCategory);
+            String json = gson.toJson(item);
             prefsEditor.putString(TAG_ITEM_PREF, json);
         }
 
@@ -47,7 +46,7 @@ public class UtilityItemCategory {
     }
 
 
-    public static ItemCategory getItemCategory(Context context)
+    public static Item getItem(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
 
@@ -61,7 +60,7 @@ public class UtilityItemCategory {
 
         }else
         {
-            return gson.fromJson(json, ItemCategory.class);
+            return gson.fromJson(json, Item.class);
         }
     }
 

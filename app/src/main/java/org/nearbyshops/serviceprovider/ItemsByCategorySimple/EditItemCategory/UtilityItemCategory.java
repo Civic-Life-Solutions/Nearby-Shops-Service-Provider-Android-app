@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 import org.nearbyshops.serviceprovider.Model.Item;
+import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -16,12 +17,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 
-public class UtilityItem {
+public class UtilityItemCategory {
 
-    public static final String TAG_ITEM_PREF = "tag_item";
+    public static final String TAG_ITEM_PREF = "tag_item_category";
 
 
-    public static void saveItem(Item item, Context context)
+    public static void saveItemCategory(ItemCategory itemCategory, Context context)
     {
 
         //Creating a shared preference
@@ -30,7 +31,7 @@ public class UtilityItem {
 
         SharedPreferences.Editor prefsEditor = sharedPref.edit();
 
-        if(item == null)
+        if(itemCategory == null)
         {
             prefsEditor.putString(TAG_ITEM_PREF, "null");
 
@@ -38,7 +39,7 @@ public class UtilityItem {
         else
         {
             Gson gson = new Gson();
-            String json = gson.toJson(item);
+            String json = gson.toJson(itemCategory);
             prefsEditor.putString(TAG_ITEM_PREF, json);
         }
 
@@ -46,7 +47,7 @@ public class UtilityItem {
     }
 
 
-    public static Item getItem(Context context)
+    public static ItemCategory getItemCategory(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
 
@@ -60,7 +61,7 @@ public class UtilityItem {
 
         }else
         {
-            return gson.fromJson(json, Item.class);
+            return gson.fromJson(json, ItemCategory.class);
         }
     }
 

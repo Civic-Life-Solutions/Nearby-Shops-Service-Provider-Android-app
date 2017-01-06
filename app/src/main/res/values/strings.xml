@@ -9,7 +9,8 @@
 
     <string name="preference_file_name">sharedpreferencefile</string>
     <string name="preference_service_url_key">service_url</string>
-    <string name="preference_distributor_id_key">distributor_id_key</string>
+    <string name="preference_service_url_gidb_key">service_url_gidb</string>
+    <!--<string name="preference_distributor_id_key">distributor_id_key</string>-->
     <string name="title_activity_login">Login</string>
 
 
@@ -75,5 +76,7 @@
     <string name="title_activity_shop_admin_approvals">Shop Admin Approvals</string>
     <string name="title_activity_shop_approals">Shop Approvals</string>
     <string name="title_activity_main">Staff Accounts</string>
+    <string name="title_activity_staff_home">Staff Home</string>
+    <string name="title_activity_staff_dashboard">Staff Dashboard</string>
 
 </resources>

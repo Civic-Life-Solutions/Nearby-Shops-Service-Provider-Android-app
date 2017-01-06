@@ -50,7 +50,7 @@ class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
 
         Staff staff = dataset.get(position);
 
-        holder.staffID.setText("Staff ID : " + String.valueOf(staff.getStaffID()));
+        holder.staffID.setText("Staff ID : " + String.valueOf(staff.getUserID()));
         holder.staffName.setText(staff.getStaffName());
         holder.phoneNumber.setText(staff.getPhone());
         holder.designation.setText(staff.getDesignation());

@@ -226,7 +226,7 @@ public class AddService extends AppCompatActivity implements Callback<Image>, Ad
 
         ServiceConfiguration serviceConfigurationForAdd = new ServiceConfiguration();
 
-        serviceConfigurationForAdd.setImagePath(imagePath);
+        serviceConfigurationForAdd.setLogoImagePath(imagePath);
 //        serviceConfigurationForAdd.setConfigurationNickname(nickname.getText().toString());
 
         serviceConfigurationForAdd.setServiceName(service_name.getText().toString());

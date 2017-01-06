@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
+package org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration;
 
 
 import android.Manifest;
@@ -16,29 +16,41 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.Model.Item;
-import org.nearbyshops.serviceprovider.Model.ItemCategory;
+import org.nearbyshops.serviceprovider.ModelRoles.Staff;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
+import org.nearbyshops.serviceprovider.StaffAccounts.UtilityStaff;
+import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -51,29 +63,21 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class EditItemFragment extends Fragment {
+public class EditConfigurationFragment extends Fragment{
 
     public static int PICK_IMAGE_REQUEST = 21;
     // Upload the image after picked up
     private static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 56;
 
-
-    ItemCategory itemCategory;
-
-    public static final String ITEM_CATEGORY_INTENT_KEY = "item_cat";
-
-//    Validator validator;
-
-
-//    @Inject
-//    DeliveryGuySelfService deliveryService;
-
     @Inject
-    ItemService itemService;
+    ServiceConfigurationService configurationService;
 
 
     // flag for knowing whether the image is changed or not
@@ -82,61 +86,31 @@ public class EditItemFragment extends Fragment {
 
 
     // bind views
-    @Bind(R.id.uploadImage)
-    ImageView resultView;
+    @Bind(R.id.uploadImage) ImageView resultView;
 
+    @Bind(R.id.item_id) EditText item_id;
+    @Bind(R.id.service_name) EditText service_name;
+    @Bind(R.id.helpline_number) EditText helpline_number;
+    @Bind(R.id.address) EditText address;
+    @Bind(R.id.city) EditText city;
+    @Bind(R.id.pincode) EditText pincode;
+    @Bind(R.id.landmark) EditText landmark;
+    @Bind(R.id.state) EditText state;
+    @Bind(R.id.auto_complete_language) AutoCompleteTextView autoComplete;
+    @Bind(R.id.latitude) EditText latitude;
+    @Bind(R.id.longitude) EditText longitude;
+    @Bind(R.id.service_coverage) EditText serviceConverage;
+    @Bind(R.id.getlatlon) Button getlatlon;
+    @Bind(R.id.spinner_country) Spinner spinnerCountry;
+    @Bind(R.id.spinner_service_level) Spinner spinnerServiceLevel;
+    @Bind(R.id.spinner_service_type) Spinner spinnerServiceType;
 
-//    @Bind(R.id.shop_open) CheckBox shopOpen;
-//    @Bind(R.id.shop_id) EditText shopID;
-
-    @Bind(R.id.itemID) EditText itemID;
-    @Bind(R.id.itemName) EditText itemName;
-    @Bind(R.id.itemDescription) EditText itemDescription;
-    @Bind(R.id.itemDescriptionLong) EditText itemDescriptionLong;
-    @Bind(R.id.quantityUnit) EditText quantityUnit;
-
-
-//    @Bind(R.id.enter_shop_id) EditText shopIDEnter;
-//    @Bind(R.id.shopName) EditText shopName;
-
-//    @Bind(R.id.shopAddress) EditText shopAddress;
-//    @Bind(R.id.shopCity) EditText city;
-//    @Bind(R.id.shopPincode) EditText pincode;
-//    @Bind(R.id.shopLandmark) EditText landmark;
-
-//    @Bind(R.id.customerHelplineNumber) EditText customerHelplineNumber;
-//    @Bind(R.id.deliveryHelplineNumber) EditText deliveryHelplineNumber;
-
-//    @Bind(R.id.shopShortDescription) EditText shopDescriptionShort;
-//    @Bind(R.id.shopLongDescription) EditText shopDescriptionLong;
-
-//    @Bind(R.id.latitude) EditText latitude;
-//    @Bind(R.id.longitude) EditText longitude;
-//    @Bind(R.id.pick_location_button) TextView pickLocationButton;
-//    @Bind(R.id.rangeOfDelivery) EditText rangeOfDelivery;
-
-//    @Bind(R.id.deliveryCharges) EditText deliveryCharge;
-//    @Bind(R.id.billAmountForFreeDelivery) EditText billAmountForFreeDelivery;
-
-//    @Bind(R.id.pick_from_shop_available) CheckBox pickFromShopAvailable;
-//    @Bind(R.id.home_delivery_available) CheckBox homeDeliveryAvailable;
-
-
-
-//    @Bind(R.id.item_id) EditText item_id;
-//    @Bind(R.id.name) EditText name;
-//    @Bind(R.id.username) EditText username;
-//    @Bind(R.id.password) EditText password;
-//    @Bind(R.id.about) EditText about;
-
-//    @Bind(R.id.phone_number) EditText phone;
-//    @Bind(R.id.designation) EditText designation;
-//    @Bind(R.id.switch_enable) Switch aSwitch;
+    ArrayList<String> countryCodeList = new ArrayList<>();
+    ArrayList<String> languageCodeList = new ArrayList<>();
 
     @Bind(R.id.saveButton) Button buttonUpdateItem;
 
-
-    public static final String SHOP_INTENT_KEY = "shop_intent_key";
+    public static final String STAFF_INTENT_KEY = "staff_intent_key";
     public static final String EDIT_MODE_INTENT_KEY = "edit_mode";
 
     public static final int MODE_UPDATE = 52;
@@ -144,17 +118,17 @@ public class EditItemFragment extends Fragment {
 
     int current_mode = MODE_ADD;
 
-//    DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
-//    ShopAdmin shopAdmin = new ShopAdmin();
-        Item item = new Item();
+    ServiceConfiguration serviceConfiguration = null;
 
-    public EditItemFragment() {
+
+    public EditConfigurationFragment() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
     }
 
 
+    Subscription editTextSub;
 
 
     @Nullable
@@ -163,29 +137,24 @@ public class EditItemFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         setRetainInstance(true);
-        View rootView = inflater.inflate(R.layout.content_edit_item_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.content_edit_service, container, false);
 
         ButterKnife.bind(this,rootView);
+        setupSpinners();
 
         if(savedInstanceState==null)
         {
-//            shopAdmin = getActivity().getIntent().getParcelableExtra(SHOP_ADMIN_INTENT_KEY);
 
             current_mode = getActivity().getIntent().getIntExtra(EDIT_MODE_INTENT_KEY,MODE_ADD);
-            itemCategory = getActivity().getIntent().getParcelableExtra(ITEM_CATEGORY_INTENT_KEY);
 
             if(current_mode == MODE_UPDATE)
             {
-                item = UtilityItem.getItem(getContext());
-            }
-            else if (current_mode == MODE_ADD)
-            {
-//                item.setItemCategoryID(itemCategory.getItemCategoryID());
-//                System.out.println("Item Category ID : " + item.getItemCategoryID());
+                serviceConfiguration = UtilityServiceConfiguration.getStaff(getContext());
             }
 
 
-            if(item !=null) {
+            if(serviceConfiguration!=null) {
+
                 bindDataToViews();
             }
 
@@ -204,8 +173,8 @@ public class EditItemFragment extends Fragment {
         updateIDFieldVisibility();
 
 
-        if(item !=null) {
-            loadImage(item.getItemImageURL());
+        if(serviceConfiguration!=null) {
+            loadImage(serviceConfiguration.getLogoImagePath());
             showLogMessage("Inside OnCreateView : DeliveryGUySelf : Not Null !");
         }
 
@@ -215,17 +184,70 @@ public class EditItemFragment extends Fragment {
         return rootView;
     }
 
+
+    void setupSpinners()
+    {
+        // setup spinners
+
+        ArrayList<String> spinnerList = new ArrayList<>();
+        ArrayList<String> spinnerListLanguages = new ArrayList<>();
+
+
+        String[] locales = Locale.getISOCountries();
+
+
+
+        for (String countryCode : locales) {
+
+            Locale obj = new Locale("", countryCode);
+
+//            System.out.println("Country Code = " + obj.getCountry()
+//                    + ", Country Name = " + obj.getDisplayCountry());
+
+            spinnerList.add(obj.getCountry() + " : " + obj.getDisplayCountry());
+
+            countryCodeList.add(obj.getCountry());
+        }
+
+
+        for(String string: Locale.getISOLanguages())
+        {
+            Locale locale = new Locale(string,"");
+
+            spinnerListLanguages.add(locale.getDisplayLanguage());
+
+            languageCodeList.add(locale.getDisplayLanguage());
+        }
+
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item, spinnerList);
+
+        spinnerCountry.setAdapter(adapter);
+
+        ArrayAdapter<String> adapterLanguages = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,spinnerListLanguages);
+
+        autoComplete.setAdapter(adapterLanguages);
+//        autoComplete.setValidator(new Validator());
+
+
+
+        // setup spinner ends
+
+    }
+
+
+
     void updateIDFieldVisibility()
     {
-
         if(current_mode==MODE_ADD)
         {
-            buttonUpdateItem.setText("Add Item");
-            itemID.setVisibility(View.GONE);
+            buttonUpdateItem.setText("Create Account");
+            item_id.setVisibility(View.GONE);
         }
         else if(current_mode== MODE_UPDATE)
         {
-            itemID.setVisibility(View.VISIBLE);
+            item_id.setVisibility(View.VISIBLE);
             buttonUpdateItem.setText("Save");
         }
     }
@@ -243,9 +265,7 @@ public class EditItemFragment extends Fragment {
 
     void loadImage(String imagePath) {
 
-        String iamgepath = UtilityGeneral.getServiceURL(getContext()) + "/api/v1/Item/Image/" + imagePath;
-
-        System.out.println(iamgepath);
+        String iamgepath = UtilityGeneral.getServiceURL(getContext()) + "/api/ServiceConfiguration/Image/" + imagePath;
 
         Picasso.with(getContext())
                 .load(iamgepath)
@@ -267,7 +287,7 @@ public class EditItemFragment extends Fragment {
 
         if(current_mode == MODE_ADD)
         {
-            item = new Item();
+            serviceConfiguration = new ServiceConfiguration();
             addAccount();
         }
         else if(current_mode == MODE_UPDATE)
@@ -280,20 +300,56 @@ public class EditItemFragment extends Fragment {
     boolean validateData()
     {
         boolean isValid = true;
-
-        if(itemName.getText().toString().length()==0)
+/*
+        if(phone.getText().toString().length()==0)
         {
-            itemName.setError("Item Name cannot be empty !");
-            itemName.requestFocus();
+            phone.setError("Please enter Phone Number");
+            phone.requestFocus();
             isValid= false;
         }
 
+
+        if(password.getText().toString().length()==0)
+        {
+            password.requestFocus();
+            password.setError("Password cannot be empty");
+            isValid = false;
+        }
+
+
+        if(username.getText().toString().length()==0)
+        {
+            username.requestFocus();
+            username.setError("Username cannot be empty");
+            isValid= false;
+        }
+
+
+        if(name.getText().toString().length()==0)
+        {
+
+//            Drawable drawable = ContextCompat.getDrawable(getContext(),R.drawable.ic_close_black_24dp);
+            name.requestFocus();
+            name.setError("Name cannot be empty");
+            isValid = false;
+        }
+*/
 
 
         return isValid;
     }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
 
 
     void addAccount()
@@ -315,7 +371,7 @@ public class EditItemFragment extends Fragment {
         else
         {
             // post request
-            retrofitPOSTRequest();
+//            retrofitPOSTRequest();
         }
 
     }
@@ -329,7 +385,7 @@ public class EditItemFragment extends Fragment {
 
 
             // delete previous Image from the Server
-            deleteImage(item.getItemImageURL());
+            deleteImage(serviceConfiguration.getLogoImagePath());
 
             /*ImageCalls.getInstance()
                     .deleteImage(
@@ -340,13 +396,10 @@ public class EditItemFragment extends Fragment {
 
             if(isImageRemoved)
             {
-
-                item.setItemImageURL(null);
+                serviceConfiguration.setLogoImagePath(null);
                 retrofitPUTRequest();
-
             }else
             {
-
                 uploadPickedImage(true);
             }
 
@@ -365,28 +418,35 @@ public class EditItemFragment extends Fragment {
 
     void bindDataToViews()
     {
-        if(item !=null) {
+        if(serviceConfiguration!=null) {
 
-            itemID.setText(String.valueOf(item.getItemID()));
-            itemName.setText(item.getItemName());
-            itemDescription.setText(item.getItemDescription());
+            item_id.setText(String.valueOf(serviceConfiguration.getServiceID()));
+            service_name.setText(serviceConfiguration.getServiceName());
+            helpline_number.setText(serviceConfiguration.getHelplineNumber());
+            spinnerServiceType.setSelection(serviceConfiguration.getServiceType()-1);
+            spinnerServiceLevel.setSelection(serviceConfiguration.getServiceLevel()-1);
+            address.setText(serviceConfiguration.getAddress());
+            city.setText(serviceConfiguration.getCity());
+            pincode.setText(String.valueOf(serviceConfiguration.getPincode()));
+            landmark.setText(serviceConfiguration.getLandmark());
+            state.setText(serviceConfiguration.getState());
+            spinnerCountry.setSelection(countryCodeList.indexOf(serviceConfiguration.getISOCountryCode()));
+            autoComplete.setText(serviceConfiguration.getISOLanguageCode());
+            latitude.setText(String.valueOf(serviceConfiguration.getLatCenter()));
+            longitude.setText(String.valueOf(serviceConfiguration.getLonCenter()));
+            serviceConverage.setText(String.valueOf(serviceConfiguration.getServiceRange()));
 
-            quantityUnit.setText(item.getQuantityUnit());
-            itemDescriptionLong.setText(item.getItemDescriptionLong());
         }
     }
 
 
-
-
-
     void getDataFromViews()
     {
-        if(item ==null)
+        if(serviceConfiguration==null)
         {
             if(current_mode == MODE_ADD)
             {
-//                item = new Item();
+                serviceConfiguration = new ServiceConfiguration();
             }
             else
             {
@@ -400,12 +460,41 @@ public class EditItemFragment extends Fragment {
 //        }
 
 
-        item.setItemName(itemName.getText().toString());
-        item.setItemDescription(itemDescription.getText().toString());
 
-        item.setItemDescriptionLong(itemDescriptionLong.getText().toString());
-        item.setQuantityUnit(quantityUnit.getText().toString());
+//            serviceConfigurationForEdit.setConfigurationNickname(nickname.getText().toString());
+        serviceConfiguration.setServiceName(service_name.getText().toString());
+//            serviceConfigurationForEdit.setServiceURL(service_url.getText().toString());
+        serviceConfiguration.setHelplineNumber(helpline_number.getText().toString());
+        serviceConfiguration.setServiceType(spinnerServiceType.getSelectedItemPosition() + 1);
+        serviceConfiguration.setServiceLevel(spinnerServiceLevel.getSelectedItemPosition() + 1);
+        serviceConfiguration.setAddress(address.getText().toString());
+        serviceConfiguration.setCity(city.getText().toString());
 
+        if(!pincode.getText().toString().equals(""))
+        {
+            serviceConfiguration.setPincode(Long.parseLong(pincode.getText().toString()));
+        }
+
+
+        serviceConfiguration.setLandmark(landmark.getText().toString());
+        serviceConfiguration.setState(state.getText().toString());
+        serviceConfiguration.setISOCountryCode(countryCodeList.get(spinnerCountry.getSelectedItemPosition()));
+
+        Locale locale = new Locale("", serviceConfiguration.getISOCountryCode());
+        serviceConfiguration.setCountry(locale.getDisplayCountry());
+
+        serviceConfiguration.setISOLanguageCode(autoComplete.getText().toString());
+
+        if(!latitude.getText().toString().equals("")&&!longitude.getText().toString().equals(""))
+        {
+            serviceConfiguration.setLatCenter(Double.parseDouble(latitude.getText().toString()));
+            serviceConfiguration.setLonCenter(Double.parseDouble(longitude.getText().toString()));
+        }
+
+        if(!serviceConverage.getText().toString().equals(""))
+        {
+            serviceConfiguration.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
+        }
     }
 
 
@@ -416,11 +505,10 @@ public class EditItemFragment extends Fragment {
         getDataFromViews();
 
 
-        Call<ResponseBody> call = itemService.updateItem(
-                UtilityLogin.getAuthorizationHeaders(getContext()),
-                item,item.getItemID()
-        );
-
+//        final Staff staff = UtilityStaff.getStaff(getContext());
+        Call<ResponseBody> call = configurationService.putServiceConfiguration(
+                                            UtilityLogin.getAuthorizationHeaders(
+                                                        getContext()), serviceConfiguration);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -429,64 +517,64 @@ public class EditItemFragment extends Fragment {
                 if(response.code()==200)
                 {
                     showToastMessage("Update Successful !");
-                    UtilityItem.saveItem(item,getContext());
+
+                    UtilityServiceConfiguration.saveConfiguration(serviceConfiguration,getContext());
                 }
                 else
                 {
-                    showToastMessage("Update Failed Code : " + response.code());
+                    showToastMessage("Update Failed Code : " + String.valueOf(response.code()));
                 }
+
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+                showToastMessage("Update Failed !");
             }
         });
-
     }
 
 
-    void retrofitPOSTRequest()
-    {
-        getDataFromViews();
-        item.setItemCategoryID(itemCategory.getItemCategoryID());
-
-        System.out.println("Item Category ID (POST) : " + item.getItemCategoryID());
-
-        Call<Item> call = itemService.insertItem(UtilityLogin.getAuthorizationHeaders(getContext()), item);
-
-        call.enqueue(new Callback<Item>() {
-            @Override
-            public void onResponse(Call<Item> call, Response<Item> response) {
-
-                if(response.code()==201)
-                {
-                    showToastMessage("Add successful !");
-
-                    current_mode = MODE_UPDATE;
-                    updateIDFieldVisibility();
-                    item = response.body();
-                    bindDataToViews();
-
-                    UtilityItem.saveItem(item,getContext());
-
-                }
-                else
-                {
-                    showToastMessage("Add failed Code : " + response.code());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Item> call, Throwable t) {
-                showToastMessage("Add failed !");
-            }
-        });
-
-    }
-
-
+//    void retrofitPOSTRequest()
+//    {
+//        getDataFromViews();
+//
+////        final Staff staffTemp = UtilityStaff.getStaff(getContext());
+//        Call<Staff> call = serviceConfiguration.post(UtilityLogin.getAuthorizationHeaders(getContext()),staff);
+//
+//        call.enqueue(new Callback<Staff>() {
+//            @Override
+//            public void onResponse(Call<Staff> call, Response<Staff> response) {
+//
+//                if(response.code()==201)
+//                {
+//                    showToastMessage("Add successful !");
+//
+//                    current_mode = MODE_UPDATE;
+//                    updateIDFieldVisibility();
+//                    staff = response.body();
+//                    bindDataToViews();
+//
+//                    UtilityStaff.saveStaff(staff,getContext());
+//
+//                }
+//                else
+//                {
+//                    showToastMessage("Add failed !");
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Staff> call, Throwable t) {
+//
+//                showToastMessage("Add failed !");
+//
+//            }
+//        });
+//    }
 
 
     @Override
@@ -508,7 +596,7 @@ public class EditItemFragment extends Fragment {
 
     void showToastMessage(String message)
     {
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -588,7 +676,7 @@ public class EditItemFragment extends Fragment {
 
 
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+        if (requestCode == ImageCropUtility.PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && result != null
                 && result.getData() != null) {
 
@@ -673,7 +761,7 @@ public class EditItemFragment extends Fragment {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    showToastMessage("Permission Granted !");
+//                    showToastMessage("Permission Granted !");
                     pickShopImage();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
@@ -681,7 +769,7 @@ public class EditItemFragment extends Fragment {
                 } else {
 
 
-                    showToastMessage("Permission Denied for Read External Storage . ");
+                    showToastMessage("Permission Denied for Reading External Storage ! ");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -748,7 +836,7 @@ public class EditItemFragment extends Fragment {
 
 
 
-        Call<Image> imageCall = itemService.uploadImage(UtilityLogin.getAuthorizationHeaders(getContext()),
+        Call<Image> imageCall = configurationService.uploadImage(UtilityLogin.getAuthorizationHeaders(getContext()),
                 requestBodyBinary);
 
 
@@ -765,20 +853,20 @@ public class EditItemFragment extends Fragment {
 //                    loadImage(image.getPath());
 
 
-                    item.setItemImageURL(image.getPath());
+                    serviceConfiguration.setLogoImagePath(image.getPath());
 
                 }
                 else if(response.code()==417)
                 {
                     showToastMessage("Cant Upload Image. Image Size should not exceed 2 MB.");
 
-                    item.setItemImageURL(null);
+                    serviceConfiguration.setLogoImagePath(null);
 
                 }
                 else
                 {
                     showToastMessage("Image Upload failed !");
-                    item.setItemImageURL(null);
+                    serviceConfiguration.setLogoImagePath(null);
 
                 }
 
@@ -788,7 +876,7 @@ public class EditItemFragment extends Fragment {
                 }
                 else
                 {
-                    retrofitPOSTRequest();
+//                    retrofitPOSTRequest();
                 }
 
 
@@ -798,8 +886,7 @@ public class EditItemFragment extends Fragment {
             public void onFailure(Call<Image> call, Throwable t) {
 
                 showToastMessage("Image Upload failed !");
-                item.setItemImageURL(null);
-
+                serviceConfiguration.setLogoImagePath(null);
 
                 if(isModeEdit)
                 {
@@ -807,7 +894,7 @@ public class EditItemFragment extends Fragment {
                 }
                 else
                 {
-                    retrofitPOSTRequest();
+//                    retrofitPOSTRequest();
                 }
             }
         });
@@ -818,11 +905,7 @@ public class EditItemFragment extends Fragment {
 
     void deleteImage(String filename)
     {
-        Call<ResponseBody> call = itemService.deleteImage(
-                UtilityLogin.getAuthorizationHeaders(getContext()),
-                filename);
-
-
+        Call<ResponseBody> call = configurationService.deleteImage(UtilityLogin.getAuthorizationHeaders(getContext()),filename);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

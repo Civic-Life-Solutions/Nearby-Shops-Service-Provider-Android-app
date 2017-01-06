@@ -133,7 +133,7 @@ public class AddItem extends AppCompatActivity implements Callback<Image> {
                 .build();
 
 
-        ItemService itemService = retrofit.create(ItemService.class);
+        ItemServiceGIDB itemService = retrofit.create(ItemServiceGIDB.class);
 
         */
 

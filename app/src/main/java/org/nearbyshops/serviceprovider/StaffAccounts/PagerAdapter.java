@@ -79,7 +79,6 @@ public class PagerAdapter extends FragmentPagerAdapter {
             titleDetachedItems = title;
         }
 
-
         notifyDataSetChanged();
     }
 

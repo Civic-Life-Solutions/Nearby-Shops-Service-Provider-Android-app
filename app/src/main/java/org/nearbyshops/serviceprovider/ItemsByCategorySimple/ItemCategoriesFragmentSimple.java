@@ -19,13 +19,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import org.nearbyshops.serviceprovider.AddFromGlobalSelection.AddFromGlobal;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategory;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyBackPressed;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyFABClick;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyHeaderChanged;
@@ -66,7 +67,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
 
     boolean isFirstChangeParent = true;
     boolean isFirst = true;
-    @State int previous_position = -1;
+//    @State int previous_position = -1;
 
     int item_count_item_category = 0;
 
@@ -75,10 +76,8 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
     int item_count_item;
     int fetched_items_count = 0;
 
-    @Bind(R.id.swipe_container)
-    SwipeRefreshLayout swipeContainer;
-    @Bind(R.id.recycler_view)
-    RecyclerView itemCategoriesList;
+    @Bind(R.id.swipe_container) SwipeRefreshLayout swipeContainer;
+    @Bind(R.id.recycler_view) RecyclerView itemCategoriesList;
 
     ArrayList<Object> dataset = new ArrayList<>();
     ArrayList<ItemCategory> datasetCategory = new ArrayList<>();
@@ -260,10 +259,10 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
 
                     // trigger fetch next page
 
-                    if(layoutManager.findLastVisibleItemPosition()== previous_position)
-                    {
-                        return;
-                    }
+//                    if(layoutManager.findLastVisibleItemPosition()== previous_position)
+//                    {
+//                        return;
+//                    }
 
 
                     // trigger fetch next page
@@ -275,10 +274,12 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
                         makeRequestItem(false,false);
                     }
 
-                    previous_position = layoutManager.findLastVisibleItemPosition();
+//                    previous_position = layoutManager.findLastVisibleItemPosition();
 
                 }
             }
+
+
 
 
             @Override
@@ -892,10 +893,6 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
         startActivity(intent);
     }
 
-    @Override
-    public void addfromGlobalItem() {
-
-    }
 
     @Override
     public void addItemCategory() {
@@ -907,9 +904,14 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
         startActivity(intent);
     }
 
-    @Override
-    public void addfromGlobalItemCat() {
 
+
+    @Override
+    public void addfromGlobal() {
+
+        Intent intent  = new Intent(getActivity(), AddFromGlobal.class);
+        intent.putExtra(AddFromGlobal.INTENT_KEY_ITEM_CAT_PARENT,currentCategory);
+        startActivity(intent);
     }
 
 
@@ -955,9 +957,9 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
                     {
                         showToastMessage(parentCategory.getCategoryName()
                                 + " is an abstract category you cannot add item to an abstract category");
-
                         return;
                     }
+
 //                    listAdapter.getRequestedChangeParent().setParentCategoryID(parentCategory.getItemCategoryID());
 
 //                    listAdapter.getRequestedChangeParent().setItemCategoryID(parentCategory.getItemCategoryID());
@@ -1093,6 +1095,9 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
             }
         });
     }
+
+
+
 
 
     void makeRequestUpdateItemCatBulk(final List<ItemCategory> list)

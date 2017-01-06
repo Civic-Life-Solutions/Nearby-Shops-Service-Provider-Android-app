@@ -110,17 +110,8 @@ public interface ItemService
 
 
 
-
-
-
-    // Deprecated
-
-
-
-    @GET("/api/v1/Item/Depricated")
-    Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID, @Query("ShopID") int shopID);
-
-    @GET("/api/v1/Item/Depricated")
-    Call<List<Item>> getItems(@Query("ItemCategoryID") int itemCategoryID);
+    @POST("/api/v1/Item/AddFromGlobal")
+    Call<ResponseBody> addItemFromGlobal(@Header("Authorization") String headers,
+                                         @Body List<Item> itemList);
 
 }

@@ -12,8 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
@@ -52,7 +49,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -61,10 +57,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -458,7 +451,7 @@ public class EditStaffFragment extends Fragment {
     {
         if(staff!=null) {
 
-            item_id.setText(String.valueOf(staff.getStaffID()));
+            item_id.setText(String.valueOf(staff.getUserID()));
             name.setText(staff.getStaffName());
             username.setText(staff.getUsername());
             password.setText(staff.getPassword());
@@ -533,7 +526,7 @@ public class EditStaffFragment extends Fragment {
 
 //        final Staff staff = UtilityStaff.getStaff(getContext());
         Call<ResponseBody> call = staffService.putStaff(UtilityLogin.getAuthorizationHeaders(
-                                                        getContext()),staff.getStaffID(), staff);
+                                                        getContext()),staff.getUserID(), staff);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -33,35 +33,17 @@ public class ItemCategoriesSimple extends AppCompatActivity implements NotifyHea
     public static final String TAG_SLIDING = "sort_items_sliding";
 
 
-
     // Fab Variables
-    @Bind(R.id.fab_menu)
-    FloatingActionMenu fab_menu;
+    @Bind(R.id.fab_menu) FloatingActionMenu fab_menu;
+    @Bind(R.id.fab_detach) FloatingActionButton fab_detach;
+    @Bind(R.id.fab_change_parent) FloatingActionButton fab_change_parent;
+    @Bind(R.id.fab_add_item) FloatingActionButton fab_add_item;
+    @Bind(R.id.fab_add) FloatingActionButton fab_add;
+//    @Bind(R.id.fab_add_from_global_item) FloatingActionButton fab_add_from_global_item;
+    @Bind(R.id.fab_add_from_global) FloatingActionButton fab_add_from_global;
+    @Bind(R.id.text_sub) TextView itemHeader;
+    @Bind(R.id.slidingLayer) SlidingLayer slidingLayer;
 
-    @Bind(R.id.fab_detach)
-    FloatingActionButton fab_detach;
-
-    @Bind(R.id.fab_change_parent)
-    FloatingActionButton fab_change_parent;
-
-    @Bind(R.id.fab_add_item)
-    FloatingActionButton fab_add_item;
-
-    @Bind(R.id.fab_add)
-    FloatingActionButton fab_add;
-
-    @Bind(R.id.fab_add_from_global_item)
-    FloatingActionButton fab_add_from_global_item;
-
-    @Bind(R.id.fab_add_from_global)
-    FloatingActionButton fab_add_from_global;
-
-
-    @Bind(R.id.text_sub)
-    TextView itemHeader;
-
-    @Bind(R.id.slidingLayer)
-    SlidingLayer slidingLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,14 +86,14 @@ public class ItemCategoriesSimple extends AppCompatActivity implements NotifyHea
         Drawable drawable = VectorDrawableCompat.create(getResources(), R.drawable.ic_low_priority_black_24px, getTheme());
         fab_change_parent.setImageDrawable(drawable);
 
-        Drawable drawable_add = VectorDrawableCompat.create(getResources(), R.drawable.ic_playlist_add_from_global, getTheme());
-        fab_add_from_global.setImageDrawable(drawable_add);
+//        Drawable drawable_add = VectorDrawableCompat.create(getResources(), R.drawable.ic_playlist_add_from_global, getTheme());
+//        fab_add_from_global.setImageDrawable(drawable_add);
 
         Drawable drawable_detach = VectorDrawableCompat.create(getResources(), R.drawable.ic_detach, getTheme());
         fab_detach.setImageDrawable(drawable_detach);
 
         fab_add_item.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_add_black_24dp));
-        fab_add_from_global_item.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_playlist_add_from_global));
+        fab_add_from_global.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_playlist_add_from_global));
 
     }
 
@@ -258,7 +240,6 @@ public class ItemCategoriesSimple extends AppCompatActivity implements NotifyHea
     @OnClick(R.id.fab_add_item)
     void fabAddItemClick()
     {
-
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentByTag(TAG_FRAGMENT);
 
@@ -266,14 +247,13 @@ public class ItemCategoriesSimple extends AppCompatActivity implements NotifyHea
         {
             ((NotifyFABClick) fragment).addItem();
         }
-
     }
+
 
 
     @OnClick(R.id.fab_add)
     void fabAddItemCatClick()
     {
-
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentByTag(TAG_FRAGMENT);
 
@@ -281,8 +261,20 @@ public class ItemCategoriesSimple extends AppCompatActivity implements NotifyHea
         {
             ((NotifyFABClick) fragment).addItemCategory();
         }
-
     }
 
+
+
+    @OnClick(R.id.fab_add_from_global)
+    void setFab_add_from_global()
+    {
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(TAG_FRAGMENT);
+
+        if(fragment instanceof NotifyFABClick)
+        {
+            ((NotifyFABClick) fragment).addfromGlobal();
+        }
+    }
 
 }

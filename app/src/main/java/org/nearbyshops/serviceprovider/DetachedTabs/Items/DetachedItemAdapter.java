@@ -21,9 +21,9 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.UtilityItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.UtilityItem;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.ModelStats.ItemStats;
 import org.nearbyshops.serviceprovider.R;

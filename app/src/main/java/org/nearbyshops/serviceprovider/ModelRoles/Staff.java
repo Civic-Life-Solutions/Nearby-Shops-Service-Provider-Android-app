@@ -12,9 +12,9 @@ public class Staff {
 
     // Column names for Distributor
 
-    public static final String STAFF_ID = "ID";
+    public static final String STAFF_ID = "STAFF_ID";
     public static final String STAFF_NAME = "STAFF_NAME";
-    public static final String USER_NAME = "USER_NAME";
+//    public static final String USER_NAME = "USER_NAME";
     public static final String PASSWORD = "PASSWORD";
 
     public static final String ABOUT = "ABOUT";
@@ -49,14 +49,15 @@ public class Staff {
 
 
 
+    //SERIAL PRIMARY KEY
 
     // Create Table CurrentServiceConfiguration Provider
     public static final String createTableStaffPostgres =
             "CREATE TABLE IF NOT EXISTS " + Staff.TABLE_NAME + "("
-            + " " + Staff.STAFF_ID + " SERIAL PRIMARY KEY,"
+            + " " + Staff.STAFF_ID + " INT UNIQUE NOT NULL,"
 
             + " " + Staff.STAFF_NAME + " text,"
-            + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
+//            + " " + Staff.USER_NAME + " text UNIQUE NOT NULL,"
             + " " + Staff.PASSWORD + " text NOT NULL,"
 
                   + Staff.ABOUT + " text,"
@@ -76,12 +77,14 @@ public class Staff {
             + " " + Staff.CREATE_UPDATE_ITEMS + " boolean ,"
             + " " + Staff.APPROVE_SHOP_ADMIN_ACCOUNTS + " boolean ,"
             + " " + Staff.APPROVE_SHOPS + " boolean ,"
-            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean " + ")";
+            + " " + Staff.APPROVE_END_USER_ACCOUNTS + " boolean ,"
+            + " FOREIGN KEY(" + Staff.STAFF_ID +") REFERENCES " + Usernames.TABLE_NAME + "(" + Usernames.USER_ID + ")"
+            + ")";
 
 
     
     // Instance Variables
-    private int staffID;
+    private int userID;
 
     private String staffName;
     private String username;
@@ -93,7 +96,7 @@ public class Staff {
     private String phone;
     private String designation;
 
-    private boolean isEnabled;
+    private Boolean isEnabled;
     private boolean accountPrivate;
 
     private String govtIDName;
@@ -242,12 +245,12 @@ public class Staff {
         this.username = username;
     }
 
-    public int getStaffID() {
-        return staffID;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getStaffName() {

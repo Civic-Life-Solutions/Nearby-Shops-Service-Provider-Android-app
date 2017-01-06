@@ -30,6 +30,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfiguration
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,11 +62,13 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
 //    @Bind(R.id.nickname)
 //    EditText nickname;
 
-    @Bind(R.id.service_name)
-    EditText service_name;
 
 //    @Bind(R.id.service_url)
 //    EditText service_url;
+
+
+    @Bind(R.id.service_name)
+    EditText service_name;
 
     @Bind(R.id.helpline_number)
     EditText helpline_number;
@@ -233,7 +236,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
                 {
                     serviceConfigurationForEdit = response.body();
                     bindDataToEditText();
-                    loadImage(serviceConfigurationForEdit.getImagePath());
+                    loadImage(serviceConfigurationForEdit.getLogoImagePath());
                 }
             }
 
@@ -272,7 +275,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
             // delete previous Image from the Server
             ConfigImageCalls.getInstance()
                     .deleteImage(
-                            serviceConfigurationForEdit.getImagePath(),
+                            serviceConfigurationForEdit.getLogoImagePath(),
                             new DeleteImageCallback()
                     );
 
@@ -280,7 +283,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
             if(isImageRemoved)
             {
 
-                serviceConfigurationForEdit.setImagePath("");
+                serviceConfigurationForEdit.setLogoImagePath("");
 
                 retrofitPUTRequest();
 
@@ -392,7 +395,9 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
         getDataFromEditText(serviceConfigurationForEdit);
 
 
-        Call<ResponseBody> itemCall = configurationService.putServiceConfiguration(serviceConfigurationForEdit);
+        Call<ResponseBody> itemCall = configurationService.putServiceConfiguration(
+                UtilityLogin.getAuthorizationHeaders(this)
+                ,serviceConfigurationForEdit);
 
         itemCall.enqueue(new Callback<ResponseBody>() {
 
@@ -570,11 +575,11 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
         }
 
 
-        serviceConfigurationForEdit.setImagePath(null);
+        serviceConfigurationForEdit.setLogoImagePath(null);
 
         if(serviceConfigurationForEdit !=null)
         {
-            serviceConfigurationForEdit.setImagePath(image.getPath());
+            serviceConfigurationForEdit.setLogoImagePath(image.getPath());
         }
 
         retrofitPUTRequest();
@@ -590,7 +595,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
 
         showToastMessage("Image Upload failed !");
 
-        serviceConfigurationForEdit.setImagePath("");
+        serviceConfigurationForEdit.setLogoImagePath("");
 
         retrofitPUTRequest();
 

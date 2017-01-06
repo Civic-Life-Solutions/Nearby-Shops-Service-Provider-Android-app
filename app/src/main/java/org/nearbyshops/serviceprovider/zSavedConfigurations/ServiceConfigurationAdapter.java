@@ -85,7 +85,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
             holder.serviceTypeBadge.setText( Constants.getServiceType(serviceConfiguration.getServiceType()) + " | " +  Constants.getServiceLevel(serviceConfiguration.getServiceLevel()));
 
             Picasso.with(context).load(UtilityGeneral
-                    .getConfigImageEndpointURL(context) + serviceConfiguration.getImagePath())
+                    .getConfigImageEndpointURL(context) + serviceConfiguration.getLogoImagePath())
                     .into(holder.serviceImage);
 
 

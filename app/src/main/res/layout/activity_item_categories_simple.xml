@@ -151,15 +151,15 @@
             fab:fab_label="Add Item Category" />
 
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_add_from_global_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_size="mini"
-            app:srcCompat="@drawable/fab_add"
-            app:fab_colorNormal="@color/gplus_color_1"
-            app:fab_colorPressed="@color/blueGrey800"
-            fab:fab_label="Add Item From Global Database" />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fab_add_from_global_item"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--fab:fab_size="mini"-->
+            <!--app:srcCompat="@drawable/fab_add"-->
+            <!--app:fab_colorNormal="@color/gplus_color_1"-->
+            <!--app:fab_colorPressed="@color/blueGrey800"-->
+            <!--fab:fab_label="Add Item From Global Database" />-->
 
 
 
@@ -171,7 +171,7 @@
             app:srcCompat="@drawable/fab_add"
             app:fab_colorNormal="@color/phonographyBlue"
             app:fab_colorPressed="@color/blueGrey800"
-            fab:fab_label="Add Item Category From Global Database" />
+            fab:fab_label="Add From Global Database" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

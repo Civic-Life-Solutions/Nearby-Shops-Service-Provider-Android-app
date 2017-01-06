@@ -1,16 +1,21 @@
 package org.nearbyshops.serviceprovider.DaggerComponents;
 
 
+import org.nearbyshops.serviceprovider.AddFromGlobalSelection.FragmentAddFromGlobal;
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory.EditItemCategoryFragment;
+import org.nearbyshops.serviceprovider.Home;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.EditItemOld;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesFragmentSimple;
+import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfigurationFragment;
+import org.nearbyshops.serviceprovider.StaffHome.EditStaffSelf.EditStaffSelfFragment;
+import org.nearbyshops.serviceprovider.StaffHome.StaffHome;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountFragment;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorDetail.DistributorDetail;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.ItemCategoriesFragment;
@@ -86,8 +91,6 @@ public interface NetComponent {
 
     void Inject(ItemAdapterTwo itemAdapterTwo);
 
-    void Inject(LoginScreen loginScreen);
-
     void Inject(SettingsActivity settingsActivity);
 
     void Inject(DistributorAccountFragment distributorAccountFragment);
@@ -109,6 +112,18 @@ public interface NetComponent {
     void Inject(EditItemCategoryFragment editItemCategoryFragment);
 
     void Inject(ItemCategoriesFragmentSimple itemCategoriesFragmentSimple);
+
+    void Inject(EditStaffSelfFragment editStaffSelfFragment);
+
+    void Inject(StaffHome staffHome);
+
+    void Inject(EditConfigurationFragment editConfigurationFragment);
+
+    void Inject(Home home);
+
+    void Inject(LoginScreen loginScreen);
+
+    void Inject(FragmentAddFromGlobal fragmentAddFromGlobal);
 
 
 //    void Inject(LoginDialog loginDialog);

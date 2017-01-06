@@ -21,6 +21,7 @@ import org.nearbyshops.serviceprovider.ModelRoles.Admin;
 import org.nearbyshops.serviceprovider.ModelRoles.Staff;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
+import org.nearbyshops.serviceprovider.StaffHome.StaffHome;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
@@ -183,10 +184,11 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
                 if(staff !=null)
                 {
-                    Gson gson = new Gson();
-                    Log.d("login", gson.toJson(staff));
+//                    Gson gson = new Gson();
+//                    Log.d("login", gson.toJson(staff));
 
-                    startActivity(new Intent(LoginScreen.this,Home.class));
+                    UtilityLogin.saveStaff(staff,LoginScreen.this);
+                    startActivity(new Intent(LoginScreen.this,StaffHome.class));
                 }
 
                 if(response.code()==403 || response.code() ==401)
@@ -274,6 +276,8 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
                         {
                             Gson gson = new Gson();
                             Log.d("login", gson.toJson(admin));
+
+                            UtilityLogin.saveAdmin(admin,LoginScreen.this);
 
                             startActivity(new Intent(LoginScreen.this,Home.class));
 

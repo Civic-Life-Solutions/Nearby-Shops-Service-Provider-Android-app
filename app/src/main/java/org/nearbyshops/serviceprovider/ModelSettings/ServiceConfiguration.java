@@ -14,23 +14,24 @@ public class ServiceConfiguration {
     // column Names
     public static final String SERVICE_CONFIGURATION_ID = "SERVICE_CONFIGURATION_ID";
 
-    public static final String IMAGE_PATH = "IMAGE_PATH";
+//    public static final String IMAGE_PATH = "IMAGE_PATH";
     public static final String LOGO_IMAGE_PATH = "LOGO_IMAGE_PATH";
     public static final String BACKDROP_IMAGE_PATH = "BACKDROP_IMAGE_PATH";
 
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String HELPLINE_NUMBER = "HELPLINE_NUMBER";
-    public static final String ADDRESS = "ADDRESS";
 
+    public static final String ADDRESS = "ADDRESS";
     public static final String CITY = "CITY";
     public static final String PINCODE = "PINCODE";
     public static final String LANDMARK = "LANDMARK";
-
     public static final String STATE = "STATE";
     public static final String COUNTRY = "COUNTRY";
-    public static final String ISO_COUNTRY_CODE = "ISO_COUNTRY_CODE";
 
+    public static final String ISO_COUNTRY_CODE = "ISO_COUNTRY_CODE";
     public static final String ISO_LANGUAGE_CODE = "ISO_LANGUAGE_CODE";
+    public static final String ISO_CURRENCY_CODE = "ISO_CURRENCY_CODE";
+
     public static final String SERVICE_TYPE = "SERVICE_TYPE";
     public static final String SERVICE_LEVEL = "SERVICE_LEVEL";
 
@@ -38,22 +39,16 @@ public class ServiceConfiguration {
     public static final String LON_CENTER = "LON_CENTER";
 
     public static final String SERVICE_RANGE = "SERVICE_RANGE";
-//    public static final String SHOP_DELIVERY_RANGE_MAX = "SHOP_DELIVERY_RANGE_MAX";
-
-    // to be taken out to global Service Configuration
-//    public static final String IS_ETHICAL_SERVICE_PROVIDER = "IS_ETHICAL_SERVICE_PROVIDER";
-//    public static final String IS_VERIFIED = "IS_VERIFIED";
-//    public static final String SERVICE_URL = "SERVICE_URL";
 
     public static final String CREATED = "CREATED";
     public static final String UPDATED = "UPDATED";
 
 
     // Consider Revising : Are these fields Required ?
-    public static final String LAT_MAX = "LAT_MAX";
-    public static final String LON_MAX = "LON_MAX";
-    public static final String LAT_MIN = "LAT_MIN";
-    public static final String LON_MIN = "LON_MIN";
+//    public static final String LAT_MAX = "LAT_MAX";
+//    public static final String LON_MAX = "LON_MAX";
+//    public static final String LAT_MIN = "LAT_MIN";
+//    public static final String LON_MIN = "LON_MIN";
 
 
 
@@ -63,34 +58,35 @@ public class ServiceConfiguration {
             = "CREATE TABLE IF NOT EXISTS " + ServiceConfiguration.TABLE_NAME + "("
             + " " + ServiceConfiguration.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
 
-            + " " + ServiceConfiguration.IMAGE_PATH + " text,"
+//            + " " + ServiceConfiguration.IMAGE_PATH + " text,"
             + " " + ServiceConfiguration.LOGO_IMAGE_PATH + " text,"
             + " " + ServiceConfiguration.BACKDROP_IMAGE_PATH + " text,"
 
             + " " + ServiceConfiguration.SERVICE_NAME + " text,"
             + " " + ServiceConfiguration.HELPLINE_NUMBER + " text,"
-            + " " + ServiceConfiguration.ADDRESS + " text,"
 
+            + " " + ServiceConfiguration.ADDRESS + " text,"
             + " " + ServiceConfiguration.CITY + " text,"
             + " " + ServiceConfiguration.PINCODE + " BIGINT,"
             + " " + ServiceConfiguration.LANDMARK + " text,"
-
             + " " + ServiceConfiguration.STATE + " text,"
             + " " + ServiceConfiguration.COUNTRY + " text,"
-            + " " + ServiceConfiguration.ISO_COUNTRY_CODE + " text,"
 
+            + " " + ServiceConfiguration.ISO_COUNTRY_CODE + " text,"
             + " " + ServiceConfiguration.ISO_LANGUAGE_CODE + " text,"
+            + " " + ServiceConfiguration.ISO_CURRENCY_CODE + " text,"
+
             + " " + ServiceConfiguration.SERVICE_TYPE + " INT,"
             + " " + ServiceConfiguration.SERVICE_LEVEL + " INT,"
 
             + " " + ServiceConfiguration.LAT_CENTER + " FLOAT,"
             + " " + ServiceConfiguration.LON_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.SERVICE_RANGE + " INT,"
+            + " " + ServiceConfiguration.SERVICE_RANGE + " FLOAT,"
 
-            + " " + ServiceConfiguration.LAT_MAX + " FLOAT,"
-            + " " + ServiceConfiguration.LON_MAX + " FLOAT,"
-            + " " + ServiceConfiguration.LAT_MIN + " FLOAT,"
-            + " " + ServiceConfiguration.LON_MIN + " FLOAT,"
+//            + " " + ServiceConfiguration.LAT_MAX + " FLOAT,"
+//            + " " + ServiceConfiguration.LON_MAX + " FLOAT,"
+//            + " " + ServiceConfiguration.LAT_MIN + " FLOAT,"
+//            + " " + ServiceConfiguration.LON_MIN + " FLOAT,"
 
             + " " + ServiceConfiguration.UPDATED + " timestamp with time zone,"
             + " " + ServiceConfiguration.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
@@ -103,10 +99,11 @@ public class ServiceConfiguration {
 
     // Instance Variables
     private int serviceID;
-    private String imagePath;
-    private String logoImagePath;
 
+//    private String imagePath;
+    private String logoImagePath;
     private String backdropImagePath;
+
     private String serviceName;
     private String helplineNumber;
 
@@ -120,30 +117,41 @@ public class ServiceConfiguration {
 
     private String ISOCountryCode;
     private String ISOLanguageCode;
-    private Integer serviceType;
+    private String ISOCurrencyCode;
 
+    private Integer serviceType;
     private Integer serviceLevel;
+
     private Double latCenter;
     private Double lonCenter;
 
     private Integer serviceRange;
 //    private Integer shopDeliveryRangeMax;
 
-
     private Timestamp created;
     private Timestamp updated;
 
 
     // Consider Revising : Are these variables needed or not ?
-    private Double latMax;
-    private Double lonMax;
-    private Double latMin;
-    private Double lonMin;
+//    private Double latMax;
+//    private Double lonMax;
+//    private Double latMin;
+//    private Double lonMin;
 
 
     // real time variables : the values of these variables are generated in real time.
     private Double rt_distance;
 
+
+
+
+    public String getISOCurrencyCode() {
+        return ISOCurrencyCode;
+    }
+
+    public void setISOCurrencyCode(String ISOCurrencyCode) {
+        this.ISOCurrencyCode = ISOCurrencyCode;
+    }
 
     public Timestamp getCreated() {
         return created;
@@ -193,13 +201,6 @@ public class ServiceConfiguration {
         this.serviceID = serviceID;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
 
     public String getLogoImagePath() {
         return logoImagePath;
@@ -322,35 +323,35 @@ public class ServiceConfiguration {
         this.serviceRange = serviceRange;
     }
 
-    public Double getLatMax() {
-        return latMax;
-    }
-
-    public void setLatMax(Double latMax) {
-        this.latMax = latMax;
-    }
-
-    public Double getLonMax() {
-        return lonMax;
-    }
-
-    public void setLonMax(Double lonMax) {
-        this.lonMax = lonMax;
-    }
-
-    public Double getLatMin() {
-        return latMin;
-    }
-
-    public void setLatMin(Double latMin) {
-        this.latMin = latMin;
-    }
-
-    public Double getLonMin() {
-        return lonMin;
-    }
-
-    public void setLonMin(Double lonMin) {
-        this.lonMin = lonMin;
-    }
+//    public Double getLatMax() {
+//        return latMax;
+//    }
+//
+//    public void setLatMax(Double latMax) {
+//        this.latMax = latMax;
+//    }
+//
+//    public Double getLonMax() {
+//        return lonMax;
+//    }
+//
+//    public void setLonMax(Double lonMax) {
+//        this.lonMax = lonMax;
+//    }
+//
+//    public Double getLatMin() {
+//        return latMin;
+//    }
+//
+//    public void setLatMin(Double latMin) {
+//        this.latMin = latMin;
+//    }
+//
+//    public Double getLonMin() {
+//        return lonMin;
+//    }
+//
+//    public void setLonMin(Double lonMin) {
+//        this.lonMin = lonMin;
+//    }
 }

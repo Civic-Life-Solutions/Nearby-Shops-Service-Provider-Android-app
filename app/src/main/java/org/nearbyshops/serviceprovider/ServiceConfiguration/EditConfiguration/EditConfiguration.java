@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.EditItemCategory;
+package org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,15 +6,14 @@ import android.support.v7.widget.Toolbar;
 
 import org.nearbyshops.serviceprovider.R;
 
-
-public class EditItemCategory extends AppCompatActivity {
+public class EditConfiguration extends AppCompatActivity {
 
     public static final String TAG_FRAGMENT_EDIT = "fragment_edit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_item_category_new);
+        setContentView(R.layout.activity_edit_service_configuration);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -24,7 +23,7 @@ public class EditItemCategory extends AppCompatActivity {
         {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container,new EditItemCategoryFragment(),TAG_FRAGMENT_EDIT)
+                    .add(R.id.fragment_container,new EditConfigurationFragment(),TAG_FRAGMENT_EDIT)
                     .commit();
         }
     }

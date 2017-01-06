@@ -25,13 +25,18 @@ public interface AdminService {
     @GET("/api/v1/Admin/Login")
     Observable<Admin> getAdmin(@Header("Authorization")String headers);
 
-    @POST("/api/v1/Admin")
-    Call<Admin> postAdmin(@Body Admin admin);
-
     @PUT("/api/v1/Admin/{id}")
-    Call<ResponseBody> putShop(@Body Admin admin, @Path("id") int id);
+    Call<ResponseBody> putShop(@Header("Authorization")String headers,
+                               @Body Admin admin);
 
-    @DELETE("/api/v1/Admin/{id}")
-    Call<ResponseBody> deleteShop(@Path("id") int id);
+
+
+
+//    @POST("/api/v1/Admin")
+//    Call<Admin> postAdmin(@Body Admin admin);
+
+
+//    @DELETE("/api/v1/Admin/{id}")
+//    Call<ResponseBody> deleteShop(@Path("id") int id);
 
 }

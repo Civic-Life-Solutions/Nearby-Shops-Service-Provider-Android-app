@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.EditItem;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

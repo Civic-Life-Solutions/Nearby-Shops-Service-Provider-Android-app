@@ -76,6 +76,34 @@ public class Item implements Parcelable{
 	private Boolean isWaitlisted;
 
 
+
+	private Float rt_rating_avg;
+	private Float rt_rating_count;
+	private String rt_gidb_service_url;
+
+	public Float getRt_rating_avg() {
+		return rt_rating_avg;
+	}
+
+	public void setRt_rating_avg(Float rt_rating_avg) {
+		this.rt_rating_avg = rt_rating_avg;
+	}
+
+	public Float getRt_rating_count() {
+		return rt_rating_count;
+	}
+
+	public void setRt_rating_count(Float rt_rating_count) {
+		this.rt_rating_count = rt_rating_count;
+	}
+
+	public String getRt_gidb_service_url() {
+		return rt_gidb_service_url;
+	}
+
+	public void setRt_gidb_service_url(String rt_gidb_service_url) {
+		this.rt_gidb_service_url = rt_gidb_service_url;
+	}
 	// Getter and Setter Statements
 
 	//No-args constructor

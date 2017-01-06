@@ -299,7 +299,7 @@ public class EditItemCategoryOld extends AppCompatActivity implements Callback<I
 //                .addConverterFactory(GsonConverterFactory.create())
 //                .build();
 //
-//        ItemCategoryService itemCategoryService = retrofit.create(ItemCategoryService.class);
+//        ItemCategoryServiceGIDB itemCategoryService = retrofit.create(ItemCategoryServiceGIDB.class);
 
 
 
