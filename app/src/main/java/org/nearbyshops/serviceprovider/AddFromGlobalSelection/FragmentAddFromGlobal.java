@@ -718,10 +718,17 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
     }
 
 
+
+
     @Override
     public void copySelected() {
 
-//        listAdapter.getSelectedItems();
+        copyItems();
+    }
+
+
+    void copyItems()
+    {
 
         ItemCategory parent = getActivity().getIntent().getParcelableExtra(AddFromGlobal.INTENT_KEY_ITEM_CAT_PARENT);
 
@@ -770,6 +777,5 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
                 showToastMessage("Failed !");
             }
         });
-
     }
 }
