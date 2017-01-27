@@ -41,33 +41,17 @@ import rx.schedulers.Schedulers;
 
 public class LoginScreen extends AppCompatActivity implements View.OnClickListener {
 
-    @Bind(R.id.serviceURLEditText)
-    EditText serviceUrlEditText;
-
-    @Bind(R.id.distributorIDEdittext)
-    EditText username;
-
-    @Bind(R.id.loginButton)
-    Button loginButton;
-
-    @Bind(R.id.password)
-    EditText password;
-
-    @Bind(R.id.signUpButton)
-    Button signUpButton;
-
-    @Bind(R.id.role_admin)
-    TextView roleAdmin;
-
-    @Bind(R.id.role_staff)
-    TextView roleStaff;
+    @Bind(R.id.serviceURLEditText) EditText serviceUrlEditText;
+    @Bind(R.id.distributorIDEdittext) EditText username;
+    @Bind(R.id.loginButton) Button loginButton;
+    @Bind(R.id.password) EditText password;
+//    @Bind(R.id.signUpButton) Button signUpButton;
+    @Bind(R.id.role_admin) TextView roleAdmin;
+    @Bind(R.id.role_staff) TextView roleStaff;
 
 
-    @Inject
-    AdminService adminService;
-
-    @Inject
-    StaffService staffService;
+    @Inject AdminService adminService;
+    @Inject StaffService staffService;
 
 
     public LoginScreen() {

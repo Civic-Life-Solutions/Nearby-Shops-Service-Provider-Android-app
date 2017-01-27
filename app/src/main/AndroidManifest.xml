@@ -285,6 +285,18 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
 
+
+        <activity
+            android:name=".EditProfileAdmin.EditProfileAdmin"
+            android:label="Edit Admin"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Home" />
+        </activity>
+
+
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Created by sumeet on 19/6/16.
  */
-public class ServiceConfiguration {
+public class ServiceConfigurationGlobal {
 
 
     // Table Name
@@ -20,6 +20,9 @@ public class ServiceConfiguration {
 
     public static final String SERVICE_NAME = "SERVICE_NAME";
     public static final String HELPLINE_NUMBER = "HELPLINE_NUMBER";
+
+    public static final String DESCRIPTION_SHORT = "DESCRIPTION_SHORT";
+    public static final String DESCRIPTION_LONG = "DESCRIPTION_LONG";
 
     public static final String ADDRESS = "ADDRESS";
     public static final String CITY = "CITY";
@@ -40,6 +43,11 @@ public class ServiceConfiguration {
 
     public static final String SERVICE_RANGE = "SERVICE_RANGE";
 
+    // to be taken out to global Service Configuration
+    public static final String IS_OFFICIAL_SERVICE_PROVIDER = "IS_OFFICIAL_SERVICE_PROVIDER";
+    public static final String IS_VERIFIED = "IS_VERIFIED";
+    public static final String SERVICE_URL = "SERVICE_URL";
+
     public static final String CREATED = "CREATED";
     public static final String UPDATED = "UPDATED";
 
@@ -55,45 +63,45 @@ public class ServiceConfiguration {
 
     // Create Table Statement
     public static final String createTableServiceConfigurationPostgres
-            = "CREATE TABLE IF NOT EXISTS " + ServiceConfiguration.TABLE_NAME + "("
-            + " " + ServiceConfiguration.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
+            = "CREATE TABLE IF NOT EXISTS " + ServiceConfigurationGlobal.TABLE_NAME + "("
 
-//            + " " + ServiceConfiguration.IMAGE_PATH + " text,"
-            + " " + ServiceConfiguration.LOGO_IMAGE_PATH + " text,"
-            + " " + ServiceConfiguration.BACKDROP_IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationGlobal.SERVICE_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
 
-            + " " + ServiceConfiguration.SERVICE_NAME + " text,"
-            + " " + ServiceConfiguration.HELPLINE_NUMBER + " text,"
+//            + " " + ServiceConfigurationLocal.IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationGlobal.LOGO_IMAGE_PATH + " text,"
+            + " " + ServiceConfigurationGlobal.BACKDROP_IMAGE_PATH + " text,"
 
-            + " " + ServiceConfiguration.ADDRESS + " text,"
-            + " " + ServiceConfiguration.CITY + " text,"
-            + " " + ServiceConfiguration.PINCODE + " BIGINT,"
-            + " " + ServiceConfiguration.LANDMARK + " text,"
-            + " " + ServiceConfiguration.STATE + " text,"
-            + " " + ServiceConfiguration.COUNTRY + " text,"
+            + " " + ServiceConfigurationGlobal.SERVICE_NAME + " text,"
+            + " " + ServiceConfigurationGlobal.HELPLINE_NUMBER + " text,"
 
-            + " " + ServiceConfiguration.ISO_COUNTRY_CODE + " text,"
-            + " " + ServiceConfiguration.ISO_LANGUAGE_CODE + " text,"
-            + " " + ServiceConfiguration.ISO_CURRENCY_CODE + " text,"
+            + " " + ServiceConfigurationGlobal.DESCRIPTION_SHORT + " text,"
+            + " " + ServiceConfigurationGlobal.DESCRIPTION_LONG + " text,"
 
-            + " " + ServiceConfiguration.SERVICE_TYPE + " INT,"
-            + " " + ServiceConfiguration.SERVICE_LEVEL + " INT,"
+            + " " + ServiceConfigurationGlobal.ADDRESS + " text,"
+            + " " + ServiceConfigurationGlobal.CITY + " text,"
+            + " " + ServiceConfigurationGlobal.PINCODE + " BIGINT,"
+            + " " + ServiceConfigurationGlobal.LANDMARK + " text,"
+            + " " + ServiceConfigurationGlobal.STATE + " text,"
+            + " " + ServiceConfigurationGlobal.COUNTRY + " text,"
 
-            + " " + ServiceConfiguration.LAT_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.LON_CENTER + " FLOAT,"
-            + " " + ServiceConfiguration.SERVICE_RANGE + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.ISO_COUNTRY_CODE + " text,"
+            + " " + ServiceConfigurationGlobal.ISO_LANGUAGE_CODE + " text,"
+            + " " + ServiceConfigurationGlobal.ISO_CURRENCY_CODE + " text,"
 
-//            + " " + ServiceConfiguration.LAT_MAX + " FLOAT,"
-//            + " " + ServiceConfiguration.LON_MAX + " FLOAT,"
-//            + " " + ServiceConfiguration.LAT_MIN + " FLOAT,"
-//            + " " + ServiceConfiguration.LON_MIN + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.SERVICE_TYPE + " INT,"
+            + " " + ServiceConfigurationGlobal.SERVICE_LEVEL + " INT,"
 
-            + " " + ServiceConfiguration.UPDATED + " timestamp with time zone,"
-            + " " + ServiceConfiguration.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
+            + " " + ServiceConfigurationGlobal.LAT_CENTER + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.LON_CENTER + " FLOAT,"
+            + " " + ServiceConfigurationGlobal.SERVICE_RANGE + " FLOAT,"
+
+            + " " + ServiceConfigurationGlobal.IS_OFFICIAL_SERVICE_PROVIDER + " boolean,"
+            + " " + ServiceConfigurationGlobal.IS_VERIFIED + " boolean,"
+            + " " + ServiceConfigurationGlobal.SERVICE_URL + " text UNIQUE NOT NULL,"
+
+            + " " + ServiceConfigurationGlobal.UPDATED + " timestamp with time zone,"
+            + " " + ServiceConfigurationGlobal.CREATED + " timestamp with time zone NOT NULL DEFAULT now()"
             + ")";
-
-
-
 
 
 
@@ -106,6 +114,9 @@ public class ServiceConfiguration {
 
     private String serviceName;
     private String helplineNumber;
+
+    private String descriptionShort;
+    private String descriptionLong;
 
     private String address;
     private String city;
@@ -128,6 +139,10 @@ public class ServiceConfiguration {
     private Integer serviceRange;
 //    private Integer shopDeliveryRangeMax;
 
+    private Boolean isOfficial;
+    private Boolean isVerified;
+    private String serviceURL;
+
     private Timestamp created;
     private Timestamp updated;
 
@@ -143,7 +158,45 @@ public class ServiceConfiguration {
     private Double rt_distance;
 
 
+    public String getDescriptionShort() {
+        return descriptionShort;
+    }
 
+    public void setDescriptionShort(String descriptionShort) {
+        this.descriptionShort = descriptionShort;
+    }
+
+    public String getDescriptionLong() {
+        return descriptionLong;
+    }
+
+    public void setDescriptionLong(String descriptionLong) {
+        this.descriptionLong = descriptionLong;
+    }
+
+    public Boolean getOfficial() {
+        return isOfficial;
+    }
+
+    public void setOfficial(Boolean official) {
+        isOfficial = official;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public String getServiceURL() {
+        return serviceURL;
+    }
+
+    public void setServiceURL(String serviceURL) {
+        this.serviceURL = serviceURL;
+    }
 
     public String getISOCurrencyCode() {
         return ISOCurrencyCode;
@@ -323,35 +376,6 @@ public class ServiceConfiguration {
         this.serviceRange = serviceRange;
     }
 
-//    public Double getLatMax() {
-//        return latMax;
-//    }
-//
-//    public void setLatMax(Double latMax) {
-//        this.latMax = latMax;
-//    }
-//
-//    public Double getLonMax() {
-//        return lonMax;
-//    }
-//
-//    public void setLonMax(Double lonMax) {
-//        this.lonMax = lonMax;
-//    }
-//
-//    public Double getLatMin() {
-//        return latMin;
-//    }
-//
-//    public void setLatMin(Double latMin) {
-//        this.latMin = latMin;
-//    }
-//
-//    public Double getLonMin() {
-//        return lonMin;
-//    }
-//
-//    public void setLonMin(Double lonMin) {
-//        this.lonMin = lonMin;
-//    }
+
+
 }

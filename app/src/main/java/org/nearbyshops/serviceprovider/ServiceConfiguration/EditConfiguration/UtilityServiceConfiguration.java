@@ -5,8 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import org.nearbyshops.serviceprovider.ModelRoles.Staff;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -19,7 +18,7 @@ public class UtilityServiceConfiguration {
 
     private static final String TAG_PREF_STAFF = "configuration";
 
-    public static void saveConfiguration(ServiceConfiguration configuration, Context context)
+    public static void saveConfiguration(ServiceConfigurationLocal configuration, Context context)
     {
 
         //Creating a shared preference
@@ -34,7 +33,7 @@ public class UtilityServiceConfiguration {
     }
 
 
-    public static ServiceConfiguration getStaff(Context context)
+    public static ServiceConfigurationLocal getStaff(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
 
@@ -48,7 +47,7 @@ public class UtilityServiceConfiguration {
 
         }else
         {
-            return gson.fromJson(json, ServiceConfiguration.class);
+            return gson.fromJson(json, ServiceConfigurationLocal.class);
         }
     }
 

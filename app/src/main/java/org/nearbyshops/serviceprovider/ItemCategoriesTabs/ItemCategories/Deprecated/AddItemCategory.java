@@ -187,7 +187,7 @@ public class AddItemCategory extends AppCompatActivity implements Callback<Image
         itemCategory.setIsLeafNode(isLeafNode.isChecked());
 
 
-        itemCategory.setAbstractNode(isAbstractNode.isChecked());
+        itemCategory.setisAbstractNode(isAbstractNode.isChecked());
         itemCategory.setDescriptionShort(descriptionShort.getText().toString());
 
     }

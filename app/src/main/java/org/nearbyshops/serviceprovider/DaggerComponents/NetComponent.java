@@ -6,6 +6,7 @@ import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemC
 import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemCatFragment;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
+import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
 import org.nearbyshops.serviceprovider.Home;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld;
@@ -124,6 +125,8 @@ public interface NetComponent {
     void Inject(LoginScreen loginScreen);
 
     void Inject(FragmentAddFromGlobal fragmentAddFromGlobal);
+
+    void Inject(EditAdminFragment editAdminFragment);
 
 
 //    void Inject(LoginDialog loginDialog);

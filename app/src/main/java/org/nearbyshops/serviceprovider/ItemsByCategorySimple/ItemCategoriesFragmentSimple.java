@@ -389,9 +389,8 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
     void makeRequestItemCategory()
     {
 
-
         Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategoriesQuerySimple(
-                currentCategory.getItemCategoryID(),null,"id",null,null
+                currentCategory.getItemCategoryID(),null,ItemCategory.CATEGORY_ORDER,null,null
         );
 
         //"id"
@@ -624,6 +623,89 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
     }
 
 
+    @Override
+    public void notifyDeleteItemCat(ItemCategory itemCategory, final int position) {
+
+        Call<ResponseBody> call = itemCategoryService.deleteItemCategory(
+                UtilityLogin.getAuthorizationHeaders(getActivity()),
+                itemCategory.getItemCategoryID()
+        );
+
+        call.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                if(response.code()==200)
+                {
+
+                    showToastMessage("Removed !");
+                    dataset.remove(position);
+                    listAdapter.notifyItemRemoved(position);
+
+                }else if(response.code()==304)
+                {
+                    showToastMessage("Delete failed !");
+
+                }else
+                {
+                    showToastMessage("Server Error !");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                showToastMessage("Network request failed ! Please check your connection!");
+            }
+        });
+
+
+    }
+
+
+    @Override
+    public void notifyDeleteItem(Item item, final int position) {
+
+        Call<ResponseBody> call = itemService.deleteItem(
+                UtilityLogin.getAuthorizationHeaders(getActivity()),
+                item.getItemID()
+        );
+
+
+        call.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
+                if(response.code()==200)
+                {
+                    dataset.remove(position);
+                    listAdapter.notifyItemRemoved(position);
+                    showToastMessage("Removed !");
+
+                }else if(response.code()==304)
+                {
+                    showToastMessage("Delete failed !");
+
+                }else
+                {
+                    showToastMessage("Server Error !");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                showToastMessage("Network request failed ! Please check your connection!");
+            }
+        });
+    }
+
+
+
 
 
 
@@ -671,10 +753,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
                 .show();
     }
 
-    @Override
-    public void notifyDeleteItemCat() {
 
-    }
 
     @Override
     public void changeParentItemCat(ItemCategory itemCategory) {
@@ -723,7 +802,6 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
                 })
                 .show();
     }
-
 
 
     @Override
@@ -953,7 +1031,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
                 if(parentCategory!=null)
                 {
 
-                    if(parentCategory.getAbstractNode())
+                    if(parentCategory.getisAbstractNode())
                     {
                         showToastMessage(parentCategory.getCategoryName()
                                 + " is an abstract category you cannot add item to an abstract category");
@@ -1018,7 +1096,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
 
 
                     // update Items
-                    if(parentCategory.getAbstractNode())
+                    if(parentCategory.getisAbstractNode())
                     {
                         showToastMessage(parentCategory.getCategoryName()
                                 + " is an abstract category you cannot add item to an abstract category");

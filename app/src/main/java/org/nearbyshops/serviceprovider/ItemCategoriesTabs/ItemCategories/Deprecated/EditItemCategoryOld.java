@@ -204,7 +204,7 @@ public class EditItemCategoryOld extends AppCompatActivity implements Callback<I
             descriptionShort.setText(itemCategoryForEdit.getDescriptionShort());
 
             isLeafNode.setChecked(itemCategoryForEdit.getIsLeafNode());
-            isAbstractNode.setChecked(itemCategoryForEdit.getAbstractNode());
+            isAbstractNode.setChecked(itemCategoryForEdit.getisAbstractNode());
 
         }
     }
@@ -219,7 +219,7 @@ public class EditItemCategoryOld extends AppCompatActivity implements Callback<I
             itemCategory.setCategoryDescription(itemCategoryDescription.getText().toString());
             itemCategory.setIsLeafNode(isLeafNode.isChecked());
 
-            itemCategory.setAbstractNode(isAbstractNode.isChecked());
+            itemCategory.setisAbstractNode(isAbstractNode.isChecked());
             itemCategory.setDescriptionShort(descriptionShort.getText().toString());
         }
 

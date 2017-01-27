@@ -11,28 +11,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
+import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
+import org.nearbyshops.serviceprovider.EditProfileAdmin.EditProfileAdmin;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesSimple;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfiguration;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfigurationFragment;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.UtilityServiceConfiguration;
-import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.ShopAdminApprovals;
 import org.nearbyshops.serviceprovider.ShopApprovals.ShopApprovals;
 import org.nearbyshops.serviceprovider.StaffAccounts.StaffAccounts;
-import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -187,11 +184,11 @@ public class Home extends AppCompatActivity
     {
 
 
-        Call<ServiceConfiguration> call = configurationService.getServiceConfiguration();
+        Call<ServiceConfigurationLocal> call = configurationService.getServiceConfiguration();
 
-        call.enqueue(new Callback<ServiceConfiguration>() {
+        call.enqueue(new Callback<ServiceConfigurationLocal>() {
             @Override
-            public void onResponse(Call<ServiceConfiguration> call, Response<ServiceConfiguration> response) {
+            public void onResponse(Call<ServiceConfigurationLocal> call, Response<ServiceConfigurationLocal> response) {
 
                 if(response.code()==200 && response.body()!=null)
                 {
@@ -204,7 +201,7 @@ public class Home extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<ServiceConfiguration> call, Throwable t) {
+            public void onFailure(Call<ServiceConfigurationLocal> call, Throwable t) {
                 showToastMessage("Failed !");
             }
         });
@@ -262,6 +259,15 @@ public class Home extends AppCompatActivity
 //        startActivity(intent);
 
         Intent intent = new Intent(this, ShopAdminApprovals.class);
+        startActivity(intent);
+    }
+
+
+    @OnClick(R.id.edit_profile)
+    void editProfileClick()
+    {
+        Intent intent = new Intent(this, EditProfileAdmin.class);
+        intent.putExtra(EditAdminFragment.EDIT_MODE_INTENT_KEY,EditAdminFragment.MODE_UPDATE);
         startActivity(intent);
     }
 

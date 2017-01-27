@@ -24,7 +24,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
@@ -126,7 +126,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
 
     public static final String SERVICE_CONFIG_INTENT_KEY = "ServiceConfigIntentKey";
 
-    ServiceConfiguration serviceConfigurationForEdit;
+    ServiceConfigurationLocal serviceConfigurationForEdit;
 
 
     public EditServiceConfiguration() {
@@ -225,12 +225,12 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
 
     void getConfigurationNetworkCall()
     {
-        final Call<ServiceConfiguration> serviceConfiguration = configurationService.getServiceConfiguration();
+        final Call<ServiceConfigurationLocal> serviceConfiguration = configurationService.getServiceConfiguration();
 
-        serviceConfiguration.enqueue(new Callback<ServiceConfiguration>() {
+        serviceConfiguration.enqueue(new Callback<ServiceConfigurationLocal>() {
 
             @Override
-            public void onResponse(Call<ServiceConfiguration> call, Response<ServiceConfiguration> response) {
+            public void onResponse(Call<ServiceConfigurationLocal> call, Response<ServiceConfigurationLocal> response) {
 
                 if(response.body()!=null)
                 {
@@ -241,7 +241,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
             }
 
             @Override
-            public void onFailure(Call<ServiceConfiguration> call, Throwable t) {
+            public void onFailure(Call<ServiceConfigurationLocal> call, Throwable t) {
                 showToastMessage(getString(R.string.NetworkConnectionError));
             }
         });
@@ -341,7 +341,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
     }
 
 
-    void getDataFromEditText(ServiceConfiguration serviceConfiguration)
+    void getDataFromEditText(ServiceConfigurationLocal serviceConfiguration)
     {
         if(serviceConfiguration !=null)
         {

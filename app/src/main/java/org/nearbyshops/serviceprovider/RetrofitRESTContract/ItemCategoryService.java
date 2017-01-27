@@ -91,6 +91,10 @@ public interface ItemCategoryService {
     Call<ItemCategory> getItemCategory(@Path("id") int ItemCategoryID);
 
 
+    @POST("/api/v1/ItemCategory/AddFromGlobal")
+    Call<ResponseBody> addItemCatFromGlobal(@Header("Authorization") String headers,
+                                            @Body List<ItemCategory> itemCatList);
+
 
     // Image Calls
 

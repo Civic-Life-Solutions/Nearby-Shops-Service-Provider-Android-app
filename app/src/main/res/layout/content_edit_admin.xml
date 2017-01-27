@@ -77,29 +77,16 @@
             android:text="Remove Picture"/>
 
 
-
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
                 android:enabled="false"
-                android:id="@+id/itemCategoryID"
+                android:id="@+id/item_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Item Category ID"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/itemCategoryName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Item Category Name"/>
+                android:hint="ID"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -110,10 +97,12 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/descriptionShort"
+                android:textColor="#000000"
+                android:inputType="text"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Short Description"/>
+                android:hint="Name"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -123,12 +112,46 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/itemCategoryDescription"
+                android:textColor="#000000"
+                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Long Description"/>
+                android:hint="Username"/>
 
         </android.support.design.widget.TextInputLayout>
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            app:passwordToggleEnabled="true"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:textColor="#000000"
+                android:id="@+id/password"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            app:counterEnabled="true"
+            app:counterMaxLength="50"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:textColor="#000000"
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="About you"/>
+
+        </android.support.design.widget.TextInputLayout>
+
 
 
         <android.support.design.widget.TextInputLayout
@@ -136,95 +159,97 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:inputType="number"
-                android:id="@+id/category_order"
+                android:textColor="#000000"
+                android:inputType="text"
+                android:id="@+id/designation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Category Order"/>
+                android:hint="Designation (Roles and Responsibilities)"/>
 
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:textColor="#000000"
+                android:inputType="phone"
+                android:id="@+id/phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone Number"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<EditText-->
+                <!--android:textColor="#000000"-->
+                <!--android:inputType="textMultiLine"-->
+                <!--android:id="@+id/govt_id_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Government ID Name"/>-->
+
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<EditText-->
+                <!--android:inputType="textMultiLine"-->
+                <!--android:textColor="#000000"-->
+                <!--android:id="@+id/govt_id_number"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Government ID Number"/>-->
+
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="#33000000"
+            android:text="Privacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/isLeafNode"
             android:layout_marginTop="10dp"
-            android:text= ":  Is Leaf Node Item Category ?"
+            android:text="Make account private"
+            android:id="@+id/make_account_private"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/whatleaf"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:padding="10dp"
-            android:textColor="@color/white"
-            android:background="@color/blueGrey800"
-            android:text="What is Leaf Node Item Category ? "
+            android:text="Private accounts are hidden from public staff contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-        <TextView
-            android:id="@+id/leaf_node_explaination"
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/leaf_node_item_category_usage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <CheckBox
-            android:id="@+id/isAbstractNode"
-            android:layout_marginTop="10dp"
-            android:text= ":  Is Abstract Node Item Category?"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <TextView
-            android:id="@+id/what_is_abstract_node"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:padding="10dp"
-            android:textColor="@color/white"
-            android:background="@color/blueGrey800"
-            android:text="What is Abstract Node Item Category ? "
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
 
 
         <TextView
-            android:visibility="gone"
-            android:layout_marginBottom="10dp"
-            android:text="@string/abstract_category_usage"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/light_grey"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="1dp" />
 
 
-<!--
-        <ScrollView
-            android:id="@+id/scrollview_abstract_node_explanation"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-        </ScrollView>-->
-
-
-
-        <!--
-
-                <TextView
-                    android:layout_marginTop="20dp"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:background="#33000000"
-                    android:text="Shop Address Fields"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />-->
+-->
 
 
 

@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory;
+package org.nearbyshops.serviceprovider.EditProfileAdmin;
 
 
 import android.Manifest;
@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
@@ -24,21 +23,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.Model.ItemCategory;
+import org.nearbyshops.serviceprovider.ModelRoles.Admin;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -51,20 +52,19 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class EditItemCategoryFragment extends Fragment {
+public class EditAdminFragment extends Fragment {
 
     public static int PICK_IMAGE_REQUEST = 21;
     // Upload the image after picked up
     private static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 56;
 
-
-    ItemCategory parent;
-
-    public static final String ITEM_CATEGORY_INTENT_KEY = "item_cat";
 
 //    Validator validator;
 
@@ -73,7 +73,7 @@ public class EditItemCategoryFragment extends Fragment {
 //    DeliveryGuySelfService deliveryService;
 
     @Inject
-    ItemCategoryService itemCategoryService;
+    AdminService adminService;
 
 
     // flag for knowing whether the image is changed or not
@@ -86,31 +86,33 @@ public class EditItemCategoryFragment extends Fragment {
     ImageView resultView;
 
 
-//    @Bind(R.id.shop_open) CheckBox shopOpen;
-//    @Bind(R.id.shop_id) EditText shopID;
+    @Bind(R.id.item_id) EditText item_id;
+    @Bind(R.id.name) EditText name;
+    @Bind(R.id.username) EditText username;
+    @Bind(R.id.password) EditText password;
+    @Bind(R.id.about) EditText about;
+
+    @Bind(R.id.phone_number) EditText phone;
+    @Bind(R.id.designation) EditText designation;
+//    @Bind(R.id.switch_enable) Switch switchEnable;
+
+    @Bind(R.id.make_account_private) CheckBox makeAccountPrivate;
+
+//    @Bind(R.id.govt_id_name) EditText govtIDName;
+//    @Bind(R.id.govt_id_number) EditText govtIDNumber;
+
+//    @Bind(R.id.permit_create_update_item_cat) CheckBox createUpdateItemCat;
+//    @Bind(R.id.permit_create_update_items) CheckBox createUpdateItems;
+//    @Bind(R.id.approve_shop_admin_accounts) CheckBox approveShopAdminAccounts;
+//    @Bind(R.id.approve_shops) CheckBox approveShops;
+//    @Bind(R.id.approve_end_user_accounts) CheckBox approveEndUserAccounts;
 
 
-    @Bind(R.id.itemCategoryID) EditText itemCategoryID;
-    @Bind(R.id.itemCategoryName) TextInputEditText itemCategoryName;
-    @Bind(R.id.itemCategoryDescription) EditText itemCategoryDescription;
-    @Bind(R.id.descriptionShort) EditText descriptionShort;
-    @Bind(R.id.isAbstractNode) CheckBox isAbstractNode;
-    @Bind(R.id.isLeafNode) CheckBox isLeafNode;
-
-    @Bind(R.id.category_order) EditText itemCategoryOrder;
-
-//    @Bind(R.id.itemID) EditText itemID;
-//    @Bind(R.id.itemName) EditText itemName;
-//    @Bind(R.id.itemDescription) EditText itemDescription;
-//    @Bind(R.id.itemDescriptionLong) EditText itemDescriptionLong;
-//    @Bind(R.id.quantityUnit) EditText quantityUnit;
+    @Bind(R.id.saveButton)
+    Button buttonUpdateItem;
 
 
-
-    @Bind(R.id.saveButton) Button buttonUpdateItem;
-
-
-    public static final String SHOP_INTENT_KEY = "shop_intent_key";
+    public static final String STAFF_INTENT_KEY = "staff_intent_key";
     public static final String EDIT_MODE_INTENT_KEY = "edit_mode";
 
     public static final int MODE_UPDATE = 52;
@@ -119,17 +121,17 @@ public class EditItemCategoryFragment extends Fragment {
     int current_mode = MODE_ADD;
 
 //    DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
-//    ShopAdmin shopAdmin = new ShopAdmin();
+    Admin admin = null;
 
-    ItemCategory itemCategory = new ItemCategory();
 
-    public EditItemCategoryFragment() {
+    public EditAdminFragment() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
     }
 
 
+    Subscription editTextSub;
 
 
     @Nullable
@@ -138,7 +140,7 @@ public class EditItemCategoryFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         setRetainInstance(true);
-        View rootView = inflater.inflate(R.layout.content_edit_item_category_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.content_edit_admin, container, false);
 
         ButterKnife.bind(this,rootView);
 
@@ -146,21 +148,18 @@ public class EditItemCategoryFragment extends Fragment {
         {
 //            shopAdmin = getActivity().getIntent().getParcelableExtra(SHOP_ADMIN_INTENT_KEY);
 
-            current_mode = getActivity().getIntent().getIntExtra(EDIT_MODE_INTENT_KEY,MODE_ADD);
-            parent = getActivity().getIntent().getParcelableExtra(ITEM_CATEGORY_INTENT_KEY);
+            current_mode = getActivity().getIntent().getIntExtra(EDIT_MODE_INTENT_KEY,MODE_UPDATE);
 
             if(current_mode == MODE_UPDATE)
             {
-                itemCategory = UtilityItemCategory.getItemCategory(getContext());
-            }
-            else if (current_mode == MODE_ADD)
-            {
-//                item.setItemCategoryID(itemCategory.getItemCategoryID());
-//                System.out.println("Item Category ID : " + item.getItemCategoryID());
+                admin = UtilityLogin.getAdmin(getContext());
+
+//                System.out.println("Current Mode : " + current_mode + " Admin ID" + admin.getAdminID());
             }
 
 
-            if(itemCategory !=null) {
+            if(admin !=null) {
+
                 bindDataToViews();
             }
 
@@ -179,13 +178,42 @@ public class EditItemCategoryFragment extends Fragment {
         updateIDFieldVisibility();
 
 
-        if(itemCategory !=null) {
-            loadImage(itemCategory.getImagePath());
+        if(admin !=null) {
+            loadImage(admin.getProfileImageURL());
             showLogMessage("Inside OnCreateView : DeliveryGUySelf : Not Null !");
         }
 
 
         showLogMessage("Inside On Create View !");
+
+
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .unsubscribeOn(AndroidSchedulers.mainThread())
+
+//        EditText user = (EditText) rootView.findViewById(R.id.username);
+
+        editTextSub = RxTextView
+                .textChanges(username)
+                .debounce(700, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<CharSequence>() {
+                    @Override
+                    public void call(CharSequence value) {
+                        // do some work with new text
+                        usernameCheck();
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                        System.out.println(throwable.toString());
+
+                    }
+                });
+
+
 
         return rootView;
     }
@@ -195,12 +223,12 @@ public class EditItemCategoryFragment extends Fragment {
 
         if(current_mode==MODE_ADD)
         {
-            buttonUpdateItem.setText("Add Item Category");
-            itemCategoryID.setVisibility(View.GONE);
+            buttonUpdateItem.setText("Create Account");
+            item_id.setVisibility(View.GONE);
         }
         else if(current_mode== MODE_UPDATE)
         {
-            itemCategoryID.setVisibility(View.VISIBLE);
+            item_id.setVisibility(View.VISIBLE);
             buttonUpdateItem.setText("Save");
         }
     }
@@ -218,9 +246,7 @@ public class EditItemCategoryFragment extends Fragment {
 
     void loadImage(String imagePath) {
 
-        String iamgepath = UtilityGeneral.getServiceURL(getContext()) + "/api/v1/ItemCategory/Image/" + imagePath;
-
-        System.out.println(iamgepath);
+        String iamgepath = UtilityGeneral.getServiceURL(getContext()) + "/api/v1/Admin/Image/" + imagePath;
 
         Picasso.with(getContext())
                 .load(iamgepath)
@@ -242,7 +268,7 @@ public class EditItemCategoryFragment extends Fragment {
 
         if(current_mode == MODE_ADD)
         {
-            itemCategory = new ItemCategory();
+            admin = new Admin();
             addAccount();
         }
         else if(current_mode == MODE_UPDATE)
@@ -256,16 +282,98 @@ public class EditItemCategoryFragment extends Fragment {
     {
         boolean isValid = true;
 
-        if(itemCategoryName.getText().toString().length()==0)
+
+        if(phone.getText().toString().length()==0)
         {
-            itemCategoryName.setError("Item Name cannot be empty !");
-            itemCategoryName.requestFocus();
+            phone.setError("Please enter Phone Number");
+            phone.requestFocus();
             isValid= false;
         }
 
 
+        if(password.getText().toString().length()==0)
+        {
+            password.requestFocus();
+            password.setError("Password cannot be empty");
+            isValid = false;
+        }
+
+
+        if(username.getText().toString().length()==0)
+        {
+            username.requestFocus();
+            username.setError("Username cannot be empty");
+            isValid= false;
+        }
+
+
+        if(name.getText().toString().length()==0)
+        {
+
+//            Drawable drawable = ContextCompat.getDrawable(getContext(),R.drawable.ic_close_black_24dp);
+            name.requestFocus();
+            name.setError("Name cannot be empty");
+            isValid = false;
+        }
+
 
         return isValid;
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(editTextSub!=null && !editTextSub.isUnsubscribed())
+        {
+            editTextSub.unsubscribe();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+//    @OnTextChanged(R.id.username)
+    void usernameCheck()
+    {
+
+
+        if(admin !=null && admin.getUsername()!=null
+                &&
+                username.getText().toString().equals(admin.getUsername()))
+        {
+            username.setTextColor(ContextCompat.getColor(getContext(),R.color.gplus_color_1));
+            return;
+        }
+
+
+        Call<ResponseBody> call = adminService.checkUsernameExist(username.getText().toString());
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if(response.code()==200)
+                {
+                    //username already exists
+                    username.setTextColor(ContextCompat.getColor(getContext(),R.color.gplus_color_4));
+                    username.setError("Username already exist !");
+                }
+                else if(response.code() == 204)
+                {
+                    username.setTextColor(ContextCompat.getColor(getContext(),R.color.gplus_color_1));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
 
@@ -290,7 +398,7 @@ public class EditItemCategoryFragment extends Fragment {
         else
         {
             // post request
-            retrofitPOSTRequest();
+//            retrofitPOSTRequest();
         }
 
     }
@@ -304,7 +412,7 @@ public class EditItemCategoryFragment extends Fragment {
 
 
             // delete previous Image from the Server
-            deleteImage(itemCategory.getImagePath());
+            deleteImage(admin.getProfileImageURL());
 
             /*ImageCalls.getInstance()
                     .deleteImage(
@@ -316,7 +424,7 @@ public class EditItemCategoryFragment extends Fragment {
             if(isImageRemoved)
             {
 
-                itemCategory.setImagePath(null);
+                admin.setProfileImageURL(null);
                 retrofitPUTRequest();
 
             }else
@@ -340,38 +448,42 @@ public class EditItemCategoryFragment extends Fragment {
 
     void bindDataToViews()
     {
-        if(itemCategory !=null) {
+        if(admin !=null) {
+
+            item_id.setText(String.valueOf(admin.getAdminID()));
+            name.setText(admin.getAdministratorName());
+            username.setText(admin.getUsername());
+            password.setText(admin.getPassword());
+            about.setText(admin.getAbout());
+            designation.setText(admin.getDesignation());
+            phone.setText(admin.getPhone());
 
 
-            itemCategoryID.setText(String.valueOf(itemCategory.getItemCategoryID()));
-            itemCategoryName.setText(itemCategory.getCategoryName());
-            itemCategoryDescription.setText(itemCategory.getCategoryDescription());
-            isLeafNode.setChecked(itemCategory.getIsLeafNode());
-            isAbstractNode.setChecked(itemCategory.getisAbstractNode());
-            descriptionShort.setText(itemCategory.getDescriptionShort());
-            itemCategoryOrder.setText(String.valueOf(itemCategory.getCategoryOrder()));
+//            switchEnable.setChecked(admin.getEnabled());
 
+            makeAccountPrivate.setChecked(admin.isAccountPrivate());
 
-//            itemID.setText(String.valueOf(item.getItemID()));
-//            itemName.setText(item.getItemName());
-//            itemDescription.setText(item.getItemDescription());
-//
-//            quantityUnit.setText(item.getQuantityUnit());
-//            itemDescriptionLong.setText(item.getItemDescriptionLong());
+//            govtIDName.setText(admin.getGovtIDName());
+//            govtIDNumber.setText(admin.getGovtIDNumber());
+
+//            createUpdateItemCat.setChecked(admin.isCreateUpdateItemCategory());
+//            createUpdateItems.setChecked(admin.isCreateUpdateItems());
+
+//            approveShopAdminAccounts.setChecked(admin.isApproveShopAdminAccounts());
+//            approveShops.setChecked(admin.isApproveShops());
+//            approveEndUserAccounts.setChecked(admin.isApproveEndUserAccounts());
+
         }
     }
 
 
-
-
-
     void getDataFromViews()
     {
-        if(itemCategory ==null)
+        if(admin ==null)
         {
             if(current_mode == MODE_ADD)
             {
-//                item = new Item();
+                admin = new Admin();
             }
             else
             {
@@ -384,19 +496,27 @@ public class EditItemCategoryFragment extends Fragment {
 //            deliveryGuySelf.setShopID(UtilityShopHome.getShop(getContext()).getShopID());
 //        }
 
+        admin.setAdministratorName(name.getText().toString());
+        admin.setUsername(username.getText().toString());
+        admin.setPassword(password.getText().toString());
+        admin.setAbout(about.getText().toString());
+        admin.setDesignation(designation.getText().toString());
+        admin.setPhone(phone.getText().toString());
 
 
-        itemCategory.setCategoryName(itemCategoryName.getText().toString());
-        itemCategory.setCategoryDescription(itemCategoryDescription.getText().toString());
-        itemCategory.setDescriptionShort(descriptionShort.getText().toString());
-        itemCategory.setIsLeafNode(isLeafNode.isChecked());
-        itemCategory.setisAbstractNode(isAbstractNode.isChecked());
-        itemCategory.setCategoryOrder(Integer.parseInt(itemCategoryOrder.getText().toString()));
+//        admin.setEnabled(switchEnable.isChecked());
 
-//        item.setItemName(itemName.getText().toString());
-//        item.setItemDescription(itemDescription.getText().toString());
-//        item.setItemDescriptionLong(itemDescriptionLong.getText().toString());
-//        item.setQuantityUnit(quantityUnit.getText().toString());
+        admin.setAccountPrivate(makeAccountPrivate.isChecked());
+
+//        admin.setGovtIDName(govtIDName.getText().toString());
+//        admin.setGovtIDNumber(govtIDNumber.getText().toString());
+
+//        admin.setCreateUpdateItemCategory(createUpdateItemCat.isChecked());
+//        admin.setCreateUpdateItems(createUpdateItems.isChecked());
+
+//        admin.setApproveShopAdminAccounts(approveShopAdminAccounts.isChecked());
+//        admin.setApproveShops(approveShops.isChecked());
+//        admin.setApproveEndUserAccounts(approveEndUserAccounts.isChecked());
     }
 
 
@@ -407,11 +527,9 @@ public class EditItemCategoryFragment extends Fragment {
         getDataFromViews();
 
 
-        Call<ResponseBody> call = itemCategoryService.updateItemCategory(
-                UtilityLogin.getAuthorizationHeaders(getContext()),
-                itemCategory,itemCategory.getItemCategoryID()
-        );
-
+//        final Staff admin = UtilityStaff.getStaff(getContext());
+        Call<ResponseBody> call = adminService.putAdmin(UtilityLogin.getAuthorizationHeaders(
+                                                        getContext()), admin);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -420,68 +538,64 @@ public class EditItemCategoryFragment extends Fragment {
                 if(response.code()==200)
                 {
                     showToastMessage("Update Successful !");
-                    UtilityItemCategory.saveItemCategory(itemCategory,getContext());
-                }
-                else if(response.code()== 403 || response.code() ==401)
-                {
-                    showToastMessage("Failed ! Reason : Not Permitted !");
+                    UtilityLogin.saveAdmin(admin,getContext());
+                    UtilityLogin.saveCredentials(getActivity(),admin.getUsername(),admin.getPassword());
                 }
                 else
                 {
-                    showToastMessage("Update Failed Code : " + response.code());
+                    showToastMessage("Update Failed Code : " + String.valueOf(response.code()));
                 }
+
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+                showToastMessage("Update Failed !");
             }
         });
-
     }
 
 
-    void retrofitPOSTRequest()
-    {
-        getDataFromViews();
-        itemCategory.setParentCategoryID(parent.getItemCategoryID());
-
-//        System.out.println("Item Category ID (POST) : " + item.getItemCategoryID());
-
-        Call<ItemCategory> call = itemCategoryService.insertItemCategory(UtilityLogin.getAuthorizationHeaders(getContext()), itemCategory);
-
-        call.enqueue(new Callback<ItemCategory>() {
-            @Override
-            public void onResponse(Call<ItemCategory> call, Response<ItemCategory> response) {
-
-                if(response.code()==201)
-                {
-                    showToastMessage("Add successful !");
-
-                    current_mode = MODE_UPDATE;
-                    updateIDFieldVisibility();
-                    itemCategory = response.body();
-                    bindDataToViews();
-
-                    UtilityItemCategory.saveItemCategory(itemCategory,getContext());
-
-                }
-                else
-                {
-                    showToastMessage("Add failed Code : " + response.code());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ItemCategory> call, Throwable t) {
-                showToastMessage("Add failed !");
-            }
-        });
-
-    }
-
-
+//    void retrofitPOSTRequest()
+//    {
+//        getDataFromViews();
+//
+////        final Staff staffTemp = UtilityStaff.getStaff(getContext());
+//        Call<Staff> call = adminService.putAdmin(UtilityLogin.getAuthorizationHeaders(getContext()), admin);
+//
+//        call.enqueue(new Callback<Staff>() {
+//            @Override
+//            public void onResponse(Call<Staff> call, Response<Staff> response) {
+//
+//                if(response.code()==201)
+//                {
+//                    showToastMessage("Add successful !");
+//
+//                    current_mode = MODE_UPDATE;
+//                    updateIDFieldVisibility();
+//                    admin = response.body();
+//                    bindDataToViews();
+//
+//                    UtilityStaff.saveStaff(admin,getContext());
+//
+//                }
+//                else
+//                {
+//                    showToastMessage("Add failed !");
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Staff> call, Throwable t) {
+//
+//                showToastMessage("Add failed !");
+//
+//            }
+//        });
+//    }
 
 
     @Override
@@ -503,7 +617,7 @@ public class EditItemCategoryFragment extends Fragment {
 
     void showToastMessage(String message)
     {
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),message, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -668,7 +782,7 @@ public class EditItemCategoryFragment extends Fragment {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    showToastMessage("Permission Granted !");
+//                    showToastMessage("Permission Granted !");
                     pickShopImage();
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
@@ -676,7 +790,7 @@ public class EditItemCategoryFragment extends Fragment {
                 } else {
 
 
-                    showToastMessage("Permission Denied for Read External Storage . ");
+                    showToastMessage("Permission Denied for Reading External Storage ! ");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
@@ -743,7 +857,7 @@ public class EditItemCategoryFragment extends Fragment {
 
 
 
-        Call<Image> imageCall = itemCategoryService.uploadImage(UtilityLogin.getAuthorizationHeaders(getContext()),
+        Call<Image> imageCall = adminService.uploadImage(UtilityLogin.getAuthorizationHeaders(getContext()),
                 requestBodyBinary);
 
 
@@ -760,20 +874,20 @@ public class EditItemCategoryFragment extends Fragment {
 //                    loadImage(image.getPath());
 
 
-                    itemCategory.setImagePath(image.getPath());
+                    admin.setProfileImageURL(image.getPath());
 
                 }
                 else if(response.code()==417)
                 {
                     showToastMessage("Cant Upload Image. Image Size should not exceed 2 MB.");
 
-                    itemCategory.setImagePath(null);
+                    admin.setProfileImageURL(null);
 
                 }
                 else
                 {
                     showToastMessage("Image Upload failed !");
-                    itemCategory.setImagePath(null);
+                    admin.setProfileImageURL(null);
 
                 }
 
@@ -783,7 +897,7 @@ public class EditItemCategoryFragment extends Fragment {
                 }
                 else
                 {
-                    retrofitPOSTRequest();
+//                    retrofitPOSTRequest();
                 }
 
 
@@ -793,8 +907,7 @@ public class EditItemCategoryFragment extends Fragment {
             public void onFailure(Call<Image> call, Throwable t) {
 
                 showToastMessage("Image Upload failed !");
-                itemCategory.setImagePath(null);
-
+                admin.setProfileImageURL(null);
 
                 if(isModeEdit)
                 {
@@ -802,7 +915,7 @@ public class EditItemCategoryFragment extends Fragment {
                 }
                 else
                 {
-                    retrofitPOSTRequest();
+//                    retrofitPOSTRequest();
                 }
             }
         });
@@ -813,11 +926,7 @@ public class EditItemCategoryFragment extends Fragment {
 
     void deleteImage(String filename)
     {
-        Call<ResponseBody> call = itemCategoryService.deleteImage(
-                UtilityLogin.getAuthorizationHeaders(getContext()),
-                filename);
-
-
+        Call<ResponseBody> call = adminService.deleteImage(UtilityLogin.getAuthorizationHeaders(getContext()),filename);
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override

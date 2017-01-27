@@ -25,7 +25,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
@@ -224,7 +224,7 @@ public class AddService extends AppCompatActivity implements Callback<Image>, Ad
 
     void addNewService(String imagePath) {
 
-        ServiceConfiguration serviceConfigurationForAdd = new ServiceConfiguration();
+        ServiceConfigurationLocal serviceConfigurationForAdd = new ServiceConfigurationLocal();
 
         serviceConfigurationForAdd.setLogoImagePath(imagePath);
 //        serviceConfigurationForAdd.setConfigurationNickname(nickname.getText().toString());

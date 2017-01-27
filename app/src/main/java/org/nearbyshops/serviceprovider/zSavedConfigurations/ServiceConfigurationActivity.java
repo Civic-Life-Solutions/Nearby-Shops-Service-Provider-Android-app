@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 
@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ServiceConfigurationActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, ServiceConfigurationAdapter.NotificationReceiver, Callback<List<ServiceConfiguration>> {
+public class ServiceConfigurationActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, ServiceConfigurationAdapter.NotificationReceiver, Callback<List<ServiceConfigurationLocal>> {
 
     @Inject
     ServiceConfigurationService configurationService;
@@ -41,10 +41,10 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
 
     SwipeRefreshLayout swipeContainer;
 
-    List<ServiceConfiguration> dataset = new ArrayList<>();
+    List<ServiceConfigurationLocal> dataset = new ArrayList<>();
 
 
-    ServiceConfiguration serviceConfiguration = null;
+    ServiceConfigurationLocal serviceConfiguration = null;
 
 
     public final static String INTENT_REQUEST_CODE_KEY = "request_code_key";
@@ -158,7 +158,7 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
     void makeNetworkCall()
     {
 
-//        Call<List<ServiceConfiguration>> call = configurationService.getServices(0,0,null,null,null,0,0);
+//        Call<List<ServiceConfigurationLocal>> call = configurationService.getServices(0,0,null,null,null,0,0);
 //
 //        call.enqueue(this);
     }
@@ -247,7 +247,7 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
 
 
     @Override
-    public void notifyEdit(ServiceConfiguration serviceConfiguration) {
+    public void notifyEdit(ServiceConfigurationLocal serviceConfiguration) {
 
 //        Intent intent = new Intent(this, EditAddressActivity.class);
 //        intent.putExtra(EditAddressActivity.DELIVERY_VEHICLE_SELF_INTENT_KEY,deliveryVehicleSelf);
@@ -256,14 +256,14 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
     }
 
     @Override
-    public void notifyRemove(ServiceConfiguration serviceConfiguration) {
+    public void notifyRemove(ServiceConfigurationLocal serviceConfiguration) {
 
         showToastMessage("Remove");
 
     }
 
     @Override
-    public void notifyListItemClick(ServiceConfiguration serviceConfiguration) {
+    public void notifyListItemClick(ServiceConfigurationLocal serviceConfiguration) {
 
         requestCode = getIntent().getIntExtra(INTENT_REQUEST_CODE_KEY,0);
 
@@ -305,7 +305,7 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
 
 
     @Override
-    public void onResponse(Call<List<ServiceConfiguration>> call, Response<List<ServiceConfiguration>> response) {
+    public void onResponse(Call<List<ServiceConfigurationLocal>> call, Response<List<ServiceConfigurationLocal>> response) {
 
         if(response.body()!=null)
         {
@@ -327,7 +327,7 @@ public class ServiceConfigurationActivity extends AppCompatActivity implements S
     }
 
     @Override
-    public void onFailure(Call<List<ServiceConfiguration>> call, Throwable t) {
+    public void onFailure(Call<List<ServiceConfigurationLocal>> call, Throwable t) {
 
         showToastMessage("Network Request failed !");
         swipeContainer.setRefreshing(false);

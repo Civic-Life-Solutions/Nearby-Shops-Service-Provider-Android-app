@@ -36,6 +36,7 @@ import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemCategoryEndPoint;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.serviceprovider.R;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemCategoryServiceGIDB;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemServiceGIDB;
@@ -96,6 +97,7 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
     @Inject ItemCategoryServiceGIDB itemCategoryService;
     @Inject ItemServiceGIDB itemServiceGIDB;
     @Inject ItemService itemService;
+    @Inject ItemCategoryService itemCatService;
 
     ItemCategory currentCategory = null;
 
@@ -386,7 +388,7 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
 
 
         Call<ItemCategoryEndPoint> endPointCall = itemCategoryService.getItemCategoriesQuerySimple(
-                currentCategory.getItemCategoryID(),null,"id",null,null
+                currentCategory.getItemCategoryID(),null,ItemCategory.CATEGORY_ORDER,null,null
         );
 
         //"id"
@@ -492,6 +494,7 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
 
         swipeContainer.setRefreshing(false);
     }
+
 
 
 
@@ -722,9 +725,64 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
 
     @Override
     public void copySelected() {
-
         copyItems();
+        copyItemCat();
     }
+
+    void copyItemCat()
+    {
+
+        ItemCategory parent = getActivity().getIntent().getParcelableExtra(AddFromGlobal.INTENT_KEY_ITEM_CAT_PARENT);
+
+        List<ItemCategory> tempList = new ArrayList<>();
+
+        for(Map.Entry<Integer,ItemCategory> entry : listAdapter.selectedItemCategories.entrySet())
+        {
+            if(parent!=null)
+            {
+                entry.getValue().setParentCategoryID(parent.getItemCategoryID());
+            }
+            entry.getValue().setRt_gidb_service_url(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+            tempList.add(entry.getValue());
+        }
+
+
+        Call<ResponseBody> call = itemCatService.addItemCatFromGlobal(UtilityLogin.getAuthorizationHeaders(getActivity()), tempList);
+
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if(response.code()==201)
+                {
+                    showToastMessage("Item Categories Copied !");
+                    clearSelectedItems();
+                    clearSelectedItemCat();
+                }
+                else if(response.code()==206)
+                {
+                    showToastMessage("Few Item Categories Copied !");
+                }
+                else if(response.code()==304)
+                {
+                    showToastMessage("No item categories updated !");
+                }
+                else
+                {
+                    showToastMessage("Unknown server error Code : " + String.valueOf(response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                showToastMessage("Failed !");
+            }
+        });
+    }
+
+
 
 
     void copyItems()
@@ -753,7 +811,8 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
 
                 if(response.code()==201)
                 {
-                    showToastMessage("Successfully Copied !");
+//                    showToastMessage("Successfully Copied !");
+                    showToastMessage("Items Copied !");
                     clearSelectedItems();
                     clearSelectedItemCat();
                 }

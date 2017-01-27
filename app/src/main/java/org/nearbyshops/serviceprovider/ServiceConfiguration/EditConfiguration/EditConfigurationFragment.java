@@ -16,31 +16,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jakewharton.rxbinding.widget.RxTextView;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.ModelRoles.Staff;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
-import org.nearbyshops.serviceprovider.StaffAccounts.UtilityStaff;
 import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
@@ -50,7 +43,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -64,8 +56,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -105,6 +95,9 @@ public class EditConfigurationFragment extends Fragment{
     @Bind(R.id.spinner_service_level) Spinner spinnerServiceLevel;
     @Bind(R.id.spinner_service_type) Spinner spinnerServiceType;
 
+    @Bind(R.id.description_short) EditText descriptionShort;
+    @Bind(R.id.description_long) EditText descriptionLong;
+
     ArrayList<String> countryCodeList = new ArrayList<>();
     ArrayList<String> languageCodeList = new ArrayList<>();
 
@@ -118,7 +111,7 @@ public class EditConfigurationFragment extends Fragment{
 
     int current_mode = MODE_ADD;
 
-    ServiceConfiguration serviceConfiguration = null;
+    ServiceConfigurationLocal serviceConfiguration = null;
 
 
     public EditConfigurationFragment() {
@@ -287,7 +280,7 @@ public class EditConfigurationFragment extends Fragment{
 
         if(current_mode == MODE_ADD)
         {
-            serviceConfiguration = new ServiceConfiguration();
+            serviceConfiguration = new ServiceConfigurationLocal();
             addAccount();
         }
         else if(current_mode == MODE_UPDATE)
@@ -436,6 +429,8 @@ public class EditConfigurationFragment extends Fragment{
             longitude.setText(String.valueOf(serviceConfiguration.getLonCenter()));
             serviceConverage.setText(String.valueOf(serviceConfiguration.getServiceRange()));
 
+            descriptionShort.setText(serviceConfiguration.getDescriptionShort());
+            descriptionLong.setText(serviceConfiguration.getDescriptionLong());
         }
     }
 
@@ -446,7 +441,7 @@ public class EditConfigurationFragment extends Fragment{
         {
             if(current_mode == MODE_ADD)
             {
-                serviceConfiguration = new ServiceConfiguration();
+                serviceConfiguration = new ServiceConfigurationLocal();
             }
             else
             {
@@ -495,6 +490,10 @@ public class EditConfigurationFragment extends Fragment{
         {
             serviceConfiguration.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
         }
+
+
+        serviceConfiguration.setDescriptionShort(descriptionShort.getText().toString());
+        serviceConfiguration.setDescriptionLong(descriptionLong.getText().toString());
     }
 
 

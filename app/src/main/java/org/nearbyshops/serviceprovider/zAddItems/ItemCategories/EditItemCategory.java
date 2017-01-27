@@ -210,7 +210,7 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
 
             isLeafNode.setChecked(itemCategoryForEdit.getIsLeafNode());
 
-            isAbstractNode.setChecked(itemCategoryForEdit.getAbstractNode());
+            isAbstractNode.setChecked(itemCategoryForEdit.getisAbstractNode());
             descriptionShort.setText(itemCategoryForEdit.getDescriptionShort());
         }
     }
@@ -225,7 +225,7 @@ public class EditItemCategory extends AppCompatActivity implements Callback<Imag
             itemCategory.setCategoryDescription(itemCategoryDescription.getText().toString());
             itemCategory.setIsLeafNode(isLeafNode.isChecked());
 
-            itemCategory.setAbstractNode(isAbstractNode.isChecked());
+            itemCategory.setisAbstractNode(isAbstractNode.isChecked());
             itemCategory.setDescriptionShort(descriptionShort.getText().toString());
         }
 

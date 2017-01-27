@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfiguration;
+import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
@@ -36,7 +36,7 @@ import butterknife.OnClick;
 public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceConfigurationAdapter.ViewHolder>{
 
 
-    List<ServiceConfiguration> dataset = null;
+    List<ServiceConfigurationLocal> dataset = null;
 
 
     Context context;
@@ -44,7 +44,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
 
 
-    public ServiceConfigurationAdapter(List<ServiceConfiguration> dataset, Context context, NotificationReceiver notificationReceiver) {
+    public ServiceConfigurationAdapter(List<ServiceConfigurationLocal> dataset, Context context, NotificationReceiver notificationReceiver) {
 
         this.dataset = dataset;
         this.context = context;
@@ -65,7 +65,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        ServiceConfiguration serviceConfiguration = dataset.get(position);
+        ServiceConfigurationLocal serviceConfiguration = dataset.get(position);
 
         if(serviceConfiguration != null)
         {
@@ -229,7 +229,7 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                    builder.setTitle("Confirm Remove ServiceConfiguration Configuration !")
+                    builder.setTitle("Confirm Remove ServiceConfigurationLocal Configuration !")
                             .setMessage("Do you want to remove this configuration.")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
@@ -287,11 +287,11 @@ public class ServiceConfigurationAdapter extends RecyclerView.Adapter<ServiceCon
 
     public interface NotificationReceiver{
 
-        void notifyEdit(ServiceConfiguration serviceConfiguration);
+        void notifyEdit(ServiceConfigurationLocal serviceConfiguration);
 
-        void notifyRemove(ServiceConfiguration serviceConfiguration);
+        void notifyRemove(ServiceConfigurationLocal serviceConfiguration);
 
-        void notifyListItemClick(ServiceConfiguration serviceConfiguration);
+        void notifyListItemClick(ServiceConfigurationLocal serviceConfiguration);
 
     }
 

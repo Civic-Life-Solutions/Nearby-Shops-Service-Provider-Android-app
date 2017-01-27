@@ -27,6 +27,8 @@
         <item>Government</item>
         <item>Commertial</item>
     </string-array>
+
+
     <string name="title_activity_maps">Map</string>
 
     <!-- An Abstract Item Category can have only Sub Item Categories and cannot contain items under them. -->

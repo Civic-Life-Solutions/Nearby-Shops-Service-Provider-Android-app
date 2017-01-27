@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -302,15 +303,22 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-//                                    deleteItemCategory();
+                                    if(dataset.get(getLayoutPosition()) instanceof ItemCategory)
+                                    {
+                                        notificationReceiver
+                                                .notifyDeleteItemCat(
+                                                        (ItemCategory) dataset.get(getLayoutPosition()),
+                                                        getLayoutPosition()
+                                                );
+                                    }
                                 }
                             })
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
+                                    showToastMessage("Cancelled !");
 
-//                                    showToastMessage("Cancelled !");
                                 }
                             })
                             .show();
@@ -486,7 +494,16 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-//                                    deleteItemCategory();
+                                    if(dataset.get(getLayoutPosition())instanceof Item)
+                                    {
+                                        notificationReceiver
+                                                .notifyDeleteItem(
+                                                        (Item) dataset.get(getLayoutPosition()),
+                                                        getLayoutPosition()
+                                                );
+                                    }
+
+
                                 }
                             })
                             .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -494,7 +511,7 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 public void onClick(DialogInterface dialog, int which) {
 
 
-//                                    showToastMessage("Cancelled !");
+                                    showToastMessage("Cancelled !");
                                 }
                             })
                             .show();
@@ -542,6 +559,12 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }// ViewHolder Class declaration ends
 
 
+    private void showToastMessage(String message)
+    {
+        Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+    }
+
+
 
 
     interface NotificationsFromAdapter
@@ -552,10 +575,11 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         void notifyItemSelected();
 
         void detachItemCat(ItemCategory itemCategory);
-        void notifyDeleteItemCat();
+        void notifyDeleteItemCat(ItemCategory itemCategory, int position);
         void changeParentItemCat(ItemCategory itemCategory);
 
         void detachItem(Item item);
+        void notifyDeleteItem(Item item, int position);
         void changeParentItem(Item item);
     }
 
