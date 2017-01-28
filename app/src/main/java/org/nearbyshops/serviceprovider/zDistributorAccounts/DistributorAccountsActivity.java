@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import com.wunderlist.slidinglayer.SlidingLayer;
 
-import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.NotifySort;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.R;
@@ -23,7 +23,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DistributorAccountsActivity extends AppCompatActivity
-        implements ToggleFab,NotifyTitleChanged, NotifySort{
+        implements ToggleFab,NotifyTitleChanged, NotifySort {
 
     private PagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;

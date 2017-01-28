@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ShopApprovals;
+package org.nearbyshops.serviceprovider.ShopApprovals.EditShop;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,7 +34,7 @@ public class UtilityShop {
     }
 
 
-    public static ShopAdmin getShop(Context context)
+    public static Shop getShop(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
 
@@ -48,7 +48,7 @@ public class UtilityShop {
 
         }else
         {
-            return gson.fromJson(json, ShopAdmin.class);
+            return gson.fromJson(json, Shop.class);
         }
     }
 

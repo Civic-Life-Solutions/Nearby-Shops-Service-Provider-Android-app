@@ -1,5 +1,7 @@
-package org.nearbyshops.serviceprovider.ShopApprovals;
+package org.nearbyshops.serviceprovider.ShopApprovals.Fragment;
 
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,12 +14,22 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.Interfaces.GetLocation;
+import org.nearbyshops.serviceprovider.Interfaces.NotifyLocation;
+import org.nearbyshops.serviceprovider.Interfaces.NotifySearch;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.Model.Shop;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ShopEndPoint;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopService;
+import org.nearbyshops.serviceprovider.ShopApprovals.EditShop.EditShop;
+import org.nearbyshops.serviceprovider.ShopApprovals.EditShop.EditShopFragment;
+import org.nearbyshops.serviceprovider.ShopApprovals.EditShop.UtilityShop;
+import org.nearbyshops.serviceprovider.ShopApprovals.SlidingLayerSort.UtilitySortShops;
+import org.nearbyshops.serviceprovider.ShopApprovals.UtilityLocation;
 import org.nearbyshops.serviceprovider.Utility.DividerItemDecoration;
+import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +46,11 @@ import retrofit2.Response;
  */
 
 
-public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Adapter.NotifyConfirmOrder {
+public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Adapter.NotifyByShopAdapter ,NotifySearch, NotifySort,NotifyLocation{
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    Location location;
 
     @Inject
     ShopService shopService;
@@ -119,7 +133,7 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
     void setupRecyclerView()
     {
 
-        adapter = new Adapter(dataset,this,getContext());
+        adapter = new Adapter(dataset,this,getContext(),this);
 
         recyclerView.setAdapter(adapter);
 
@@ -132,7 +146,7 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
 //        layoutManager.setSpanCount(metrics.widthPixels/400);
 
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
 
         int spanCount = (int) (metrics.widthPixels/(230 * metrics.density));
 
@@ -148,24 +162,22 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if(layoutManager.findLastVisibleItemPosition()==dataset.size()-1)
+
+
+                if(offset + limit > layoutManager.findLastVisibleItemPosition()+1-1)
+                {
+                    return;
+                }
+
+                if(layoutManager.findLastVisibleItemPosition()==dataset.size()-1+1)
                 {
                     // trigger fetch next page
-
-                    if(layoutManager.findLastVisibleItemPosition() == previous_position)
-                    {
-                        return;
-                    }
-
 
                     if((offset+limit)<=item_count)
                     {
                         offset = offset + limit;
-                        makeNetworkCall(false);
+                        makeNetworkCall(false,false);
                     }
-
-                    previous_position = layoutManager.findLastVisibleItemPosition();
-
                 }
 
             }
@@ -173,13 +185,10 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
     }
 
 
-    int previous_position = -1;
 
     @Override
     public void onRefresh() {
-
-        offset = 0;
-        makeNetworkCall(true);
+        makeNetworkCall(true,true);
     }
 
     void makeRefreshNetworkCall()
@@ -199,17 +208,51 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
 
 
 
-    void makeNetworkCall(final boolean clearDataset)
+    void makeNetworkCall(final boolean clearDataset,boolean resetOffset)
     {
+        if(resetOffset)
+        {
+            offset = 0;
+        }
+
 
         Call<ShopEndPoint> call = null;
+
+        String current_sort = "";
+        current_sort = UtilitySortShops.getSort(getContext()) + " " + UtilitySortShops.getAscending(getContext());
+
+
+        Double latitude = null;
+        Double longitude = null;
+
+
+        if(getActivity() instanceof GetLocation)
+        {
+            this.location = ((GetLocation)getActivity()).getLocation();
+        }
+
+        if(location!=null)
+        {
+            showToastMessage("Location" + String.valueOf(this.location.getLongitude()) + " : " + String.valueOf(this.location.getLatitude()));
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+
+
+//        latitude = UtilityLocation.getLatitude(getActivity());
+//        longitude = UtilityLocation.getLongitude(getActivity());
+
+//        showToastMessage("Latitude : " + UtilityLocation.getLatitude(getActivity()) + " : Longitude " + UtilityLocation.getLongitude(getActivity()));
 
 
         if(getArguments().getInt(ARG_SECTION_NUMBER) == MODE_DISABLED)
         {
-            call = shopService.getShopListSimple(false,false,
-                    null,null,null,null,null,
-                    null,null,limit,offset);
+            call = shopService.getShopListSimple(
+                    false,false,
+                    null,
+                    latitude,longitude,
+                    null,null,null,
+                    searchQuery,current_sort,limit,offset);
 
         }
         else if (getArguments().getInt(ARG_SECTION_NUMBER) == MODE_WAITLISTED)
@@ -217,8 +260,10 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
 
             call = shopService.getShopListSimple(
                     false,true,
-                    null,null,null,null,null,
-                    null,null,limit,offset);
+                    null,
+                    latitude,longitude,
+                    null,null,null,
+                    searchQuery,current_sort,limit,offset);
 
         }
         else if(getArguments().getInt(ARG_SECTION_NUMBER)==MODE_ENABLED)
@@ -226,8 +271,10 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
 
             call = shopService.getShopListSimple(
                     true,null,
-                    null,null,null,null,null,
-                    null,null,limit,offset);
+                    null,
+                    latitude,longitude,
+                    null,null, null,
+                    searchQuery,current_sort,limit,offset);
         }
 
 
@@ -358,15 +405,44 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
     @Override
     public void notifyEditClick(Shop shop) {
 
-//        UtilityShopAdmin.saveShopAdmin(shopAdmin,getContext());
-//
-//        Intent intent = new Intent(getContext(),EditStaffSelf.class);
-//        intent.putExtra(EditStaffSelfFragment.EDIT_MODE_INTENT_KEY,EditStaffSelfFragment.MODE_UPDATE);
-//        startActivity(intent);
+        UtilityShop.saveShop(shop,getActivity());
+        Intent intent = new Intent(getActivity(), EditShop.class);
+        intent.putExtra(EditShopFragment.EDIT_MODE_INTENT_KEY,EditShopFragment.MODE_UPDATE);
+        startActivity(intent);
+
     }
 
     @Override
     public void notifyListItemClick(Shop shop) {
 
+    }
+
+
+    String searchQuery = null;
+
+    @Override
+    public void search(String searchString) {
+        searchQuery = searchString;
+        makeRefreshNetworkCall();
+    }
+
+    @Override
+    public void endSearchMode() {
+        searchQuery = null;
+        makeRefreshNetworkCall();
+    }
+
+
+    @Override
+    public void notifySortChanged() {
+        makeRefreshNetworkCall();
+    }
+
+
+
+    @Override
+    public void fetchedLocation(Location location) {
+//        this.location = location;
+        makeRefreshNetworkCall();
     }
 }

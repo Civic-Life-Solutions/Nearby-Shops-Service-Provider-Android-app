@@ -188,15 +188,40 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
+
+        <!--<activity-->
+            <!--android:name=".ShopApprovals.ShopApprovals"-->
+            <!--android:label="@string/title_activity_shop_approals"-->
+            <!--android:parentActivityName=".Home"-->
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="org.nearbyshops.serviceprovider.Home" />-->
+        <!--</activity>-->
+
+
         <activity
+            android:launchMode="singleTop"
             android:name=".ShopApprovals.ShopApprovals"
-            android:label="@string/title_activity_shop_approals"
+            android:label="Order History"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.nearbyshops.serviceprovider.Home" />
+                android:value=".Home" />
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
         </activity>
+
+
+
+
         <activity
             android:name=".StaffAccounts.StaffAccounts"
             android:label="@string/title_activity_main"
@@ -296,6 +321,17 @@
                 android:value=".Home" />
         </activity>
 
+
+
+        <activity
+            android:name=".ShopApprovals.EditShop.EditShop"
+            android:label="Edit Shop"
+            android:parentActivityName=".ShopApprovals.ShopApprovals"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ShopApprovals.ShopApprovals" />
+        </activity>
 
     </application>
 

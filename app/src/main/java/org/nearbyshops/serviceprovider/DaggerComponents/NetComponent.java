@@ -15,6 +15,7 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.EditI
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesFragmentSimple;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfigurationFragment;
+import org.nearbyshops.serviceprovider.ShopApprovals.EditShop.EditShopFragment;
 import org.nearbyshops.serviceprovider.StaffHome.EditStaffSelf.EditStaffSelfFragment;
 import org.nearbyshops.serviceprovider.StaffHome.StaffHome;
 import org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountFragment;
@@ -33,7 +34,7 @@ import org.nearbyshops.serviceprovider.DaggerModules.NetModule;
 import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.EditShopAdmin.EditShopAdminFragment;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.FragmentShopAdmins;
-import org.nearbyshops.serviceprovider.ShopApprovals.FragmentShopApprovals;
+import org.nearbyshops.serviceprovider.ShopApprovals.Fragment.FragmentShopApprovals;
 import org.nearbyshops.serviceprovider.StaffAccounts.EditStaff.EditStaffFragment;
 import org.nearbyshops.serviceprovider.StaffAccounts.FragmentStaffAccounts;
 import org.nearbyshops.serviceprovider.zSavedConfigurations.AddService;
@@ -127,6 +128,8 @@ public interface NetComponent {
     void Inject(FragmentAddFromGlobal fragmentAddFromGlobal);
 
     void Inject(EditAdminFragment editAdminFragment);
+
+    void Inject(EditShopFragment editShopFragment);
 
 
 //    void Inject(LoginDialog loginDialog);

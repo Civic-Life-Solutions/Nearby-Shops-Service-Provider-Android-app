@@ -1,17 +1,18 @@
-package org.nearbyshops.serviceprovider.ShopApprovals;
+package org.nearbyshops.serviceprovider.zDistributorAccounts;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-
-import org.nearbyshops.serviceprovider.ShopApprovals.Fragment.FragmentShopApprovals;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
- * Created by sumeet on 24/11/16.
+ * Created by sumeet on 28/9/16.
  */
 
+public class PagerAdapter extends FragmentStatePagerAdapter {
 
-public class PagerAdapter extends FragmentPagerAdapter {
+    private DistributorAccountFragment distributorAccountFragment = new DistributorAccountFragment(0);
+    private DistributorAccountFragment distributorAccountFragmentTwo = new DistributorAccountFragment(1);
+    private DistributorAccountFragment distributorAccountFragmentThree = new DistributorAccountFragment(2);
 
     public PagerAdapter(FragmentManager fm) {
         super(fm);
@@ -20,23 +21,25 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a FragmentShopApprovals (defined as a static inner class below).
+        // Return a FragmentShopAdmins (defined as a static inner class below).
 
-        if(position==0)
+        if(position == 0)
         {
-            return FragmentShopApprovals.newInstance(FragmentShopApprovals.MODE_DISABLED);
+            return distributorAccountFragment;
         }
-        else if(position==1)
+        else if(position == 1)
         {
-            return FragmentShopApprovals.newInstance(FragmentShopApprovals.MODE_WAITLISTED);
+            return distributorAccountFragmentTwo;
         }
-        else if(position==2)
+        else if(position == 2)
         {
-            return FragmentShopApprovals.newInstance(FragmentShopApprovals.MODE_ENABLED);
+            return distributorAccountFragmentThree;
+        }
+        else
+        {
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
-
-        return FragmentShopApprovals.newInstance(position + 1);
     }
 
     @Override
@@ -59,12 +62,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     }
 
 
-
     private String titleDisabled = "Disabled (0/0)";
     private String titleWaitlisted = "Waitlisted (0/0)";
     private String titleEnabled = "Enabled (0/0)";
-//    private String titleDetachedItems = "Detached Items (0/0)";
-
 
     public void setTitle(String title, int tabPosition)
     {
@@ -74,23 +74,14 @@ public class PagerAdapter extends FragmentPagerAdapter {
         }
         else if (tabPosition == 1)
         {
-
             titleWaitlisted = title;
 
         }else if(tabPosition == 2)
         {
             titleEnabled = title;
 
-        }else if(tabPosition == 3)
-        {
-//            titleDetachedItems = title;
         }
-
 
         notifyDataSetChanged();
     }
-
-
-
-
 }
