@@ -134,7 +134,7 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
         if(role == UtilityLogin.ROLE_ADMIN)
         {
-            networkCallLoginAdmin();
+            networkCallLoginAdminSimple();
         }
         else if(role == UtilityLogin.ROLE_STAFF)
         {
@@ -196,7 +196,8 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     }
 
 
-    void networkCallLoginAdmin()
+
+    void networkCallLoginAdminSimple()
     {
 
         String username = this.username.getText().toString();
@@ -206,73 +207,117 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         setProgressBar(true);
 
 
-        Observable<Admin> call = adminService.getAdmin(UtilityLogin.baseEncoding(username,password));
+        Call<Admin> call = adminService.getAdminSimple(UtilityLogin.baseEncoding(username,password));
 
-        /*call.enqueue(new Callback<Admin>() {
+        call.enqueue(new Callback<Admin>() {
             @Override
             public void onResponse(Call<Admin> call, Response<Admin> response) {
 
+                if(response.code()==200)
+                {
 
-            }
+                    UtilityLogin.saveAdmin(response.body(),LoginScreen.this);
+                    startActivity(new Intent(LoginScreen.this,Home.class));
+
+                }
+                else
+                {
+                    showSnackBar("Failed Code : " + String.valueOf(response.code()));
+                }
+
+            setProgressBar(false);
+
+
+        }
 
             @Override
             public void onFailure(Call<Admin> call, Throwable t) {
 
+                showSnackBar("Failed Network !");
+
+                setProgressBar(false);
             }
-        });*/
-
-        call.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Admin>() {
-                    @Override
-                    public void onCompleted() {
-
-                        setProgressBar(false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        if(e instanceof HttpException)
-                        {
-                            HttpException response = (HttpException) e;
-                            Log.d("login",String.valueOf(response.code()));
-
-                            if(response.code()==403 || response.code() ==401)
-                            {
-                                showSnackBar("Unable to login. Username or password is incorrect !");
-                            }
-                            else
-                            {
-                                showSnackBar("LoginScreen failed. Please try again !");
-                            }
-
-                        }
-
-                        setProgressBar(false);
-
-                    }
-
-                    @Override
-                    public void onNext(Admin admin) {
-
-                        if(admin !=null)
-                        {
-                            Gson gson = new Gson();
-                            Log.d("login", gson.toJson(admin));
-
-                            UtilityLogin.saveAdmin(admin,LoginScreen.this);
-
-                            startActivity(new Intent(LoginScreen.this,Home.class));
-
-                        }
-
-                        setProgressBar(false);
-
-                    }
-                });
-
+        });
     }
+
+
+//    void networkCallLoginAdmin()
+//    {
+//
+//        String username = this.username.getText().toString();
+//        String password = this.password.getText().toString();
+//
+//
+//        setProgressBar(true);
+//
+//
+//        Observable<Admin> call = adminService.getAdmin(UtilityLogin.baseEncoding(username,password));
+//
+//        /*call.enqueue(new Callback<Admin>() {
+//            @Override
+//            public void onResponse(Call<Admin> call, Response<Admin> response) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Admin> call, Throwable t) {
+//
+//            }
+//        });*/
+//
+//        call.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<Admin>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                        setProgressBar(false);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                        if(e instanceof HttpException)
+//                        {
+//                            HttpException response = (HttpException) e;
+//                            Log.d("login",String.valueOf(response.code()));
+//
+//                            if(response.code()==403 || response.code() ==401)
+//                            {
+//                                showSnackBar("Unable to login. Username or password is incorrect !");
+//                            }
+//                            else
+//                            {
+//                                showSnackBar("LoginScreen failed. Please try again !");
+//                            }
+//
+//                        }
+//
+//                        setProgressBar(false);
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Admin admin) {
+//
+//                        if(admin !=null)
+//                        {
+//                            Gson gson = new Gson();
+//                            Log.d("login", gson.toJson(admin));
+//
+//                            UtilityLogin.saveAdmin(admin,LoginScreen.this);
+//
+//                            startActivity(new Intent(LoginScreen.this,Home.class));
+//
+//                        }
+//
+//                        setProgressBar(false);
+//
+//                    }
+//                });
+//
+//    }
 
 
 

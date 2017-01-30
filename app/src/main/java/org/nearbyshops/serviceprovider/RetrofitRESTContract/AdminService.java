@@ -24,8 +24,14 @@ import rx.Observable;
  */
 public interface AdminService {
 
+//    @GET("/api/v1/Admin/Login")
+//    Observable<Admin> getAdmin(@Header("Authorization")String headers);
+
+
     @GET("/api/v1/Admin/Login")
-    Observable<Admin> getAdmin(@Header("Authorization")String headers);
+    Call<Admin> getAdminSimple(@Header("Authorization")String headers);
+
+
 
     @PUT("/api/v1/Admin")
     Call<ResponseBody> putAdmin(@Header("Authorization")String headers,

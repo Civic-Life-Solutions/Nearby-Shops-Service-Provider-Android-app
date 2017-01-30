@@ -78,7 +78,12 @@ public class NetModule {
     Gson provideGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         //gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-        return gsonBuilder.create();
+        return gsonBuilder
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+
+//        .setDateFormat("yyyy-MM-dd hh:mm:ss.S")
     }
 
     @Provides
@@ -203,7 +208,7 @@ public class NetModule {
 
 
     @Provides
-    AdminService provideAdminService(@Named("reactive")Retrofit retrofit)
+    AdminService provideAdminService(@Named("normal")Retrofit retrofit)
     {
         return retrofit.create(AdminService.class);
     }

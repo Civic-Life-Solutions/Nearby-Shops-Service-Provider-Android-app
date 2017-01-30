@@ -24,16 +24,28 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/tabs"-->
+            <!--android:background="@color/blueGrey800"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:tabGravity="fill"-->
+            <!--app:tabMode="scrollable"-->
+            <!--app:tabIndicatorHeight="2dp"-->
+            <!--app:tabIndicatorColor="@color/gplus_color_2"-->
+            <!--app:tabBackground="@color/blueGrey800" />-->
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
-            android:background="@color/blueGrey800"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             app:tabGravity="fill"
             app:tabMode="scrollable"
+            app:tabTextAppearance="@style/AppTabTextAppearance"
+            android:background="@color/blueGrey800"
             app:tabIndicatorHeight="2dp"
-            app:tabIndicatorColor="@color/gplus_color_2"
-            app:tabBackground="@color/blueGrey800" />
+            app:tabSelectedTextColor="@color/gplus_color_2"
+            app:tabIndicatorColor="@color/gplus_color_2"/>
 
     </android.support.design.widget.AppBarLayout>
 

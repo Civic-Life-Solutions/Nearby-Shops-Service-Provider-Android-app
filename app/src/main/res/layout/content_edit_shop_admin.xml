@@ -86,7 +86,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:id="@+id/item_id"
                 android:layout_width="match_parent"
@@ -102,7 +101,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:inputType="text"
                 android:id="@+id/name"
@@ -119,7 +117,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:id="@+id/username"
                 android:layout_width="match_parent"
@@ -137,7 +134,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:id="@+id/password"
                 android:inputType="textPassword"
@@ -154,7 +150,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:id="@+id/about"
                 android:layout_width="match_parent"
@@ -170,13 +165,12 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:inputType="text"
                 android:id="@+id/designation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Designation (Roles and Responsibilities)"/>
+                android:hint="Designation"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -185,7 +179,6 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:enabled="false"
                 android:textColor="#000000"
                 android:inputType="phone"
                 android:id="@+id/phone_number"
@@ -195,8 +188,20 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@color/gplus_color_2"
+            android:text="Administrative Options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Switch
+            android:layout_marginTop="10dp"
             android:background="@color/light_grey"
             android:text="Enable / Disable Account"
             android:id="@+id/switch_enable"

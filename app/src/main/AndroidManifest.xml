@@ -203,7 +203,7 @@
         <activity
             android:launchMode="singleTop"
             android:name=".ShopApprovals.ShopApprovals"
-            android:label="Order History"
+            android:label="Shop approvals"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
