@@ -82,9 +82,9 @@ public class NetModule {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
 
-
 //        .setDateFormat("yyyy-MM-dd hh:mm:ss.S")
     }
+
 
     @Provides
     @Singleton
@@ -183,27 +183,21 @@ public class NetModule {
     @Provides
     ServiceConfigurationService provideConfigurationService(@Named("normal")Retrofit retrofit)
     {
-        ServiceConfigurationService service = retrofit.create(ServiceConfigurationService.class);
-
-        return service;
+        return retrofit.create(ServiceConfigurationService.class);
     }
 
 
     @Provides
     ItemCategoryService provideItemCategoryService(@Named("normal")Retrofit retrofit)
     {
-        ItemCategoryService service = retrofit.create(ItemCategoryService.class);
-
-        return service;
+        return retrofit.create(ItemCategoryService.class);
     }
 
 
     @Provides
     ItemService provideItemService(@Named("normal")Retrofit retrofit)
     {
-        ItemService service = retrofit.create(ItemService.class);
-
-        return service;
+        return retrofit.create(ItemService.class);
     }
 
 

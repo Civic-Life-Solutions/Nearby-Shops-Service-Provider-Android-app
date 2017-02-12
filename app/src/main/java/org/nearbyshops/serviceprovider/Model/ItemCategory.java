@@ -72,6 +72,11 @@ public class ItemCategory implements Parcelable{
 	private boolean isWaitlisted;
 
 
+	// gidb stands for global items database
+	private int gidbItemCatID;
+	private String gidbServiceURL;
+
+
 	private String rt_gidb_service_url;
 	ItemCategory parentCategory = null;
 
@@ -151,6 +156,22 @@ public class ItemCategory implements Parcelable{
 
 	//Getters and Setters
 
+
+	public int getGidbItemCatID() {
+		return gidbItemCatID;
+	}
+
+	public void setGidbItemCatID(int gidbItemCatID) {
+		this.gidbItemCatID = gidbItemCatID;
+	}
+
+	public String getGidbServiceURL() {
+		return gidbServiceURL;
+	}
+
+	public void setGidbServiceURL(String gidbServiceURL) {
+		this.gidbServiceURL = gidbServiceURL;
+	}
 
 	public Integer getCategoryOrder() {
 		return categoryOrder;

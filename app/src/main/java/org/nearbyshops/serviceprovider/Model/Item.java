@@ -76,6 +76,12 @@ public class Item implements Parcelable{
 	private Boolean isWaitlisted;
 
 
+	// gidb stands for global items database
+	private int gidbItemID;
+	private String gidbServiceURL;
+
+
+
 
 	private Float rt_rating_avg;
 	private Float rt_rating_count;
@@ -240,5 +246,22 @@ public class Item implements Parcelable{
 	}
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
+	}
+
+
+	public int getGidbItemID() {
+		return gidbItemID;
+	}
+
+	public void setGidbItemID(int gidbItemID) {
+		this.gidbItemID = gidbItemID;
+	}
+
+	public String getGidbServiceURL() {
+		return gidbServiceURL;
+	}
+
+	public void setGidbServiceURL(String gidbServiceURL) {
+		this.gidbServiceURL = gidbServiceURL;
 	}
 }

@@ -173,6 +173,19 @@
             app:fab_colorPressed="@color/blueGrey800"
             fab:fab_label="Add From Global Database" />
 
+
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/sync_from_global"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            app:srcCompat="@drawable/ic_playlist_add_from_global"
+            app:fab_colorNormal="@color/phonographyBlue"
+            app:fab_colorPressed="@color/blueGrey800"
+            fab:fab_label="Sync From Global Database" />
+
+
     </com.github.clans.fab.FloatingActionMenu>
 
 

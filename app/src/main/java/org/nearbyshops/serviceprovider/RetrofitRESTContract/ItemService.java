@@ -110,7 +110,7 @@ public interface ItemService
 
 
 
-    @POST("/api/v1/Item/AddFromGlobal")
+    @POST("/api/v1/Item/AddFromGlobalRevised")
     Call<ResponseBody> addItemFromGlobal(@Header("Authorization") String headers,
                                          @Body List<Item> itemList);
 

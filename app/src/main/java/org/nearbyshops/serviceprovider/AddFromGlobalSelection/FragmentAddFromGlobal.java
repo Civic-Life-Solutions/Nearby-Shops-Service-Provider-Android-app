@@ -742,7 +742,12 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
             {
                 entry.getValue().setParentCategoryID(parent.getItemCategoryID());
             }
-            entry.getValue().setRt_gidb_service_url(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+
+//            entry.getValue().setRt_gidb_service_url(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+            entry.getValue().setGidbServiceURL(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+            entry.getValue().setGidbItemCatID(entry.getValue().getItemCategoryID());
+
+
             tempList.add(entry.getValue());
         }
 
@@ -798,7 +803,11 @@ public class FragmentAddFromGlobal extends Fragment implements SwipeRefreshLayou
             {
                 entry.getValue().setItemCategoryID(parent.getItemCategoryID());
             }
-            entry.getValue().setRt_gidb_service_url(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+
+//            entry.getValue().setRt_gidb_service_url(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+            entry.getValue().setGidbServiceURL(UtilityGeneral.getServiceURL_GIDB(getActivity()));
+            entry.getValue().setGidbItemID(entry.getValue().getItemID());
+
             tempList.add(entry.getValue());
         }
 
