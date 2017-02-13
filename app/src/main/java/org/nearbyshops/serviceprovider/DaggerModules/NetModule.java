@@ -105,7 +105,7 @@ public class NetModule {
     //    @Singleton
 
     @Provides @Named("normal")
-    @Singleton
+//    @Singleton
     Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -142,7 +142,7 @@ public class NetModule {
 
 
     @Provides @Named("reactive")
-    @Singleton
+//    @Singleton
     Retrofit provideRetrofitReactive(Gson gson, OkHttpClient okHttpClient) {
 
 

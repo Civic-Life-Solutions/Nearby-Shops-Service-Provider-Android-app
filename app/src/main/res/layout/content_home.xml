@@ -63,16 +63,17 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
         <ImageView
+            android:paddingBottom="40dp"
+            android:paddingTop="10dp"
+            app:srcCompat="@drawable/ic_dns_black_24px"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:paddingBottom="60dp"
             android:background="@color/buttonColor"
             android:id="@+id/items_database"
-            android:layout_marginTop="10dp"
             app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
             app:layout_constraintTop_toBottomOf="@+id/header_items"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/ic_edit_black_48px"
             android:layout_width="0dp"
             android:layout_height="150dp" />
 
@@ -149,6 +150,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         <ImageView
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
+            android:paddingTop="10dp"
             android:paddingBottom="60dp"
             android:background="@color/blueGrey800"
             android:id="@+id/settings"
@@ -156,7 +158,7 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
             app:layout_constraintTop_toBottomOf="@+id/header_settings"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/ic_delete_black_48px"
+            app:srcCompat="@drawable/ic_settings_black_24dp"
             android:layout_width="0dp"
             android:layout_height="150dp" />
 
@@ -177,13 +179,15 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
         <ImageView
+
+            android:paddingBottom="60dp"
+            android:paddingTop="10dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:paddingBottom="60dp"
             android:background="@color/orangeDark"
             android:id="@+id/service_configuration"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_settings_black_24dp"
+            app:srcCompat="@drawable/ic_perm_data_setting_black_24px"
             app:layout_constraintTop_toBottomOf="@+id/header_settings"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="0dp"
@@ -237,13 +241,14 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:paddingBottom="60dp"
+            android:paddingTop="10dp"
             android:background="@color/gplus_color_1"
             android:id="@+id/shop_admin_approvals"
             android:layout_marginTop="10dp"
             app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
             app:layout_constraintTop_toBottomOf="@+id/header_approvals"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/ic_delete_black_48px"
+            app:srcCompat="@drawable/ic_shop_admin_approvals"
             android:layout_width="0dp"
             android:layout_height="150dp" />
 
@@ -266,11 +271,12 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         <ImageView
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:paddingBottom="60dp"
+            android:paddingBottom="40dp"
+            android:paddingTop="10dp"
             android:background="@color/cyan900"
             android:id="@+id/shop_approvals"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_settings_black_24dp"
+            app:srcCompat="@drawable/ic_shop_approvals"
             app:layout_constraintTop_toBottomOf="@+id/header_approvals"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="0dp"
@@ -298,13 +304,14 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:paddingBottom="60dp"
+            android:paddingTop="10dp"
             android:background="@color/gplus_color_3"
             android:id="@+id/end_user_approvals"
             android:layout_marginTop="10dp"
             app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
             app:layout_constraintTop_toBottomOf="@+id/shop_admin_approvals"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/ic_delete_black_48px"
+            app:srcCompat="@drawable/ic_end_user_approvals"
             android:layout_width="0dp"
             android:layout_height="150dp" />
 
@@ -354,14 +361,14 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         <ImageView
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:paddingBottom="60dp"
+            android:paddingBottom="40dp"
             android:background="@color/gplus_color_2Dark"
             android:id="@+id/staff_accounts"
             android:layout_marginTop="10dp"
             app:layout_constraintRight_toLeftOf="@+id/vertical_guide"
             app:layout_constraintTop_toBottomOf="@+id/header_accounts"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:srcCompat="@drawable/ic_playlist_add_from_global"
+            app:srcCompat="@drawable/ic_supervisor_account_black_24px"
             android:layout_width="0dp"
             android:layout_height="150dp" />
 
@@ -384,11 +391,12 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
         <ImageView
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:paddingBottom="60dp"
+            android:paddingBottom="50dp"
+            android:paddingTop="10dp"
             android:background="@color/cyan900"
             android:id="@+id/edit_profile"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_settings_black_24dp"
+            app:srcCompat="@drawable/ic_face_black_24px"
             app:layout_constraintTop_toBottomOf="@+id/header_accounts"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="0dp"
