@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
+import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditServiceConfiguration;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;

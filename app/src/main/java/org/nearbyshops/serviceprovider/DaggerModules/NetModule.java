@@ -20,6 +20,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemCategoryServiceGIDB;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemServiceGIDB;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractSDS.ServiceConfigService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
 import javax.inject.Named;
@@ -162,6 +163,31 @@ public class NetModule {
 
         return retrofit;
     }
+
+    @Provides @Named("sds")
+    Retrofit provideRetrofitSDS(Gson gson, OkHttpClient okHttpClient) {
+
+        //        .client(okHttpClient)
+
+//        Log.d("applog","Retrofit : " + UtilityGeneral.getServiceURL_SDS(MyApplication.getAppContext()));
+
+
+        return new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(UtilityGeneral.getServiceURL_SDS(MyApplication.getAppContext()))
+                .build();
+    }
+
+
+
+    @Provides
+    ServiceConfigService provideServiceConfig(@Named("sds")Retrofit retrofit)
+    {
+        return retrofit.create(ServiceConfigService.class);
+    }
+
+
+
 
 
 

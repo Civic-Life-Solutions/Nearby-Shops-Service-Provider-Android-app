@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 25
@@ -67,29 +67,7 @@ Feb. 23, 2015
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    // libraries for retrofit configuration
-
-    // Image crop and image display
-
-    // dependencies for Dagger 2
-    // apt command comes from the android-apt plugin
-
-//     constrant layout
-
-    // Ucrop : Image Crop Utility Library
-
-    // google play services
-    //    compile 'com.google.android.gms:play-services:9.0.2'
-
-    // ice pack dependencies
-
-    // fab with menu
-
-//    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
-
-    // Rx Java
-
-        compile 'com.github.arimorty:floatingsearchview:2.0.3'
+    compile 'com.github.arimorty:floatingsearchview:2.0.3'
 
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:support-v4:25.1.0'
@@ -105,7 +83,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.yalantis:ucrop:2.1.2'
-    compile 'com.google.dagger:dagger:2.2'
+
     compile 'com.google.android.gms:play-services-maps:10.0.1'
     compile 'com.google.android.gms:play-services-location:10.0.1'
     compile 'frankiesardo:icepick:3.2.0'
@@ -117,7 +95,13 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
 
     testCompile 'junit:junit:4.12'
-    apt 'com.google.dagger:dagger-compiler:2.2'
     provided 'javax.annotation:jsr250-api:1.0'
     provided 'frankiesardo:icepick-processor:3.2.0'
+
+
+//    apt 'com.google.dagger:dagger-compiler:2.2'
+//    compile 'com.google.dagger:dagger:2.2'
+    compile 'com.google.dagger:dagger:2.8'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+    compile 'commons-validator:commons-validator:1.4.0'
 }

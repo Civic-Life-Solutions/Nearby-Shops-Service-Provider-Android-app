@@ -18,7 +18,7 @@ import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
 import org.nearbyshops.serviceprovider.EditProfileAdmin.EditProfileAdmin;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesSimple;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
+import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfiguration;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfigurationFragment;
@@ -184,7 +184,7 @@ public class Home extends AppCompatActivity
     {
 
 
-        Call<ServiceConfigurationLocal> call = configurationService.getServiceConfiguration();
+        Call<ServiceConfigurationLocal> call = configurationService.getServiceConfiguration(null,null);
 
         call.enqueue(new Callback<ServiceConfigurationLocal>() {
             @Override

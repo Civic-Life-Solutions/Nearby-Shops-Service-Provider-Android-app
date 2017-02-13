@@ -1,7 +1,10 @@
 package org.nearbyshops.serviceprovider;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,13 +20,19 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.nearbyshops.serviceprovider.ModelRoles.Admin;
 import org.nearbyshops.serviceprovider.ModelRoles.Staff;
+import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
+import org.nearbyshops.serviceprovider.Services.ServicesActivity;
+import org.nearbyshops.serviceprovider.ShopApprovals.UtilityLocation;
 import org.nearbyshops.serviceprovider.StaffHome.StaffHome;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
+import org.nearbyshops.serviceprovider.Utility.UtilityServiceConfig;
 
 import javax.inject.Inject;
 
@@ -33,15 +42,12 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginScreen extends AppCompatActivity implements View.OnClickListener {
 
-    @Bind(R.id.serviceURLEditText) EditText serviceUrlEditText;
+//    @Bind(R.id.serviceURL) EditText serviceUrlEditText;
     @Bind(R.id.distributorIDEdittext) EditText username;
     @Bind(R.id.loginButton) Button loginButton;
     @Bind(R.id.password) EditText password;
@@ -50,8 +56,10 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
     @Bind(R.id.role_staff) TextView roleStaff;
 
 
-    @Inject AdminService adminService;
-    @Inject StaffService staffService;
+//    @Inject AdminService adminService;
+//    @Inject StaffService staffService;
+
+    @Inject Gson gson;
 
 
     public LoginScreen() {
@@ -81,31 +89,33 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         //serviceUrlEditText = (EditText) findViewById(R.id.serviceURLEditText);
         //username = (EditText) findViewById(R.id.distributorIDEdittext);
 
-        serviceUrlEditText.setText(UtilityGeneral.getServiceURL(getApplicationContext()));
+//        serviceUrlEditText.setText(UtilityGeneral.getServiceURL(getApplicationContext()));
         username.setText(UtilityLogin.getUsername(this));
         password.setText(UtilityLogin.getPassword(this));
         setRoleButtons();
 
+//
+//        serviceUrlEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//                UtilityGeneral.saveServiceURL(s.toString());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//                UtilityGeneral.saveServiceURL(s.toString());
+//
+//            }
+//        });
 
-        serviceUrlEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                UtilityGeneral.saveServiceURL(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                UtilityGeneral.saveServiceURL(s.toString());
-
-            }
-        });
+        setupServiceURLEditText();
 
     }
 
@@ -158,6 +168,14 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         setProgressBar(true);
 
 
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(UtilityGeneral.getServiceURL(MyApplication.getAppContext()))
+                .build();
+
+        StaffService staffService = retrofit.create(StaffService.class);
+
         Call<Staff> staffCall = staffService.getLogin(UtilityLogin.baseEncoding(username,password));
 
         staffCall.enqueue(new Callback<Staff>() {
@@ -206,6 +224,14 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
 
         setProgressBar(true);
 
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(UtilityGeneral.getServiceURL(MyApplication.getAppContext()))
+                .build();
+
+        AdminService adminService = retrofit.create(AdminService.class);
 
         Call<Admin> call = adminService.getAdminSimple(UtilityLogin.baseEncoding(username,password));
 
@@ -409,6 +435,172 @@ public class LoginScreen extends AppCompatActivity implements View.OnClickListen
         }
 
     }
+
+
+    // Setup Status Light
+
+    @Bind(R.id.text_input_service_url) TextInputLayout textInputServiceURL;
+    @Bind(R.id.serviceURL) EditText serviceURL;
+
+    UrlValidator urlValidator;
+
+    void setupServiceURLEditText()
+    {
+        String[] schemes = {"http", "https"};
+
+        urlValidator = new UrlValidator(schemes);
+
+        serviceURL.setText(UtilityGeneral.getServiceURL(this));
+
+        serviceURL.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (urlValidator.isValid(s.toString())) {
+                    UtilityGeneral.saveServiceURL(s.toString());
+                    textInputServiceURL.setError(null);
+                    textInputServiceURL.setErrorEnabled(false);
+                    updateStatusLight();
+                }
+                else
+                {
+//                    serviceURL.setError("URL Invalid");
+                    textInputServiceURL.setErrorEnabled(true);
+                    textInputServiceURL.setError("Invalid URL");
+
+                    UtilityServiceConfig.saveServiceLightStatus(LoginScreen.this,STATUS_LIGHT_RED);
+                    setStatusLight();
+                }
+
+            }
+        });
+
+
+    }
+
+
+    void updateStatusLight()
+    {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(UtilityGeneral.getServiceURL(MyApplication.getAppContext()))
+                .build();
+
+        ServiceConfigurationService service = retrofit.create(ServiceConfigurationService.class);
+
+        Call<ServiceConfigurationLocal> call = service.getServiceConfiguration(
+                UtilityLocation.getLatitude(this),
+                UtilityLocation.getLongitude(this)
+        );
+
+
+        call.enqueue(new Callback<ServiceConfigurationLocal>() {
+            @Override
+            public void onResponse(Call<ServiceConfigurationLocal> call, Response<ServiceConfigurationLocal> response) {
+
+                if(response.code()==200)
+                {
+                    if(response.body()!=null)
+                    {
+                        ServiceConfigurationLocal configurationLocal = response.body();
+                        UtilityServiceConfig.saveConfiguration(configurationLocal,LoginScreen.this);
+
+
+                        if(configurationLocal.getRt_distance()<=configurationLocal.getServiceRange())
+                        {
+                            UtilityServiceConfig.saveServiceLightStatus(LoginScreen.this,STATUS_LIGHT_GREEN);
+                            setStatusLight();
+                        }
+                        else
+                        {
+                            UtilityServiceConfig.saveServiceLightStatus(LoginScreen.this,STATUS_LIGHT_YELLOW);
+                            setStatusLight();
+                        }
+
+                    }
+                    else
+                    {
+                        UtilityServiceConfig.saveServiceLightStatus(LoginScreen.this,STATUS_LIGHT_RED);
+                        setStatusLight();
+                    }
+                }
+                else
+                {
+                    UtilityServiceConfig.saveServiceLightStatus(LoginScreen.this,STATUS_LIGHT_RED);
+                    setStatusLight();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServiceConfigurationLocal> call, Throwable t) {
+
+
+                UtilityServiceConfig.saveServiceLightStatus(LoginScreen.this,STATUS_LIGHT_RED);
+                setStatusLight();
+
+            }
+        });
+
+    }
+
+
+    @Bind(R.id.status_indicator_one) TextView statusLight;
+    public static final int STATUS_LIGHT_GREEN = 1;
+    public static final int STATUS_LIGHT_YELLOW = 2;
+    public static final int STATUS_LIGHT_RED = 3;
+
+
+    void setStatusLight()
+    {
+        int status = UtilityServiceConfig.getServiceLightStatus(this);
+
+        if(status == STATUS_LIGHT_GREEN)
+        {
+            statusLight.setBackgroundColor(ContextCompat.getColor(this,R.color.gplus_color_1));
+        }
+        else if(status == STATUS_LIGHT_YELLOW)
+        {
+            statusLight.setBackgroundColor(ContextCompat.getColor(this,R.color.gplus_color_2));
+        }
+        else if(status == STATUS_LIGHT_RED)
+        {
+            statusLight.setBackgroundColor(ContextCompat.getColor(this,R.color.deepOrange900));
+        }
+    }
+
+
+
+    @OnClick(R.id.paste_url_button)
+    void pasteURLClick()
+    {
+        ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if(clipboard.getPrimaryClip()!=null)
+        {
+            serviceURL.setText(clipboard.getPrimaryClip().getItemAt(0).getText());
+        }
+    }
+
+
+    @OnClick(R.id.discover_services_button)
+    void discoverServices()
+    {
+        Intent intent = new Intent(this, ServicesActivity.class);
+        startActivity(intent);
+    }
+
+
 
 
 }

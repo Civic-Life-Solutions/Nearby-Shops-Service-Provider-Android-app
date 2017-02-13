@@ -15,6 +15,8 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.EditI
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesFragmentSimple;
 import org.nearbyshops.serviceprovider.ServiceConfiguration.EditConfiguration.EditConfigurationFragment;
+import org.nearbyshops.serviceprovider.Services.ServiceFragment.ServicesFragment;
+import org.nearbyshops.serviceprovider.Services.SubmitURLDialog.SubmitURLDialog;
 import org.nearbyshops.serviceprovider.ShopApprovals.EditShop.EditShopFragment;
 import org.nearbyshops.serviceprovider.StaffHome.EditStaffSelf.EditStaffSelfFragment;
 import org.nearbyshops.serviceprovider.StaffHome.StaffHome;
@@ -130,6 +132,10 @@ public interface NetComponent {
     void Inject(EditAdminFragment editAdminFragment);
 
     void Inject(EditShopFragment editShopFragment);
+
+    void Inject(ServicesFragment servicesFragment);
+
+    void Inject(SubmitURLDialog submitURLDialog);
 
 
 //    void Inject(LoginDialog loginDialog);

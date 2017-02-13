@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ShopApprovals;
+package org.nearbyshops.serviceprovider.Services;
 
 import android.Manifest;
 import android.app.SearchManager;
@@ -6,18 +6,17 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,66 +37,71 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.wunderlist.slidinglayer.SlidingLayer;
 
-import org.nearbyshops.serviceprovider.Interfaces.GetLocation;
+
 import org.nearbyshops.serviceprovider.Interfaces.NotifyLocation;
 import org.nearbyshops.serviceprovider.Interfaces.NotifySearch;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
-import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.ShopApprovals.SlidingLayerSort.SlidingLayerSortShops;
+import org.nearbyshops.serviceprovider.Services.ServiceFragment.ServicesFragment;
+import org.nearbyshops.serviceprovider.Services.SlidingLayerSort.SlidingLayerSortServices;
+import org.nearbyshops.serviceprovider.Services.SubmitURLDialog.SubmitURLDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ShopApprovals extends AppCompatActivity implements NotifyTitleChanged,NotifySort, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener ,LocationListener,GetLocation{
-
+public class ServicesActivity extends AppCompatActivity implements NotifySort, ToggleFab,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
     // variables for fetching location
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     LocationRequest mLocationRequest;
-
-
-    private PagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+//    Location locationResult;
 
 
     @Bind(R.id.slidingLayer)
     SlidingLayer slidingLayer;
-
     public static final String TAG_SLIDING_LAYER = "sliding_layer";
+
+    public static final String TAG_FRAGMENT = "tag_fragment";
+
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop_approals);
+        setContentView(R.layout.activity_services);
         ButterKnife.bind(this);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//
+////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                        .setAction("Action", null).show();
+//            }
+//        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        if(getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT) == null)
+        {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,new ServicesFragment(),TAG_FRAGMENT)
+                    .commit();
+        }
 
 
 
@@ -113,9 +117,14 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
         }
 
 
-
         setupSlidingLayer();
+    }
 
+
+    @OnClick(R.id.fab)
+    void fabClick()
+    {
+        showDialogSubmitURL();
     }
 
 
@@ -146,7 +155,7 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
             {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.slidinglayerfragment,new SlidingLayerSortShops(),TAG_SLIDING_LAYER)
+                        .add(R.id.slidinglayerfragment,new SlidingLayerSortServices(),TAG_SLIDING_LAYER)
                         .commit();
             }
 
@@ -155,146 +164,11 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
 
 
 
+
     @OnClick({R.id.icon_sort,R.id.text_sort})
     void sortClick()
     {
         slidingLayer.openLayer(true);
-//        showToastMessage("Open sliding ");
-    }
-
-
-    void showToastMessage(String message)
-    {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public void NotifyTitleChanged(String title, int tabPosition) {
-        mSectionsPagerAdapter.setTitle(title,tabPosition);
-    }
-
-
-
-
-    private static String makeFragmentName(int viewId, int index) {
-        return "android:switcher:" + viewId + ":" + index;
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_shop_approvals, menu);
-
-
-        // Associate searchable configuration with the SearchView
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-
-        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-
-//                Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
-
-                Fragment fragment = getSupportFragmentManager()
-                        .findFragmentByTag(
-                                makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem())
-                        );
-
-
-                if(fragment instanceof NotifySearch)
-                {
-                    ((NotifySearch) fragment).endSearchMode();
-                }
-
-//                Toast.makeText(PickFromShopInventory.this, "onCollapsed Called ", Toast.LENGTH_SHORT).show();
-
-                return true;
-            }
-        });
-
-        return true;
-    }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
-
-//            Toast.makeText(this,query,Toast.LENGTH_SHORT).show();
-
-//            Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
-
-            Fragment fragment = getSupportFragmentManager()
-                    .findFragmentByTag(
-                            makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem())
-                    );
-
-
-            if(fragment instanceof NotifySearch)
-            {
-                ((NotifySearch) fragment).search(query);
-            }
-        }
-    }
-
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-    }
-
-    @Override
-    public void notifySortChanged() {
-
-        Fragment fragment = getSupportFragmentManager()
-                .findFragmentByTag(
-                        makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem())
-                );
-
-        if(fragment instanceof NotifySort)
-        {
-            ((NotifySort)fragment).notifySortChanged();
-        }
     }
 
 
@@ -307,14 +181,15 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
         }
     }
 
-
     @Override
     protected void onStop() {
         super.onStop();
+
         if (mGoogleApiClient != null) {
             mGoogleApiClient.disconnect();
         }
     }
+
 
     @Override
     protected void onPause() {
@@ -325,7 +200,7 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -350,40 +225,40 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
         }
 
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-
-        if (mLastLocation != null) {
-
-            saveLocation(mLastLocation);
-
-
-        }else
-        {
-
-            // if getlastlocation does not work then request the device to get the current location.
-            createLocationRequest();
-
-
-            if(mLocationRequest!=null)
-            {
-                startLocationUpdates();
-            }
-
-        }
-
-
-//        // if getlastlocation does not work then request the device to get the current location.
-//        createLocationRequest();
+//        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 //
-//        if(mLocationRequest!=null)
+//
+//        if (mLastLocation != null) {
+//
+//            saveLocation(mLastLocation);
+//
+//
+//        }else
 //        {
-//            startLocationUpdates();
+//
+//            // if getlastlocation does not work then request the device to get the current location.
+//            createLocationRequest();
+//
+//
+//            if(mLocationRequest!=null)
+//            {
+//                startLocationUpdates();
+//            }
+//
 //        }
+
+
+        // if getlastlocation does not work then request the device to get the current location.
+        createLocationRequest();
+
+        if(mLocationRequest!=null)
+        {
+            startLocationUpdates();
+        }
     }
 
-    private static final int REQUEST_CHECK_SETTINGS = 3;
 
+    private static final int REQUEST_CHECK_SETTINGS = 3;
 
 
     protected void createLocationRequest() {
@@ -420,7 +295,7 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
                             status.startResolutionForResult(
-                                    ShopApprovals.this,
+                                    ServicesActivity.this,
                                     REQUEST_CHECK_SETTINGS);
 
                         } catch (IntentSender.SendIntentException e) {
@@ -441,8 +316,10 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
     }
 
 
+
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CHECK_SETTINGS) {
@@ -491,7 +368,9 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
 
             ActivityCompat.requestPermissions(
                     this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    },
                     2);
 
             return;
@@ -506,54 +385,170 @@ public class ShopApprovals extends AppCompatActivity implements NotifyTitleChang
     }
 
 
+
     protected void stopLocationUpdates() {
 
         if(mGoogleApiClient.isConnected())
         {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+
     }
 
 
     @Override
     public void onLocationChanged(Location location) {
 
-//        UtilityLocationServices.saveLatitude((float)location.getLatitude(),this);
-//        UtilityLocationServices.saveLongitude((float)location.getLongitude(),this);
-
-//        System.out.println(location.getLatitude() + ":" + location.getLongitude());
-
-        this.location = location;
         saveLocation(location);
-        stopLocationUpdates();
-    }
 
+        UtilityLocationServices.saveLatitude((float) location.getLatitude(),this);
+        UtilityLocationServices.saveLongitude((float) location.getLongitude(),this);
+
+//        stopLocationUpdates();
+
+
+    }
 
 
     private void saveLocation(Location mLastLocation) {
 //        locationResult=mLastLocation;
 //        makeRefreshNetworkCall();
 
-
         Fragment fragment = getSupportFragmentManager()
-                .findFragmentByTag(makeFragmentName(mViewPager.getId(),mViewPager.getCurrentItem()));
+                .findFragmentByTag(TAG_FRAGMENT);
 
         if(fragment instanceof NotifyLocation)
         {
             ((NotifyLocation) fragment).fetchedLocation(mLastLocation);
         }
 
+
     }
 
-    Location location;
+
+
+
 
 
     @Override
-    public Location getLocation() {
-        return location;
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void notifySortChanged() {
+
+        Fragment fragment = getSupportFragmentManager()
+                .findFragmentByTag(TAG_FRAGMENT);
+
+        if(fragment instanceof NotifySort)
+        {
+            ((NotifySort)fragment).notifySortChanged();
+        }
+
     }
 
 
 
-}
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_service_activity, menu);
+
+
+        // Associate searchable configuration with the SearchView
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.action_search), new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+
+//                Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+
+                Fragment fragment = getSupportFragmentManager()
+                        .findFragmentByTag(TAG_FRAGMENT);
+
+
+                if(fragment instanceof NotifySearch)
+                {
+                    ((NotifySearch) fragment).endSearchMode();
+                }
+
+//                Toast.makeText(OrderHistoryHD.this, "onCollapsed Called ", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
+        return true;
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search your data somehow
+
+//            Toast.makeText(this,query,Toast.LENGTH_SHORT).show();
+
+//            Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+
+            Fragment fragment = getSupportFragmentManager()
+                    .findFragmentByTag(TAG_FRAGMENT);
+
+            if(fragment instanceof NotifySearch)
+            {
+                ((NotifySearch) fragment).search(query);
+            }
+        }
+    }
+
+
+
+
+    private void showDialogSubmitURL()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        SubmitURLDialog submitURLDialog = new SubmitURLDialog();
+        submitURLDialog.show(fm,"serviceUrl");
+    }
+
+
+    @Override
+    public void showFab() {
+        fab.animate().translationY(0);
+    }
+
+    @Override
+    public void hideFab() {
+        fab.animate().translationY(fab.getHeight()+50);
+    }
+
+
+
+    void showToastMessage(String message)
+    {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+
+}

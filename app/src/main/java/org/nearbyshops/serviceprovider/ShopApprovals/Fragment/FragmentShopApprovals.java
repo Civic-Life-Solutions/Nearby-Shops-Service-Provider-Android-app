@@ -239,10 +239,10 @@ public class FragmentShopApprovals extends Fragment implements SwipeRefreshLayou
         }
 
 
-//        latitude = UtilityLocation.getLatitude(getActivity());
-//        longitude = UtilityLocation.getLongitude(getActivity());
+//        latitude = UtilityLocationServices.getLatitude(getActivity());
+//        longitude = UtilityLocationServices.getLongitude(getActivity());
 
-//        showToastMessage("Latitude : " + UtilityLocation.getLatitude(getActivity()) + " : Longitude " + UtilityLocation.getLongitude(getActivity()));
+//        showToastMessage("Latitude : " + UtilityLocationServices.getLatitude(getActivity()) + " : Longitude " + UtilityLocationServices.getLongitude(getActivity()));
 
 
         if(getArguments().getInt(ARG_SECTION_NUMBER) == MODE_DISABLED)

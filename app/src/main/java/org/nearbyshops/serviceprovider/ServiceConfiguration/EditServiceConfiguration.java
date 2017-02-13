@@ -24,7 +24,7 @@ import com.yalantis.ucrop.UCrop;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
+import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.Utility.ConfigImageCalls;
@@ -225,7 +225,7 @@ public class EditServiceConfiguration extends AppCompatActivity implements Callb
 
     void getConfigurationNetworkCall()
     {
-        final Call<ServiceConfigurationLocal> serviceConfiguration = configurationService.getServiceConfiguration();
+        final Call<ServiceConfigurationLocal> serviceConfiguration = configurationService.getServiceConfiguration(null,null);
 
         serviceConfiguration.enqueue(new Callback<ServiceConfigurationLocal>() {
 

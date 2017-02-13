@@ -1,7 +1,8 @@
 package org.nearbyshops.serviceprovider.RetrofitRESTContract;
 
+
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.ModelSettings.ServiceConfigurationLocal;
+import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -13,18 +14,21 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by sumeet on 12/3/16.
  */
 public interface ServiceConfigurationService {
 
+
     @GET("/api/ServiceConfiguration")
-    Call<ServiceConfigurationLocal> getServiceConfiguration();
+    Call<ServiceConfigurationLocal> getServiceConfiguration(@Query("latCenter") Double latCenter,
+                                                            @Query("lonCenter") Double lonCenter);
 
     @PUT("/api/ServiceConfiguration")
-    Call<ResponseBody> putServiceConfiguration( @Header("Authorization") String headers,
-                                                @Body ServiceConfigurationLocal serviceConfiguration);
+    Call<ResponseBody> putServiceConfiguration(@Header("Authorization") String headers,
+                                               @Body ServiceConfigurationLocal serviceConfiguration);
 
 
 
