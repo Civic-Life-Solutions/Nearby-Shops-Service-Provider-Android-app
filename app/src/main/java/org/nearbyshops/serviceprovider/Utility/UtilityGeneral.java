@@ -58,7 +58,7 @@ public class UtilityGeneral {
                 context.getString(R.string.preference_service_url_key),
                 service_url);
 
-        editor.commit();
+        editor.apply();
     }
 
     public static String getServiceURL(Context context) {

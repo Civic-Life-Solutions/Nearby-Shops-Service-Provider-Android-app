@@ -390,12 +390,12 @@ public class EditShopAdminFragment extends Fragment {
     {
         if(shopAdmin!=null) {
 
-            fixNulls();
+//            fixNulls();
 
             item_id.setText(String.valueOf(shopAdmin.getShopAdminID()));
             name.setText(shopAdmin.getName());
-//            username.setText(shopAdmin.getUsername());
-//            password.setText(shopAdmin.getPassword());
+            username.setText(shopAdmin.getUsername());
+            password.setText(shopAdmin.getPassword());
             about.setText(shopAdmin.getAbout());
             phone.setText(shopAdmin.getPhoneNumber());
             designation.setText(shopAdmin.getDesignation());

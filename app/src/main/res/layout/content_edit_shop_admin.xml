@@ -112,7 +112,6 @@
 
 
         <android.support.design.widget.TextInputLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -128,7 +127,6 @@
 
 
         <android.support.design.widget.TextInputLayout
-            android:visibility="gone"
             android:layout_width="match_parent"
             app:passwordToggleEnabled="true"
             android:layout_height="wrap_content">

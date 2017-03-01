@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'sumeet'
+            keyPassword 'abcde23870'
+            storeFile file('/media/sumeet/data/BookDiscovery/keystore/androidplaystore.jks')
+            storePassword 'bluetree'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
 
@@ -28,33 +36,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
-
         debug {
-
         }
     }
-
-    /*
-    *Mike Nakhimovich
-Mnakhimovich@gmail.com
-Feb. 23, 2015
-:: progaurd icepack configuration
-
--dontwarn icepick.**
--keep class icepick.** { *; }
--keep class **$$Icepick { *; }
--keepclasseswithmembernames class * {
-    @icepick.* <fields>;
-}
--keepnames class * { @icepick.State *;}
-
-    *
-    *
-    * */
 
 
     repositories {
@@ -65,16 +53,14 @@ Feb. 23, 2015
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.github.arimorty:floatingsearchview:2.0.3'
-
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:support-v4:25.1.1'
+    compile 'com.android.support:recyclerview-v7:25.1.1'
+    compile 'com.android.support:cardview-v7:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:design:25.1.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
@@ -83,9 +69,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.yalantis:ucrop:2.1.2'
-
-    compile 'com.google.android.gms:play-services-maps:10.0.1'
-    compile 'com.google.android.gms:play-services-location:10.0.1'
+    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
     compile 'frankiesardo:icepick:3.2.0'
     compile 'com.github.clans:fab:1.6.4'
     compile 'com.wunderlist:sliding-layer:1.2.5'
@@ -93,14 +78,12 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.3'
     compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
-
     testCompile 'junit:junit:4.12'
     provided 'javax.annotation:jsr250-api:1.0'
     provided 'frankiesardo:icepick-processor:3.2.0'
+    //    apt 'com.google.dagger:dagger-compiler:2.2'
 
-
-//    apt 'com.google.dagger:dagger-compiler:2.2'
-//    compile 'com.google.dagger:dagger:2.2'
+    //    compile 'com.google.dagger:dagger:2.2'
     compile 'com.google.dagger:dagger:2.8'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
     compile 'commons-validator:commons-validator:1.4.0'

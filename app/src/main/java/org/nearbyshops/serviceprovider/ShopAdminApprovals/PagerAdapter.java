@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.Fragment.FragmentShopAdmins;
+
 /**
  * Created by sumeet on 22/11/16.
  */

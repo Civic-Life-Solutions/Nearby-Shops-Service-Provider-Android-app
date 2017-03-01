@@ -35,7 +35,7 @@ import org.nearbyshops.serviceprovider.DaggerModules.AppModule;
 import org.nearbyshops.serviceprovider.DaggerModules.NetModule;
 import org.nearbyshops.serviceprovider.Settings.SettingsActivity;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.EditShopAdmin.EditShopAdminFragment;
-import org.nearbyshops.serviceprovider.ShopAdminApprovals.FragmentShopAdmins;
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.Fragment.FragmentShopAdmins;
 import org.nearbyshops.serviceprovider.ShopApprovals.Fragment.FragmentShopApprovals;
 import org.nearbyshops.serviceprovider.StaffAccounts.EditStaff.EditStaffFragment;
 import org.nearbyshops.serviceprovider.StaffAccounts.FragmentStaffAccounts;

@@ -82,7 +82,7 @@ public class SlidingLayerSortItems extends Fragment {
 
 
     void loadDefaultSort() {
-//        String[] sort_options = UtilitySortShops.getSort(getActivity());
+//        String[] sort_options = UtilitySortShopAdmin.getSort(getActivity());
 
         currentSort = UtilitySortItemsByCategory.getSort(getActivity());
         currentAscending = UtilitySortItemsByCategory.getAscending(getActivity());

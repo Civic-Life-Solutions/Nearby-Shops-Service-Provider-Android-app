@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ShopAdminApprovals;
+package org.nearbyshops.serviceprovider.ShopAdminApprovals.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
+import org.nearbyshops.serviceprovider.Interfaces.NotifySearch;
+import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ModelRoles.Endpoints.ShopAdminEndPoint;
 import org.nearbyshops.serviceprovider.ModelRoles.ShopAdmin;
@@ -20,6 +22,9 @@ import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopAdminService;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.EditShopAdmin.EditShopAdmin;
 import org.nearbyshops.serviceprovider.ShopAdminApprovals.EditShopAdmin.EditShopAdminFragment;
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.SlidingLayerSort.UtilitySortShopAdmin;
+import org.nearbyshops.serviceprovider.ShopAdminApprovals.UtilityShopAdmin;
+import org.nearbyshops.serviceprovider.ShopApprovals.SlidingLayerSort.UtilitySortShops;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;
@@ -36,7 +41,7 @@ import retrofit2.Response;
  * Created by sumeet on 22/11/16.
  */
 
-public class FragmentShopAdmins extends Fragment implements Adapter.NotifyConfirmOrder, SwipeRefreshLayout.OnRefreshListener {
+public class FragmentShopAdmins extends Fragment implements Adapter.NotifyConfirmOrder, SwipeRefreshLayout.OnRefreshListener ,NotifySort,NotifySearch{
 
 
     @Inject
@@ -208,13 +213,16 @@ public class FragmentShopAdmins extends Fragment implements Adapter.NotifyConfir
 
         Call<ShopAdminEndPoint> call = null;
 
+        String current_sort = "";
+        current_sort = UtilitySortShopAdmin.getSort(getContext()) + " " + UtilitySortShopAdmin.getAscending(getContext());
+
 
         if(getArguments().getInt(ARG_SECTION_NUMBER) == MODE_ACCOUNTS_DISABLED)
         {
             call = shopAdminService
                     .getShopAdmin(UtilityLogin.getAuthorizationHeaders(getContext()),
                             false,false,
-                            null,null,limit,offset,null);
+                            searchQuery,current_sort,limit,offset,null);
 
 
         }
@@ -223,7 +231,7 @@ public class FragmentShopAdmins extends Fragment implements Adapter.NotifyConfir
             call = shopAdminService
                     .getShopAdmin(UtilityLogin.getAuthorizationHeaders(getContext()),
                             false,true,
-                            null,null,limit,offset,null);
+                            searchQuery,current_sort,limit,offset,null);
 
 
         }
@@ -232,7 +240,7 @@ public class FragmentShopAdmins extends Fragment implements Adapter.NotifyConfir
             call = shopAdminService
                     .getShopAdmin(UtilityLogin.getAuthorizationHeaders(getContext()),
                             true,null,
-                            null,null,limit,offset,null);
+                            searchQuery,current_sort,limit,offset,null);
 
         }
 
@@ -376,4 +384,25 @@ public class FragmentShopAdmins extends Fragment implements Adapter.NotifyConfir
     public void notifyListItemClick(ShopAdmin shopAdmin) {
 
     }
+
+    @Override
+    public void notifySortChanged() {
+        makeRefreshNetworkCall();
+    }
+
+
+    String searchQuery = null;
+
+    @Override
+    public void search(String searchString) {
+        searchQuery = searchString;
+        makeRefreshNetworkCall();
+    }
+
+    @Override
+    public void endSearchMode() {
+        searchQuery = null;
+        makeRefreshNetworkCall();
+    }
+
 }

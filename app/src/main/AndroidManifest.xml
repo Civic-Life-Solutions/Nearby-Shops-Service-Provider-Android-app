@@ -15,7 +15,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_shopping_basket_white_24px"
+        android:icon="@mipmap/icon_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -170,15 +170,39 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountsActivity" />
         </activity>
+
+        <!--<activity-->
+            <!--android:name=".ShopAdminApprovals.ShopAdminApprovals"-->
+            <!--android:label="@string/title_activity_shop_admin_approvals"-->
+            <!--android:parentActivityName=".Home"-->
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="org.nearbyshops.serviceprovider.Home" />-->
+        <!--</activity>-->
+
         <activity
+            android:launchMode="singleTop"
             android:name=".ShopAdminApprovals.ShopAdminApprovals"
-            android:label="@string/title_activity_shop_admin_approvals"
+            android:label="Shopadmin Approvals"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.nearbyshops.serviceprovider.Home" />
+                android:value=".Home" />
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
         </activity>
+
+
+
+
         <activity
             android:name=".ShopAdminApprovals.EditShopAdmin.EditShopAdmin"
             android:label="@string/title_activity_shop_admin_approvals"
