@@ -184,7 +184,7 @@
         <activity
             android:launchMode="singleTop"
             android:name=".ShopAdminApprovals.ShopAdminApprovals"
-            android:label="Shopadmin Approvals"
+            android:label="Shop Admin Approvals"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

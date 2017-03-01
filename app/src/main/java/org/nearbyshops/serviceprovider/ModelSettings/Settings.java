@@ -1,12 +1,9 @@
 package org.nearbyshops.serviceprovider.ModelSettings;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by sumeet on 18/9/16.
  */
-public class Settings implements Parcelable{
+public class Settings {
 
     // Table Name
     public static final String TABLE_NAME = "SETTINGS";
@@ -16,7 +13,9 @@ public class Settings implements Parcelable{
     public static final String END_USER_ENABLED_DEFAULT = "END_USER_ENABLED_DEFAULT";
     public static final String DISTRIBUTOR_ENABLED_DEFAULT = "DISTRIBUTOR_ENABLED_DEFAULT";
 //    public static final String STAFF_ACCOUNT_ENABLED_DEFAULT = "STAFF_ACCOUNT_ENABLED_DEFAULT";
+    public static final String SHOP_ENABLED_BY_DEFAULT = "SHOP_ENABLED_BY_DEFAULT";
     public static final String GOOGLE_MAPS_API_KEY = "GOOGLE_MAPS_API_KEY";
+
 
 
     // Create Table Statement
@@ -25,6 +24,7 @@ public class Settings implements Parcelable{
             + " " + Settings.SETTING_CONFIGURATION_ID + " SERIAL PRIMARY KEY,"
             + " " + Settings.END_USER_ENABLED_DEFAULT + " boolean,"
             + " " + Settings.DISTRIBUTOR_ENABLED_DEFAULT + " boolean,"
+            + " " + Settings.SHOP_ENABLED_BY_DEFAULT + " boolean,"
             + " " + Settings.GOOGLE_MAPS_API_KEY + " text"
             + ")";
 
@@ -32,45 +32,20 @@ public class Settings implements Parcelable{
 
     // Instance Variables
     private int settingsID;
-    private boolean endUserEnabledByDefault;
-    private boolean distributorEnabledByDefault;
+    private Boolean endUserEnabledByDefault;
+    private Boolean distributorEnabledByDefault;
+    private boolean shopEnabledByDefault;
 //    private String staffEnabledByDefault;
     private String googleMapsAPIKey;
 
-    public Settings() {
+
+    public boolean isShopEnabledByDefault() {
+        return shopEnabledByDefault;
     }
 
-    protected Settings(Parcel in) {
-        settingsID = in.readInt();
-        endUserEnabledByDefault = in.readByte() != 0;
-        distributorEnabledByDefault = in.readByte() != 0;
-        googleMapsAPIKey = in.readString();
+    public void setShopEnabledByDefault(boolean shopEnabledByDefault) {
+        this.shopEnabledByDefault = shopEnabledByDefault;
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(settingsID);
-        dest.writeByte((byte) (endUserEnabledByDefault ? 1 : 0));
-        dest.writeByte((byte) (distributorEnabledByDefault ? 1 : 0));
-        dest.writeString(googleMapsAPIKey);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Settings> CREATOR = new Creator<Settings>() {
-        @Override
-        public Settings createFromParcel(Parcel in) {
-            return new Settings(in);
-        }
-
-        @Override
-        public Settings[] newArray(int size) {
-            return new Settings[size];
-        }
-    };
 
     public int getSettingsID() {
         return settingsID;

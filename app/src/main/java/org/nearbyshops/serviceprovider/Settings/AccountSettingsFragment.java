@@ -38,6 +38,11 @@ public class AccountSettingsFragment extends Fragment implements NotifySettings{
     @Bind(R.id.switch_end_user_account)
     Switch switchEndUser;
 
+    @Bind(R.id.switch_shop_admin_account)
+    Switch switchShopAdmin;
+
+
+
     @Bind(R.id.button_save)
     TextView buttonSave;
 
@@ -85,6 +90,7 @@ public class AccountSettingsFragment extends Fragment implements NotifySettings{
             Settings settings = ((SettingsActivity)getActivity()).getSettings();
             switchDistributor.setChecked(settings.getDistributorEnabledByDefault());
             switchEndUser.setChecked(settings.getEndUserEnabledByDefault());
+            switchShopAdmin.setChecked(settings.isShopEnabledByDefault());
     }
 
 
@@ -107,6 +113,8 @@ public class AccountSettingsFragment extends Fragment implements NotifySettings{
         Settings settings = ((SettingsActivity)getActivity()).getSettings();
         settings.setDistributorEnabledByDefault(switchDistributor.isChecked());
         settings.setEndUserEnabledByDefault(switchEndUser.isChecked());
+        settings.setShopEnabledByDefault(switchShopAdmin.isChecked());
+
     }
 
 

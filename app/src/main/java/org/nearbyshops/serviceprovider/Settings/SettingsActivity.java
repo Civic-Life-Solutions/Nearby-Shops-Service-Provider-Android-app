@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements UpdateSetting
     @Inject
     SettingsService settingsService;
 
-    @State
+//    @State
     Settings settings;
 
     @Bind(R.id.coordinatorLayout)
@@ -120,6 +120,7 @@ public class SettingsActivity extends AppCompatActivity implements UpdateSetting
 
 
     public Settings getSettings() {
+
         return settings;
     }
 
