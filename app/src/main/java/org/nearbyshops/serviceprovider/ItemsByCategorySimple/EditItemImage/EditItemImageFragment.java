@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemImage;
 
 
 import android.Manifest;
@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +29,9 @@ import com.yalantis.ucrop.UCropActivity;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
-import org.nearbyshops.serviceprovider.Model.Item;
-import org.nearbyshops.serviceprovider.Model.ItemCategory;
+import org.nearbyshops.serviceprovider.Model.ItemImage;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemImageService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
@@ -54,25 +54,17 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 
 
-public class EditItemFragment extends Fragment {
+public class EditItemImageFragment extends Fragment {
 
     public static int PICK_IMAGE_REQUEST = 21;
     // Upload the image after picked up
     private static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 56;
 
 
-    ItemCategory itemCategory;
-
-    public static final String ITEM_CATEGORY_INTENT_KEY = "item_cat";
-
-//    Validator validator;
-
-
-//    @Inject
-//    DeliveryGuySelfService deliveryService;
+    public static final String ITEM_ID_INTENT_KEY = "item_id_intent_key";
 
     @Inject
-    ItemService itemService;
+    ItemImageService itemImageService;
 
 
     // flag for knowing whether the image is changed or not
@@ -81,61 +73,18 @@ public class EditItemFragment extends Fragment {
 
 
     // bind views
-    @Bind(R.id.uploadImage)
-    ImageView resultView;
+    @Bind(R.id.uploadImage) ImageView resultView;
 
 
-//    @Bind(R.id.shop_open) CheckBox shopOpen;
-//    @Bind(R.id.shop_id) EditText shopID;
-
-    @Bind(R.id.itemID) EditText itemID;
-    @Bind(R.id.itemName) EditText itemName;
-    @Bind(R.id.itemDescription) EditText itemDescription;
-    @Bind(R.id.itemDescriptionLong) EditText itemDescriptionLong;
-    @Bind(R.id.quantityUnit) EditText quantityUnit;
-
-
-//    @Bind(R.id.enter_shop_id) EditText shopIDEnter;
-//    @Bind(R.id.shopName) EditText shopName;
-
-//    @Bind(R.id.shopAddress) EditText shopAddress;
-//    @Bind(R.id.shopCity) EditText city;
-//    @Bind(R.id.shopPincode) EditText pincode;
-//    @Bind(R.id.shopLandmark) EditText landmark;
-
-//    @Bind(R.id.customerHelplineNumber) EditText customerHelplineNumber;
-//    @Bind(R.id.deliveryHelplineNumber) EditText deliveryHelplineNumber;
-
-//    @Bind(R.id.shopShortDescription) EditText shopDescriptionShort;
-//    @Bind(R.id.shopLongDescription) EditText shopDescriptionLong;
-
-//    @Bind(R.id.latitude) EditText latitude;
-//    @Bind(R.id.longitude) EditText longitude;
-//    @Bind(R.id.pick_location_button) TextView pickLocationButton;
-//    @Bind(R.id.rangeOfDelivery) EditText rangeOfDelivery;
-
-//    @Bind(R.id.deliveryCharges) EditText deliveryCharge;
-//    @Bind(R.id.billAmountForFreeDelivery) EditText billAmountForFreeDelivery;
-
-//    @Bind(R.id.pick_from_shop_available) CheckBox pickFromShopAvailable;
-//    @Bind(R.id.home_delivery_available) CheckBox homeDeliveryAvailable;
-
-
-
-//    @Bind(R.id.item_id) EditText item_id;
-//    @Bind(R.id.name) EditText name;
-//    @Bind(R.id.username) EditText username;
-//    @Bind(R.id.password) EditText password;
-//    @Bind(R.id.about) EditText about;
-
-//    @Bind(R.id.phone_number) EditText phone;
-//    @Bind(R.id.designation) EditText designation;
-//    @Bind(R.id.switch_enable) Switch aSwitch;
+    @Bind(R.id.imageID) EditText imageID;
+    @Bind(R.id.captionTitle) EditText captionTitle;
+    @Bind(R.id.caption) EditText caption;
+    @Bind(R.id.image_copyrights_info) EditText imageCopyrightsInfo;
+    @Bind(R.id.imageOrder) EditText imageOrder;
 
     @Bind(R.id.saveButton) Button buttonUpdateItem;
 
 
-    public static final String SHOP_INTENT_KEY = "shop_intent_key";
     public static final String EDIT_MODE_INTENT_KEY = "edit_mode";
 
     public static final int MODE_UPDATE = 52;
@@ -143,11 +92,13 @@ public class EditItemFragment extends Fragment {
 
     int current_mode = MODE_ADD;
 
-//    DeliveryGuySelf deliveryGuySelf = new DeliveryGuySelf();
-//    ShopAdmin shopAdmin = new ShopAdmin();
-        Item item = new Item();
+    boolean isDestroyed = false;
 
-    public EditItemFragment() {
+
+//    Item item = new Item();
+    ItemImage itemImage = new ItemImage();
+
+    public EditItemImageFragment() {
 
         DaggerComponentBuilder.getInstance()
                 .getNetComponent().Inject(this);
@@ -162,31 +113,42 @@ public class EditItemFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         setRetainInstance(true);
-        View rootView = inflater.inflate(R.layout.content_edit_item_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.content_edit_item_image_fragment, container, false);
 
         ButterKnife.bind(this,rootView);
 
         if(savedInstanceState==null)
         {
-//            shopAdmin = getActivity().getIntent().getParcelableExtra(SHOP_ADMIN_INTENT_KEY);
 
             current_mode = getActivity().getIntent().getIntExtra(EDIT_MODE_INTENT_KEY,MODE_ADD);
-            itemCategory = getActivity().getIntent().getParcelableExtra(ITEM_CATEGORY_INTENT_KEY);
 
             if(current_mode == MODE_UPDATE)
             {
-                item = UtilityItem.getItem(getContext());
+                itemImage = UtilityItemImage.getItemImage(getContext());
+
+                if(itemImage !=null) {
+                    bindDataToViews();
+                }
+
             }
             else if (current_mode == MODE_ADD)
             {
+
+//                if(getActivity().getActionBar()!=null)
+//                {
+//                    getActivity().getActionBar().setTitle("Add Item Image");
+//                }
+
+
+                if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null)
+                {
+                    ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Add Item Image");
+                }
+
 //                item.setItemCategoryID(itemCategory.getItemCategoryID());
 //                System.out.println("Item Category ID : " + item.getItemCategoryID());
             }
 
-
-            if(item !=null) {
-                bindDataToViews();
-            }
 
 
             showLogMessage("Inside OnCreateView - Saved Instance State !");
@@ -194,18 +156,12 @@ public class EditItemFragment extends Fragment {
 
 
 
-//        if(validator==null)
-//        {
-//            validator = new Validator(this);
-//            validator.setValidationListener(this);
-//        }
 
         updateIDFieldVisibility();
 
 
-        if(item !=null) {
-            loadImage(item.getItemImageURL());
-            showLogMessage("Inside OnCreateView : DeliveryGUySelf : Not Null !");
+        if(itemImage !=null) {
+            loadImage(itemImage.getImageFilename());
         }
 
 
@@ -214,20 +170,30 @@ public class EditItemFragment extends Fragment {
         return rootView;
     }
 
+
+
     void updateIDFieldVisibility()
     {
 
         if(current_mode==MODE_ADD)
         {
-            buttonUpdateItem.setText("Add Item");
-            itemID.setVisibility(View.GONE);
+            buttonUpdateItem.setText("Add Item Image");
+            imageID.setVisibility(View.GONE);
         }
         else if(current_mode== MODE_UPDATE)
         {
-            itemID.setVisibility(View.VISIBLE);
+            imageID.setVisibility(View.VISIBLE);
             buttonUpdateItem.setText("Save");
+
+
+            if(((AppCompatActivity)getActivity()).getSupportActionBar()!=null)
+            {
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Edit Item Image");
+            }
         }
     }
+
+
 
 
     public static final String TAG_LOG = "TAG_LOG";
@@ -240,14 +206,19 @@ public class EditItemFragment extends Fragment {
 
 
 
-    void loadImage(String imagePath) {
 
-        String iamgepath = UtilityGeneral.getServiceURL(getContext()) + "/api/v1/Item/Image/" + imagePath;
+    void loadImage(String filename) {
 
-        System.out.println(iamgepath);
+//        String iamgepath = UtilityGeneral.getServiceURL(getContext()) + "/api/v1/ItemImage/five_hundred_" + imagePath + ".jpg";
+
+
+        String imagePath = UtilityGeneral.getServiceURL(getActivity()) + "/api/v1/ItemImage/Image/five_hundred_"
+                + filename + ".jpg";
+
+        System.out.println(imagePath);
 
         Picasso.with(getContext())
-                .load(iamgepath)
+                .load(imagePath)
                 .into(resultView);
     }
 
@@ -266,7 +237,7 @@ public class EditItemFragment extends Fragment {
 
         if(current_mode == MODE_ADD)
         {
-            item = new Item();
+            itemImage = new ItemImage();
             addAccount();
         }
         else if(current_mode == MODE_UPDATE)
@@ -280,10 +251,10 @@ public class EditItemFragment extends Fragment {
     {
         boolean isValid = true;
 
-        if(itemName.getText().toString().length()==0)
+        if(captionTitle.getText().toString().length()==0)
         {
-            itemName.setError("Item Name cannot be empty !");
-            itemName.requestFocus();
+            captionTitle.setError("Item Name cannot be empty !");
+            captionTitle.requestFocus();
             isValid= false;
         }
 
@@ -328,7 +299,7 @@ public class EditItemFragment extends Fragment {
 
 
             // delete previous Image from the Server
-            deleteImage(item.getItemImageURL());
+            deleteImage(itemImage.getImageFilename());
 
             /*ImageCalls.getInstance()
                     .deleteImage(
@@ -340,7 +311,7 @@ public class EditItemFragment extends Fragment {
             if(isImageRemoved)
             {
 
-                item.setItemImageURL(null);
+                itemImage.setImageFilename(null);
                 retrofitPUTRequest();
 
             }else
@@ -364,14 +335,14 @@ public class EditItemFragment extends Fragment {
 
     void bindDataToViews()
     {
-        if(item !=null) {
+        if(itemImage !=null) {
 
-            itemID.setText(String.valueOf(item.getItemID()));
-            itemName.setText(item.getItemName());
-            itemDescription.setText(item.getItemDescription());
+            imageID.setText(String.valueOf(itemImage.getImageID()));
+            captionTitle.setText(itemImage.getCaptionTitle());
+            caption.setText(itemImage.getCaption());
+            imageCopyrightsInfo.setText(itemImage.getImageCopyrights());
+            imageOrder.setText(String.valueOf(itemImage.getImageOrder()));
 
-            quantityUnit.setText(item.getQuantityUnit());
-            itemDescriptionLong.setText(item.getItemDescriptionLong());
         }
     }
 
@@ -381,11 +352,11 @@ public class EditItemFragment extends Fragment {
 
     void getDataFromViews()
     {
-        if(item ==null)
+        if(itemImage ==null)
         {
             if(current_mode == MODE_ADD)
             {
-//                item = new Item();
+//                itemImage = new ItemImage();
             }
             else
             {
@@ -393,21 +364,35 @@ public class EditItemFragment extends Fragment {
             }
         }
 
-//        if(current_mode == MODE_ADD)
-//        {
-//            deliveryGuySelf.setShopID(UtilityShopHome.getShop(getContext()).getShopID());
-//        }
 
+        if(!imageID.getText().toString().equals(""))
+        {
+            itemImage.setImageID(Integer.parseInt(imageID.getText().toString()));
+        }
 
-        item.setItemName(itemName.getText().toString());
-        item.setItemDescription(itemDescription.getText().toString());
+        itemImage.setCaptionTitle(captionTitle.getText().toString());
+        itemImage.setCaption(caption.getText().toString());
+        itemImage.setImageCopyrights(imageCopyrightsInfo.getText().toString());
 
-        item.setItemDescriptionLong(itemDescriptionLong.getText().toString());
-        item.setQuantityUnit(quantityUnit.getText().toString());
-
+        if(!imageOrder.getText().toString().equals(""))
+        {
+            itemImage.setImageOrder(Integer.parseInt(imageOrder.getText().toString()));
+        }
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        isDestroyed = false;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isDestroyed = true;
+    }
 
     public void retrofitPUTRequest()
     {
@@ -415,9 +400,9 @@ public class EditItemFragment extends Fragment {
         getDataFromViews();
 
 
-        Call<ResponseBody> call = itemService.updateItem(
+        Call<ResponseBody> call = itemImageService.updateItemImage(
                 UtilityLogin.getAuthorizationHeaders(getContext()),
-                item,item.getItemID()
+                itemImage,itemImage.getImageID()
         );
 
 
@@ -425,14 +410,20 @@ public class EditItemFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
                 if(response.code()==200)
                 {
                     showToastMessage("Update Successful !");
-                    UtilityItem.saveItem(item,getContext());
+                    UtilityItemImage.saveItemImage(itemImage,getContext());
                 }
                 else if(response.code()== 403 || response.code() ==401)
                 {
-                    showToastMessage("Failed ! Reason : Not Permitted !");
+                    showToastMessage("Not Permitted !");
                 }
                 else
                 {
@@ -443,24 +434,42 @@ public class EditItemFragment extends Fragment {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
+
+                showToastMessage("Update failed !");
             }
         });
 
     }
 
 
+
+
+
     void retrofitPOSTRequest()
     {
         getDataFromViews();
-        item.setItemCategoryID(itemCategory.getItemCategoryID());
+        itemImage.setItemID(getActivity().getIntent().getIntExtra(ITEM_ID_INTENT_KEY,0));
 
-        System.out.println("Item Category ID (POST) : " + item.getItemCategoryID());
+        Call<ItemImage> call = itemImageService.saveItemImage(UtilityLogin.getAuthorizationHeaders(getContext()), itemImage);
 
-        Call<Item> call = itemService.insertItem(UtilityLogin.getAuthorizationHeaders(getContext()), item);
-
-        call.enqueue(new Callback<Item>() {
+        call.enqueue(new Callback<ItemImage>() {
             @Override
-            public void onResponse(Call<Item> call, Response<Item> response) {
+            public void onResponse(Call<ItemImage> call, Response<ItemImage> response) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
 
                 if(response.code()==201)
                 {
@@ -468,11 +477,15 @@ public class EditItemFragment extends Fragment {
 
                     current_mode = MODE_UPDATE;
                     updateIDFieldVisibility();
-                    item = response.body();
+                    itemImage = response.body();
                     bindDataToViews();
 
-                    UtilityItem.saveItem(item,getContext());
+                    UtilityItemImage.saveItemImage(itemImage,getContext());
 
+                }
+                else if(response.code()== 403 || response.code() ==401)
+                {
+                    showToastMessage("Not Permitted !");
                 }
                 else
                 {
@@ -482,7 +495,16 @@ public class EditItemFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Item> call, Throwable t) {
+            public void onFailure(Call<ItemImage> call, Throwable t) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
+
                 showToastMessage("Add failed !");
             }
         });
@@ -751,13 +773,21 @@ public class EditItemFragment extends Fragment {
 
 
 
-        Call<Image> imageCall = itemService.uploadImage(UtilityLogin.getAuthorizationHeaders(getContext()),
+        Call<Image> imageCall = itemImageService.uploadItemImage(UtilityLogin.getAuthorizationHeaders(getContext()),
                 requestBodyBinary);
 
 
         imageCall.enqueue(new Callback<Image>() {
             @Override
             public void onResponse(Call<Image> call, Response<Image> response) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
 
                 if(response.code()==201)
                 {
@@ -768,20 +798,20 @@ public class EditItemFragment extends Fragment {
 //                    loadImage(image.getPath());
 
 
-                    item.setItemImageURL(image.getPath());
+                    itemImage.setImageFilename(image.getPath());
 
                 }
                 else if(response.code()==417)
                 {
                     showToastMessage("Cant Upload Image. Image Size should not exceed 2 MB.");
 
-                    item.setItemImageURL(null);
+                    itemImage.setImageFilename(null);
 
                 }
                 else
                 {
                     showToastMessage("Image Upload failed !");
-                    item.setItemImageURL(null);
+                    itemImage.setImageFilename(null);
 
                 }
 
@@ -800,8 +830,16 @@ public class EditItemFragment extends Fragment {
             @Override
             public void onFailure(Call<Image> call, Throwable t) {
 
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
+
                 showToastMessage("Image Upload failed !");
-                item.setItemImageURL(null);
+                itemImage.setImageFilename(null);
 
 
                 if(isModeEdit)
@@ -821,7 +859,7 @@ public class EditItemFragment extends Fragment {
 
     void deleteImage(String filename)
     {
-        Call<ResponseBody> call = itemService.deleteImage(
+        Call<ResponseBody> call = itemImageService.deleteItemImage(
                 UtilityLogin.getAuthorizationHeaders(getContext()),
                 filename);
 
@@ -832,7 +870,15 @@ public class EditItemFragment extends Fragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
 
-                    if(response.code()==200)
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
+
+
+                if(response.code()==200)
                     {
                         showToastMessage("Image Removed !");
                     }
@@ -846,6 +892,14 @@ public class EditItemFragment extends Fragment {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
 
 //                showToastMessage("Image Delete failed");
             }

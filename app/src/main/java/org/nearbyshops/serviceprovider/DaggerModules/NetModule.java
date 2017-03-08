@@ -12,7 +12,11 @@ import org.nearbyshops.serviceprovider.MyApplication;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.DistributorAccountService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemImageService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecNameService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecValueService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.SettingsService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopAdminService;
@@ -220,11 +224,43 @@ public class NetModule {
     }
 
 
+
     @Provides
     ItemService provideItemService(@Named("normal")Retrofit retrofit)
     {
         return retrofit.create(ItemService.class);
     }
+
+
+    @Provides
+    ItemImageService provideItemImageService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ItemImageService.class);
+    }
+
+
+    @Provides
+    ItemSpecItemService provideItemSpecItem(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ItemSpecItemService.class);
+    }
+
+    @Provides
+    ItemSpecNameService provideSpecNameService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ItemSpecNameService.class);
+    }
+
+
+
+    @Provides
+    ItemSpecValueService provideSpecValueService(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ItemSpecValueService.class);
+    }
+
+
+
 
 
     @Provides

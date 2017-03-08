@@ -265,7 +265,7 @@
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
         <activity
-            android:name=".ItemsByCategorySimple.EditItem.EditItem"
+            android:name=".ItemsByCategorySimple.EditItemOld.EditItemOld"
             android:label="Edit Item"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
@@ -376,6 +376,43 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+
+
+        <activity
+            android:name=".FilterItemsBySpecifications.FilterItemsActivity"
+            android:label="Item Specifications"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Home" />
+        </activity>
+
+
+        <activity
+            android:name=".ItemsByCategorySimple.EditItem.EditItem"
+            android:label="Edit Item"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Home" />
+        </activity>
+
+
+
+        <activity
+            android:name=".ItemsByCategorySimple.EditItemImage.EditItemImage"
+            android:label="Edit Item Image"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Home" />
+        </activity>
+
+
+
 
 
     </application>

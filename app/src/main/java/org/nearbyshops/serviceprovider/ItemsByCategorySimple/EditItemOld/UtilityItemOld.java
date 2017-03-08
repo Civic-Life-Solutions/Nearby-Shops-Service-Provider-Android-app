@@ -1,10 +1,9 @@
-package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
-
 
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.R;
@@ -17,7 +16,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 
-public class UtilityItem {
+public class UtilityItemOld {
 
     public static final String TAG_ITEM_PREF = "tag_item";
 

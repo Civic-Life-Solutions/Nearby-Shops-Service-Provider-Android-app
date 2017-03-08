@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import org.nearbyshops.serviceprovider.R;
 
 
-public class EditItem extends AppCompatActivity {
+public class EditItemOld extends AppCompatActivity {
 
     public static final String TAG_FRAGMENT_EDIT = "fragment_edit";
 
@@ -24,7 +24,7 @@ public class EditItem extends AppCompatActivity {
         {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_container,new EditItemFragmentNew(),TAG_FRAGMENT_EDIT)
+                    .add(R.id.fragment_container,new EditItemFragmentOld(),TAG_FRAGMENT_EDIT)
                     .commit();
         }
     }

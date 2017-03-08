@@ -23,10 +23,10 @@ import org.nearbyshops.serviceprovider.AddFromGlobalSelection.AddFromGlobal;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragmentNew;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyBackPressed;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyFABClick;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyHeaderChanged;
@@ -966,8 +966,8 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
 //        showToastMessage("add item");
 
         Intent intent = new Intent(getActivity(),EditItem.class);
-        intent.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY,EditItemFragment.MODE_ADD);
-        intent.putExtra(EditItemFragment.ITEM_CATEGORY_INTENT_KEY,currentCategory);
+        intent.putExtra(EditItemFragmentNew.EDIT_MODE_INTENT_KEY, EditItemFragmentNew.MODE_ADD);
+        intent.putExtra(EditItemFragmentNew.ITEM_CATEGORY_INTENT_KEY,currentCategory);
         startActivity(intent);
     }
 

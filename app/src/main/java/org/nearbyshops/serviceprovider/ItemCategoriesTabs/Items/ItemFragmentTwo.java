@@ -24,8 +24,8 @@ import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySwipeToRight;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifyTitleChanged;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemOld;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemFragmentOld;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
 import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
@@ -834,9 +834,9 @@ public class ItemFragmentTwo extends Fragment
 //        addIntent.putExtra(ADD_ITEM_INTENT_KEY,notifiedCurrentCategory);
 //        startActivity(addIntent);
 
-        Intent intent = new Intent(getActivity(),EditItem.class);
-        intent.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY,EditItemFragment.MODE_ADD);
-        intent.putExtra(EditItemFragment.ITEM_CATEGORY_INTENT_KEY,notifiedCurrentCategory);
+        Intent intent = new Intent(getActivity(),EditItemOld.class);
+        intent.putExtra(EditItemFragmentOld.EDIT_MODE_INTENT_KEY, EditItemFragmentOld.MODE_ADD);
+        intent.putExtra(EditItemFragmentOld.ITEM_CATEGORY_INTENT_KEY,notifiedCurrentCategory);
         startActivity(intent);
     }
 

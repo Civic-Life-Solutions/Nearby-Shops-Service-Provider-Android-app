@@ -1,14 +1,9 @@
 package org.nearbyshops.serviceprovider.AddFromGlobalSelection;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,12 +17,7 @@ import android.widget.Toast;
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.NotifySort;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Interfaces.ToggleFab;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyBackPressed;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyFABClick;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Interfaces.NotifyHeaderChanged;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Utility.HeaderItemsList;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Utility.UtilitySortItemsByCategory;
@@ -40,7 +30,6 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemCategoryServiceGIDB;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemServiceGIDB;
-import org.nearbyshops.serviceprovider.SelectParent.ItemCategoriesParent;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 

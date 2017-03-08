@@ -22,12 +22,14 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragmentNew;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.UtilityItemCategory;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.UtilityItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemOld;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemFragmentOld;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.UtilityItemOld;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.Utility.HeaderItemsList;
 import org.nearbyshops.serviceprovider.Model.Item;
 import org.nearbyshops.serviceprovider.Model.ItemCategory;
@@ -522,10 +524,10 @@ public class AdapterSimple extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 case R.id.action_edit:
 
                     if (dataset.get(getLayoutPosition()) instanceof Item) {
-                        UtilityItem.saveItem((Item) dataset.get(getLayoutPosition()), context);
+                        UtilityItemOld.saveItem((Item) dataset.get(getLayoutPosition()), context);
 
                         Intent intentEdit = new Intent(context, EditItem.class);
-                        intentEdit.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY, EditItemFragment.MODE_UPDATE);
+                        intentEdit.putExtra(EditItemFragmentNew.EDIT_MODE_INTENT_KEY, EditItemFragmentNew.MODE_UPDATE);
                         context.startActivity(intentEdit);
                     }
                     break;

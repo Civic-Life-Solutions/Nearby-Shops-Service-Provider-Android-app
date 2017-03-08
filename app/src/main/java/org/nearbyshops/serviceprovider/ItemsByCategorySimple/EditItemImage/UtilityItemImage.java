@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem;
+package org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemImage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 
 
-import org.nearbyshops.serviceprovider.Model.Item;
+import org.nearbyshops.serviceprovider.Model.ItemImage;
 import org.nearbyshops.serviceprovider.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -17,12 +17,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 
-public class UtilityItem {
+public class UtilityItemImage {
 
-    public static final String TAG_ITEM_PREF = "tag_item";
+    public static final String TAG_ITEM_PREF = "tag_item_image";
 
 
-    public static void saveItem(Item item, Context context)
+    public static void saveItemImage(ItemImage itemImage, Context context)
     {
 
         //Creating a shared preference
@@ -31,7 +31,7 @@ public class UtilityItem {
 
         SharedPreferences.Editor prefsEditor = sharedPref.edit();
 
-        if(item == null)
+        if(itemImage == null)
         {
             prefsEditor.putString(TAG_ITEM_PREF, "null");
 
@@ -39,7 +39,7 @@ public class UtilityItem {
         else
         {
             Gson gson = new Gson();
-            String json = gson.toJson(item);
+            String json = gson.toJson(itemImage);
             prefsEditor.putString(TAG_ITEM_PREF, json);
         }
 
@@ -47,7 +47,7 @@ public class UtilityItem {
     }
 
 
-    public static Item getItem(Context context)
+    public static ItemImage getItemImage(Context context)
     {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.preference_file_name), MODE_PRIVATE);
 
@@ -61,9 +61,17 @@ public class UtilityItem {
 
         }else
         {
-            return gson.fromJson(json, Item.class);
+            return gson.fromJson(json, ItemImage.class);
         }
     }
+
+
+
+    // Item for Item ID
+
+
+
+
 
 
 }

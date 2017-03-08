@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItem;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.UtilityItem;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemOld;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemFragmentOld;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.UtilityItemOld;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategory;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.UtilityItemCategory;
@@ -516,10 +515,10 @@ public class AdapterAddFromGlobal extends RecyclerView.Adapter<RecyclerView.View
                 case R.id.action_edit:
 
                     if (dataset.get(getLayoutPosition()) instanceof Item) {
-                        UtilityItem.saveItem((Item) dataset.get(getLayoutPosition()), context);
+                        UtilityItemOld.saveItem((Item) dataset.get(getLayoutPosition()), context);
 
-                        Intent intentEdit = new Intent(context, EditItem.class);
-                        intentEdit.putExtra(EditItemFragment.EDIT_MODE_INTENT_KEY, EditItemFragment.MODE_UPDATE);
+                        Intent intentEdit = new Intent(context, EditItemOld.class);
+                        intentEdit.putExtra(EditItemFragmentOld.EDIT_MODE_INTENT_KEY, EditItemFragmentOld.MODE_UPDATE);
                         context.startActivity(intentEdit);
                     }
                     break;

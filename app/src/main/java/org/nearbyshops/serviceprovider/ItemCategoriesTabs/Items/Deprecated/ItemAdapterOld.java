@@ -311,13 +311,10 @@ public class ItemAdapterOld extends RecyclerView.Adapter<ItemAdapterOld.ViewHold
 
                 case R.id.action_edit:
 
-//                    Intent intent = new Intent(context,EditItemCategoryOld.class);
-//                    intent.putExtra(EditItemCategoryOld.ITEM_CATEGORY_INTENT_KEY,dataset.get(getLayoutPosition()));
-//                    context.startActivity(intent);
 
-                    Intent intentEdit = new Intent(context,EditItemOld.class);
-                    intentEdit.putExtra(EditItemOld.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
-                    context.startActivity(intentEdit);
+//                    Intent intentEdit = new Intent(context,EditItemOld.class);
+//                    intentEdit.putExtra(EditItemOld.ITEM_INTENT_KEY,dataset.get(getLayoutPosition()));
+//                    context.startActivity(intentEdit);
 
                     break;
 

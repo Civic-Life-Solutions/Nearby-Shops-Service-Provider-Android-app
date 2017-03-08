@@ -7,10 +7,13 @@ import org.nearbyshops.serviceprovider.DetachedTabs.ItemCategories.DetachedItemC
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemAdapter;
 import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
 import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
+import org.nearbyshops.serviceprovider.FilterItemsBySpecifications.FilterItemsFragment;
 import org.nearbyshops.serviceprovider.Home;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragmentNew;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld;
-import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemImage.EditItemImageFragment;
+import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemOld.EditItemFragmentOld;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.Deprecated.EditItemOld;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.Items.ItemFragmentTwo;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesFragmentSimple;
@@ -111,7 +114,7 @@ public interface NetComponent {
 
     void Inject(FragmentStaffAccounts fragmentStaffAccounts);
 
-    void Inject(EditItemFragment editItemFragment);
+    void Inject(EditItemFragmentOld editItemFragmentOld);
 
     void Inject(EditItemCategoryFragment editItemCategoryFragment);
 
@@ -136,6 +139,12 @@ public interface NetComponent {
     void Inject(ServicesFragment servicesFragment);
 
     void Inject(SubmitURLDialog submitURLDialog);
+
+    void Inject(EditItemFragmentNew editItemFragmentNew);
+
+    void Inject(EditItemImageFragment editItemImageFragment);
+
+    void Inject(FilterItemsFragment filterItemsFragment);
 
 
 //    void Inject(LoginDialog loginDialog);
