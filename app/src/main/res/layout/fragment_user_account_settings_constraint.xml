@@ -88,7 +88,7 @@
 
         <Switch
             android:gravity="center"
-            android:id="@+id/switch_shop_admin_account"
+            android:id="@+id/switch_shop_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="@+id/switch_end_user_account"
@@ -102,8 +102,8 @@
             android:id="@+id/shop_admin_enabled_default"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/switch_shop_admin_account"
-            app:layout_constraintTop_toTopOf="@+id/switch_shop_admin_account"
+            app:layout_constraintRight_toLeftOf="@+id/switch_shop_account"
+            app:layout_constraintTop_toTopOf="@+id/switch_shop_account"
             app:layout_constraintLeft_toLeftOf="@+id/text_distributor_account"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp" />

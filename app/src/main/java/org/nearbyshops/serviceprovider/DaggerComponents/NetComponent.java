@@ -9,6 +9,10 @@ import org.nearbyshops.serviceprovider.DetachedTabs.Items.DetachedItemFragment;
 import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
 import org.nearbyshops.serviceprovider.FilterItemsBySpecifications.FilterItemsFragment;
 import org.nearbyshops.serviceprovider.Home;
+import org.nearbyshops.serviceprovider.ItemSpecName.EditItemSpecName.EditItemSpecNameFragment;
+import org.nearbyshops.serviceprovider.ItemSpecName.ItemSpecNameFragment;
+import org.nearbyshops.serviceprovider.ItemSpecValue.EditItemSpecValue.EditItemSpecValueFragment;
+import org.nearbyshops.serviceprovider.ItemSpecValue.ItemSpecValueFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragmentNew;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld;
@@ -145,6 +149,14 @@ public interface NetComponent {
     void Inject(EditItemImageFragment editItemImageFragment);
 
     void Inject(FilterItemsFragment filterItemsFragment);
+
+    void Inject(EditItemSpecNameFragment editItemSpecNameFragment);
+
+    void Inject(ItemSpecNameFragment itemSpecNameFragment);
+
+    void Inject(EditItemSpecValueFragment editItemSpecValueFragment);
+
+    void Inject(ItemSpecValueFragment itemSpecValueFragment);
 
 
 //    void Inject(LoginDialog loginDialog);

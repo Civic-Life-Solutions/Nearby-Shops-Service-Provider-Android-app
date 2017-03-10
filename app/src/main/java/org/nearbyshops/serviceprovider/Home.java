@@ -17,6 +17,7 @@ import org.nearbyshops.serviceprovider.DetachedTabs.DetachedTabs;
 import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
 import org.nearbyshops.serviceprovider.EditProfileAdmin.EditProfileAdmin;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
+import org.nearbyshops.serviceprovider.ItemSpecName.ItemSpecNameActivity;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesSimple;
 import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
@@ -113,6 +114,16 @@ public class Home extends AppCompatActivity {
         startActivity(new Intent(this, ItemCategoriesSimple.class));
     }
 
+
+
+
+
+    @OnClick(R.id.item_specifications)
+    void itemSpecNameClick()
+    {
+        Intent intent = new Intent(this, ItemSpecNameActivity.class);
+        startActivity(intent);
+    }
 
 
 
