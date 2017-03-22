@@ -178,6 +178,44 @@ android:paddingTop="@dimen/activity_vertical_margin"   -->
 
 
 
+        <ImageView
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="60dp"
+            android:background="@color/overflow_icon_color"
+            android:id="@+id/item_submissions"
+            android:layout_marginTop="10dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/header_item_specs"
+            app:layout_constraintLeft_toRightOf="@id/vertical_guide"
+            app:srcCompat="@drawable/ic_low_priority_black_24px"
+            android:layout_width="0dp"
+            android:layout_height="150dp" />
+
+
+        <TextView
+            app:layout_constraintLeft_toLeftOf="@+id/item_submissions"
+            app:layout_constraintRight_toRightOf="@+id/item_submissions"
+            app:layout_constraintBottom_toBottomOf="@+id/item_submissions"
+            android:padding="10dp"
+            android:id="@+id/text_item_submissions"
+            android:textSize="@dimen/menu_item_text_size"
+            android:textColor="#ffffff"
+            android:text="Item Submissions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+
+
+
+
+
+
+
+
+
 
 
         <TextView

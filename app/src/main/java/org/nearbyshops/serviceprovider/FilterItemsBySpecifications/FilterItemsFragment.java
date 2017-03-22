@@ -17,9 +17,9 @@ import org.nearbyshops.serviceprovider.ModelItemSpecification.ItemSpecificationI
 import org.nearbyshops.serviceprovider.ModelItemSpecification.ItemSpecificationName;
 import org.nearbyshops.serviceprovider.ModelItemSpecification.ItemSpecificationValue;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecItemService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecNameService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecValueService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecNameService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecValueService;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
 import java.util.ArrayList;

@@ -31,7 +31,7 @@ import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.Model.Image;
 import org.nearbyshops.serviceprovider.ModelItemSpecification.ItemSpecificationValue;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecValueService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecValueService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
@@ -179,7 +179,7 @@ public class EditItemSpecValueFragment extends Fragment {
 
         if(current_mode==MODE_ADD)
         {
-            buttonUpdateItem.setText("Add Item Image");
+            buttonUpdateItem.setText("Add Value");
             itemSpecNameID.setVisibility(View.GONE);
         }
         else if(current_mode== MODE_UPDATE)

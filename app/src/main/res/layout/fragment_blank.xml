@@ -1,0 +1,211 @@
+<android.support.v4.widget.NestedScrollView app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="org.nearbyshops.serviceprovider.ItemSubmissionsList.SubmissionDetails.SubmissionDetailsFragment">
+
+
+    <com.alexvasilkov.gestures.views.GestureImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/item_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        android:layout_marginRight="0dp"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+
+    <!--<ImageView-->
+        <!--android:scaleType="centerCrop"-->
+        <!--android:id="@+id/item_image"-->
+        <!--android:background="@color/colorAccent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:layout_marginRight="0dp"-->
+        <!--android:layout_marginLeft="0dp" />-->
+
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/copyright_info"
+        android:text="Copyright Information : Creative Commons "
+        app:layout_constraintTop_toBottomOf="@id/item_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/border_zero"
+        android:background="@color/grey800"
+        app:layout_constraintTop_toBottomOf="@id/copyright_info"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="1dp" />
+
+
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_marginTop="10dp"
+        android:textSize="34sp"
+        android:text="Item Name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/border_zero"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+
+    <TextView
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/item_description_short"
+        android:text="Item Description Short which will be about 150 characters. And will have another extra line."
+        app:layout_constraintTop_toBottomOf="@id/item_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:textSize="17sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_description_short"
+        android:text="Price : Rs. 345"
+        android:id="@+id/list_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:textSize="17sp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_price"
+        android:text="Item Unit : Dozen"
+        android:id="@+id/item_unit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:text="Item Description long. "
+        android:id="@+id/item_description_long"
+        app:layout_constraintTop_toBottomOf="@id/item_unit"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+
+
+    <ImageView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_description_long"
+        android:layout_marginTop="10dp"
+        android:id="@+id/barcode_image"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_barcode"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+
+    <TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:text="Barcode : 12423232\nBarcode Format : UPC_3A"
+        app:layout_constraintTop_toTopOf="@id/barcode_image"
+        app:layout_constraintLeft_toRightOf="@id/barcode_image"
+        android:id="@+id/barcode_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/border_one"
+        android:background="@color/grey800"
+        app:layout_constraintTop_toBottomOf="@id/barcode_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="1dp" />
+
+
+
+    <TextView
+        android:id="@+id/accept"
+        android:layout_marginBottom="20dp"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="10dp"
+        android:text="Accept"
+        app:layout_constraintTop_toBottomOf="@id/border_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/reject"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/buttonColorDark"
+        android:textSize="20sp"
+        android:text="|  Reject"
+        app:layout_constraintLeft_toRightOf="@id/accept"
+        app:layout_constraintTop_toTopOf="@id/accept"
+        app:layout_constraintBottom_toBottomOf="@id/accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/border_bottom"
+        android:background="@color/grey800"
+        app:layout_constraintTop_toBottomOf="@id/accept"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="1dp" />
+
+
+
+
+
+</android.support.constraint.ConstraintLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

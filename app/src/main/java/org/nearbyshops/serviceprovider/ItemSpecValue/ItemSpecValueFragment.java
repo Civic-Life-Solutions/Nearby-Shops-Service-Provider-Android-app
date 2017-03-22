@@ -20,7 +20,8 @@ import org.nearbyshops.serviceprovider.ItemSpecValue.EditItemSpecValue.UtilityIt
 import org.nearbyshops.serviceprovider.ModelItemSpecification.EndPoints.ItemSpecValueEndPoint;
 import org.nearbyshops.serviceprovider.ModelItemSpecification.ItemSpecificationValue;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecValueService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecValueService;
+import org.nearbyshops.serviceprovider.Utility.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,8 +114,8 @@ public class ItemSpecValueFragment extends Fragment implements SwipeRefreshLayou
         layoutManager = new GridLayoutManager(getActivity(),1);
         recyclerView.setLayoutManager(layoutManager);
 
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL_LIST));
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL_LIST));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
 
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -292,13 +293,14 @@ public class ItemSpecValueFragment extends Fragment implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
 
-        boolean resetGetRowCount = false;
-        if(item_count == 0)
-        {
-            resetGetRowCount=true;
-        }
+//        boolean resetGetRowCount = false;
+//        if(item_count == 0)
+//        {
+//            resetGetRowCount=true;
+//        }
 
-        makeNetworkCall(true,true,resetGetRowCount);
+
+        makeNetworkCall(true,true,true);
     }
 
 

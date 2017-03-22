@@ -1,72 +1,95 @@
 package org.nearbyshops.serviceprovider.ModelStats;
 
+import java.sql.Timestamp;
+
 /**
  * Created by sumeet on 26/5/16.
  */
 public class ItemStats {
 
-    private int itemID;
-    private double min_price;
-    private double max_price;
-    private double avg_price;
-    private int shopCount;
-    private double rating_avg;
-    private int ratingCount;
+    private Integer itemID;
+    private Double min_price;
+    private Double max_price;
+    private Double avg_price;
+    private Integer shopCount;
+
+    private Double rating_avg;
+    private Integer ratingCount;
 
 
-    public int getItemID() {
+    private int submissionsCount;
+    private Timestamp latestUpdate;
+
+
+    public Timestamp getLatestUpdate() {
+        return latestUpdate;
+    }
+
+    public void setLatestUpdate(Timestamp latestUpdate) {
+        this.latestUpdate = latestUpdate;
+    }
+
+    public int getSubmissionsCount() {
+        return submissionsCount;
+    }
+
+    public void setSubmissionsCount(int submissionsCount) {
+        this.submissionsCount = submissionsCount;
+    }
+
+    public Integer getItemID() {
         return itemID;
     }
 
-    public void setItemID(int itemID) {
+    public void setItemID(Integer itemID) {
         this.itemID = itemID;
     }
 
-    public double getMin_price() {
+    public Double getMin_price() {
         return min_price;
     }
 
-    public void setMin_price(double min_price) {
+    public void setMin_price(Double min_price) {
         this.min_price = min_price;
     }
 
-    public double getMax_price() {
+    public Double getMax_price() {
         return max_price;
     }
 
-    public void setMax_price(double max_price) {
+    public void setMax_price(Double max_price) {
         this.max_price = max_price;
     }
 
-    public double getAvg_price() {
+    public Double getAvg_price() {
         return avg_price;
     }
 
-    public void setAvg_price(double avg_price) {
+    public void setAvg_price(Double avg_price) {
         this.avg_price = avg_price;
     }
 
-    public int getShopCount() {
+    public Integer getShopCount() {
         return shopCount;
     }
 
-    public void setShopCount(int shopCount) {
+    public void setShopCount(Integer shopCount) {
         this.shopCount = shopCount;
     }
 
-    public double getRating_avg() {
+    public Double getRating_avg() {
         return rating_avg;
     }
 
-    public void setRating_avg(double rating_avg) {
+    public void setRating_avg(Double rating_avg) {
         this.rating_avg = rating_avg;
     }
 
-    public int getRatingCount() {
+    public Integer getRatingCount() {
         return ratingCount;
     }
 
-    public void setRatingCount(int ratingCount) {
+    public void setRatingCount(Integer ratingCount) {
         this.ratingCount = ratingCount;
     }
 }

@@ -46,9 +46,9 @@ import org.nearbyshops.serviceprovider.Model.ItemImage;
 import org.nearbyshops.serviceprovider.ModelItemSpecification.EndPoints.ItemImageEndPoint;
 import org.nearbyshops.serviceprovider.ModelItemSpecification.ItemSpecificationName;
 import org.nearbyshops.serviceprovider.R;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemImageService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecNameService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemImageService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecNameService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
 
@@ -1175,6 +1175,7 @@ public class EditItemFragmentNew extends Fragment implements AdapterItemImages.n
 
                     dataset.remove(position);
                     adapterItemImages.notifyItemRemoved(position+1);
+
 
                 }
                 else if(response.code()==401 || response.code()==403)

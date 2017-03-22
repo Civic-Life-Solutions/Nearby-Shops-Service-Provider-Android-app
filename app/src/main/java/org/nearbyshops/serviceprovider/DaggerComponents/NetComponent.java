@@ -13,6 +13,9 @@ import org.nearbyshops.serviceprovider.ItemSpecName.EditItemSpecName.EditItemSpe
 import org.nearbyshops.serviceprovider.ItemSpecName.ItemSpecNameFragment;
 import org.nearbyshops.serviceprovider.ItemSpecValue.EditItemSpecValue.EditItemSpecValueFragment;
 import org.nearbyshops.serviceprovider.ItemSpecValue.ItemSpecValueFragment;
+import org.nearbyshops.serviceprovider.ItemSubmissionsList.ItemReviewFragment;
+import org.nearbyshops.serviceprovider.ItemSubmissionsList.ItemUpdates.ItemUpdatesFragment;
+import org.nearbyshops.serviceprovider.ItemSubmissionsList.SubmissionDetails.SubmissionDetailsFragment;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItem.EditItemFragmentNew;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.EditItemCategory.EditItemCategoryFragment;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategories.Deprecated.EditItemCategoryOld;
@@ -157,6 +160,13 @@ public interface NetComponent {
     void Inject(EditItemSpecValueFragment editItemSpecValueFragment);
 
     void Inject(ItemSpecValueFragment itemSpecValueFragment);
+
+
+    void Inject(ItemReviewFragment itemReviewFragment);
+
+    void Inject(SubmissionDetailsFragment submissionDetailsFragment);
+
+    void Inject(ItemUpdatesFragment itemUpdatesFragment);
 
 
 //    void Inject(LoginDialog loginDialog);

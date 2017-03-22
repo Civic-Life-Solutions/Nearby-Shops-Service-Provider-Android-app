@@ -12,11 +12,11 @@ import org.nearbyshops.serviceprovider.MyApplication;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.DistributorAccountService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemImageService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecItemService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecNameService;
-import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemSpecValueService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemImageService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecItemService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecNameService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecValueService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.SettingsService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopAdminService;
@@ -24,6 +24,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.ShopService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.StaffService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemCategoryServiceGIDB;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractGIDB.ItemServiceGIDB;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSubmissionService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractSDS.ServiceConfigService;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 
@@ -36,7 +37,6 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by sumeet on 14/5/16.
@@ -301,6 +301,14 @@ public class NetModule {
     ShopService provideShopService(@Named("normal")Retrofit retrofit)
     {
         return retrofit.create(ShopService.class);
+    }
+
+
+
+    @Provides
+    ItemSubmissionService provideItemSubmission(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ItemSubmissionService.class);
     }
 
 

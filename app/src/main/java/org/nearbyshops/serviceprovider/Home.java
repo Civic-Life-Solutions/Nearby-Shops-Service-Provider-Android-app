@@ -18,6 +18,7 @@ import org.nearbyshops.serviceprovider.EditProfileAdmin.EditAdminFragment;
 import org.nearbyshops.serviceprovider.EditProfileAdmin.EditProfileAdmin;
 import org.nearbyshops.serviceprovider.ItemCategoriesTabs.ItemCategoriesTabs;
 import org.nearbyshops.serviceprovider.ItemSpecName.ItemSpecNameActivity;
+import org.nearbyshops.serviceprovider.ItemSubmissionsMenu.ItemSubmissionMenu;
 import org.nearbyshops.serviceprovider.ItemsByCategorySimple.ItemCategoriesSimple;
 import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
@@ -242,8 +243,9 @@ public class Home extends AppCompatActivity {
     @OnClick(R.id.end_user_approvals)
     void itemCategoriesClick(View view)
     {
-        Intent intent = new Intent(this, ItemCategoriesTabs.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, ItemCategoriesTabs.class);
+//        startActivity(intent);
+        showToastMessage("Feature coming soon!");
     }
 
 
@@ -282,6 +284,14 @@ public class Home extends AppCompatActivity {
     {
         Intent intent = new Intent(this, EditProfileAdmin.class);
         intent.putExtra(EditAdminFragment.EDIT_MODE_INTENT_KEY,EditAdminFragment.MODE_UPDATE);
+        startActivity(intent);
+    }
+
+
+    @OnClick(R.id.item_submissions)
+    void itemSubmissionClick()
+    {
+        Intent intent = new Intent(this, ItemSubmissionMenu.class);
         startActivity(intent);
     }
 

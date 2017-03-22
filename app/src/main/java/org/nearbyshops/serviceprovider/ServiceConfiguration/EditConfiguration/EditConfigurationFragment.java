@@ -34,6 +34,7 @@ import org.nearbyshops.serviceprovider.Model.Image;
 import org.nearbyshops.serviceprovider.ModelServiceConfig.ServiceConfigurationLocal;
 import org.nearbyshops.serviceprovider.R;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ServiceConfigurationService;
+import org.nearbyshops.serviceprovider.ServiceConfiguration.Utility.PickLocationActivity;
 import org.nearbyshops.serviceprovider.Utility.ImageCropUtility;
 import org.nearbyshops.serviceprovider.Utility.UtilityGeneral;
 import org.nearbyshops.serviceprovider.Utility.UtilityLogin;
@@ -89,8 +90,8 @@ public class EditConfigurationFragment extends Fragment{
     @Bind(R.id.auto_complete_language) AutoCompleteTextView autoComplete;
     @Bind(R.id.latitude) EditText latitude;
     @Bind(R.id.longitude) EditText longitude;
-    @Bind(R.id.service_coverage) EditText serviceConverage;
-    @Bind(R.id.getlatlon) Button getlatlon;
+    @Bind(R.id.service_coverage) EditText serviceCoverage;
+//    @Bind(R.id.getlatlon) Button getlatlon;
     @Bind(R.id.spinner_country) Spinner spinnerCountry;
     @Bind(R.id.spinner_service_level) Spinner spinnerServiceLevel;
     @Bind(R.id.spinner_service_type) Spinner spinnerServiceType;
@@ -427,7 +428,12 @@ public class EditConfigurationFragment extends Fragment{
             autoComplete.setText(serviceConfiguration.getISOLanguageCode());
             latitude.setText(String.valueOf(serviceConfiguration.getLatCenter()));
             longitude.setText(String.valueOf(serviceConfiguration.getLonCenter()));
-            serviceConverage.setText(String.valueOf(serviceConfiguration.getServiceRange()));
+            serviceCoverage.setText(String.valueOf(serviceConfiguration.getServiceRange()));
+
+//            latitude.setText(String.format("%.2d",serviceConfiguration.getLatCenter()));
+//            longitude.setText(String.format("%.2d",serviceConfiguration.getLonCenter()));
+//            serviceCoverage.setText(String.format("%.2d",serviceConfiguration.getServiceRange()));
+
 
             descriptionShort.setText(serviceConfiguration.getDescriptionShort());
             descriptionLong.setText(serviceConfiguration.getDescriptionLong());
@@ -486,9 +492,9 @@ public class EditConfigurationFragment extends Fragment{
             serviceConfiguration.setLonCenter(Double.parseDouble(longitude.getText().toString()));
         }
 
-        if(!serviceConverage.getText().toString().equals(""))
+        if(!serviceCoverage.getText().toString().equals(""))
         {
-            serviceConfiguration.setServiceRange(Integer.parseInt(serviceConverage.getText().toString()));
+            serviceConfiguration.setServiceRange(Integer.parseInt(serviceCoverage.getText().toString()));
         }
 
 
@@ -673,6 +679,14 @@ public class EditConfigurationFragment extends Fragment{
 
         super.onActivityResult(requestCode, resultCode, result);
 
+
+
+        if(resultCode == RESULT_OK && requestCode == REQUEST_CODE_PICK_LAT_LON)
+        {
+            latitude.setText(String.valueOf(result.getDoubleExtra("latitude",0)));
+            longitude.setText(String.valueOf(result.getDoubleExtra("longitude",0)));
+            serviceCoverage.setText(String.valueOf((int)result.getDoubleExtra("delivery_range_kms",0)));
+        }
 
 
         if (requestCode == ImageCropUtility.PICK_IMAGE_REQUEST && resultCode == RESULT_OK
@@ -929,6 +943,37 @@ public class EditConfigurationFragment extends Fragment{
 //                showToastMessage("Image Delete failed");
             }
         });
+    }
+
+
+
+    // Pick location code
+
+
+
+    private int REQUEST_CODE_PICK_LAT_LON = 23;
+
+    @OnClick(R.id.pick_location_button)
+    void pickLocationClick()
+    {
+        Intent intent = new Intent(getActivity(),PickLocationActivity.class);
+
+        if(!longitude.getText().toString().equals("")&&!latitude.getText().toString().equals(""))
+        {
+            intent.putExtra(PickLocationActivity.INTENT_KEY_CURRENT_LON,Double.parseDouble(longitude.getText().toString()));
+            intent.putExtra(PickLocationActivity.INTENT_KEY_CURRENT_LAT,Double.parseDouble(latitude.getText().toString()));
+
+            if(!serviceCoverage.getText().toString().equals(""))
+            {
+                intent.putExtra(
+                        PickLocationActivity.INTENT_KEY_DELIVERY_RANGE,
+                        Double.parseDouble(serviceCoverage.getText().toString())
+                );
+            }
+        }
+
+
+        startActivityForResult(intent,REQUEST_CODE_PICK_LAT_LON);
     }
 
 

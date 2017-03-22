@@ -81,8 +81,8 @@ class AdapterItemSpecValue extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             ItemSpecificationValue itemSpecificationValue = dataset.get(position);
 
-            holder.results.setText("(" + String.valueOf(itemSpecificationValue.getRt_item_count()) + " results)");
-            holder.title.setText(itemSpecificationValue.getTitle());
+//            holder.results.setText("(" + String.valueOf(itemSpecificationValue.getRt_item_count()) + " results)");
+            holder.title.setText(itemSpecificationValue.getTitle()  + " " + "(" + itemSpecificationValue.getRt_item_count() + " results)");
 
 
             if(fragment instanceof FilterItemsFragment)
@@ -181,7 +181,7 @@ class AdapterItemSpecValue extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //        @Bind(R.id.description) TextView description;
 //        @Bind(R.id.item_count) TextView itemCount;
 
-        @Bind(R.id.results) TextView results;
+//        @Bind(R.id.results) TextView results;
         @Bind(R.id.checkbox_values) CheckBox checkBoxValues;
         @Bind(R.id.title_values) TextView title;
 

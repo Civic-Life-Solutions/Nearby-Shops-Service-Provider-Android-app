@@ -169,6 +169,7 @@
 
 
             <TextView
+                android:visibility="gone"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="Select Service Level"
@@ -176,6 +177,7 @@
                 android:layout_height="wrap_content" />
 
             <RelativeLayout
+                android:visibility="gone"
                 android:background="#22000000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -438,13 +440,35 @@
             </android.support.design.widget.TextInputLayout>
 
 
-            <Button
-                android:id="@+id/getlatlon"
-                android:text="Get current latitude | longitude"
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:id="@+id/pick_location_button"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:text="Pick Location From Map"
+                android:background="@color/blueGrey800"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+
+            <!--<Button-->
+                <!--android:paddingTop="0dp"-->
+                <!--android:paddingBottom="0dp"-->
+                <!--android:paddingStart="10dp"-->
+                <!--android:paddingEnd="10dp"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--android:paddingRight="10dp"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:background="@color/buttonColorDark"-->
+                <!--android:id="@+id/getlatlon"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:text="Get Location from Map"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+
             <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

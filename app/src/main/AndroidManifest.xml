@@ -172,26 +172,25 @@
                 android:value="org.nearbyshops.serviceprovider.zDistributorAccounts.DistributorAccountsActivity" />
         </activity>
 
-        <!--<activity-->
-            <!--android:name=".ShopAdminApprovals.ShopAdminApprovals"-->
-            <!--android:label="@string/title_activity_shop_admin_approvals"-->
-            <!--android:parentActivityName=".Home"-->
-            <!--android:theme="@style/AppTheme.NoActionBar">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="org.nearbyshops.serviceprovider.Home" />-->
-        <!--</activity>-->
+        <!-- <activity -->
+        <!-- android:name=".ShopAdminApprovals.ShopAdminApprovals" -->
+        <!-- android:label="@string/title_activity_shop_admin_approvals" -->
+        <!-- android:parentActivityName=".Home" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value="org.nearbyshops.serviceprovider.Home" /> -->
+        <!-- </activity> -->
 
         <activity
-            android:launchMode="singleTop"
             android:name=".ShopAdminApprovals.ShopAdminApprovals"
             android:label="Shop Admin Approvals"
+            android:launchMode="singleTop"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -200,10 +199,6 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-
-
-
-
         <activity
             android:name=".ShopAdminApprovals.EditShopAdmin.EditShopAdmin"
             android:label="@string/title_activity_shop_admin_approvals"
@@ -214,27 +209,25 @@
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
 
-        <!--<activity-->
-            <!--android:name=".ShopApprovals.ShopApprovals"-->
-            <!--android:label="@string/title_activity_shop_approals"-->
-            <!--android:parentActivityName=".Home"-->
-            <!--android:theme="@style/AppTheme.NoActionBar">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value="org.nearbyshops.serviceprovider.Home" />-->
-        <!--</activity>-->
-
+        <!-- <activity -->
+        <!-- android:name=".ShopApprovals.ShopApprovals" -->
+        <!-- android:label="@string/title_activity_shop_approals" -->
+        <!-- android:parentActivityName=".Home" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value="org.nearbyshops.serviceprovider.Home" /> -->
+        <!-- </activity> -->
 
         <activity
-            android:launchMode="singleTop"
             android:name=".ShopApprovals.ShopApprovals"
             android:label="Shop approvals"
+            android:launchMode="singleTop"
             android:parentActivityName=".Home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -243,10 +236,6 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-
-
-
-
         <activity
             android:name=".StaffAccounts.StaffAccounts"
             android:label="@string/title_activity_main"
@@ -292,7 +281,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
         <activity
             android:name=".AddFromGlobalSelection.AddFromGlobal"
             android:label="Add from Global Items DB"
@@ -302,12 +290,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.nearbyshops.serviceprovider.Home" />
         </activity>
-
         <activity
             android:name=".StaffHome.StaffHome"
             android:label="@string/title_activity_staff_home"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".StaffHome.EditStaffSelf.EditStaffSelf"
             android:label="Edit Profile"
@@ -317,7 +303,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".StaffHome.StaffHome" />
         </activity>
-
         <activity
             android:name=".ServiceConfiguration.EditConfiguration.EditConfiguration"
             android:label="Edit Profile"
@@ -327,15 +312,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-
-
         <activity
             android:name=".StaffHome.StaffDashboard"
             android:label="@string/title_activity_staff_dashboard"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EditProfileAdmin.EditProfileAdmin"
             android:label="Edit Admin"
@@ -345,9 +325,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-
-
-
         <activity
             android:name=".ShopApprovals.EditShop.EditShop"
             android:label="Edit Shop"
@@ -357,9 +334,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ShopApprovals.ShopApprovals" />
         </activity>
-
-
-
         <activity
             android:name=".Services.ServicesActivity"
             android:label="Discover Services"
@@ -377,8 +351,6 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".FilterItemsBySpecifications.FilterItemsActivity"
             android:label="Item Specifications"
@@ -388,8 +360,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-
-
         <activity
             android:name=".ItemsByCategorySimple.EditItem.EditItem"
             android:label="Edit Item"
@@ -399,9 +369,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-
-
-
         <activity
             android:name=".ItemsByCategorySimple.EditItemImage.EditItemImage"
             android:label="Edit Item Image"
@@ -411,16 +378,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
         </activity>
-
-
-
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
-
-
-
         <activity
             android:name=".ItemSpecName.ItemSpecNameActivity"
             android:label="Item Specifications"
@@ -446,6 +407,54 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Home" />
+        </activity>
+        <activity
+            android:name=".ServiceConfiguration.Utility.PickLocationActivity"
+            android:label="Pick Location"
+            android:parentActivityName=".ServiceConfiguration.EditConfiguration.EditConfiguration"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ServiceConfiguration.EditConfiguration.EditConfiguration" />
+        </activity>
+        <activity
+            android:name=".ItemSubmissionsMenu.ItemSubmissionMenu"
+            android:label="Item Submissions"
+            android:parentActivityName=".Home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Home" />
+        </activity>
+        <activity
+            android:name=".ItemSubmissionsList.SubmissionDetails.SubmissionDetails"
+            android:label="@string/title_activity_item_review"
+            android:parentActivityName=".ItemSubmissionsMenu.ItemSubmissionMenu"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.ItemSubmissionsMenu.ItemSubmissionMenu" />
+        </activity>
+
+        <activity
+            android:name=".ItemSubmissionsList.ItemSubmissionList"
+            android:label="@string/title_activity_item_submission_list"
+            android:parentActivityName=".ItemSubmissionsMenu.ItemSubmissionMenu"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.ItemSubmissionsMenu.ItemSubmissionMenu" />
+        </activity>
+
+        <activity
+            android:name=".ItemSubmissionsList.ItemUpdates.ItemUpdates"
+            android:label="Item Updates"
+            android:parentActivityName=".ItemSubmissionsMenu.ItemSubmissionMenu"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.nearbyshops.serviceprovider.ItemSubmissionsMenu.ItemSubmissionMenu" />
         </activity>
 
 

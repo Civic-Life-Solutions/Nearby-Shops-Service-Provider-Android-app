@@ -1,4 +1,4 @@
-package org.nearbyshops.serviceprovider.RetrofitRESTContract;
+package org.nearbyshops.serviceprovider.RetrofitRESTContractItem;
 
 
 import org.nearbyshops.serviceprovider.Model.Image;
