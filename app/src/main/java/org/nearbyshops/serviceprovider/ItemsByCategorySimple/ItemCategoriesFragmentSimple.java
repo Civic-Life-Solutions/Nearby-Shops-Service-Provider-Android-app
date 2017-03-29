@@ -1317,6 +1317,7 @@ public class ItemCategoriesFragmentSimple extends Fragment implements SwipeRefre
 
 
 
+
     void makeUpdateRequestItemsBulk(final List<Item> list)
     {
 //        Call<ResponseBody> call = itemService.updateItemCategoryBulk(list);

@@ -1,25 +1,20 @@
-package org.nearbyshops.serviceprovider.Model.Endpoints;
+package org.nearbyshops.serviceprovider.ModelItemSubmission.Endpoints;
 
 
-
-
-import org.nearbyshops.serviceprovider.Model.ItemImage;
+import org.nearbyshops.serviceprovider.ModelItemSubmission.ItemImageSubmission;
 
 import java.util.List;
 
 /**
  * Created by sumeet on 30/6/16.
  */
-public class ItemImageEndPoint {
+public class ItemImageSubmissionEndPoint {
 
     private int itemCount;
     private int offset;
     private int limit;
     private int max_limit;
-    private List<ItemImage> results;
-
-
-
+    private List<ItemImageSubmission> results;
 
 
     public int getItemCount() {
@@ -54,11 +49,12 @@ public class ItemImageEndPoint {
         this.max_limit = max_limit;
     }
 
-    public List<ItemImage> getResults() {
+
+    public List<ItemImageSubmission> getResults() {
         return results;
     }
 
-    public void setResults(List<ItemImage> results) {
+    public void setResults(List<ItemImageSubmission> results) {
         this.results = results;
     }
 }

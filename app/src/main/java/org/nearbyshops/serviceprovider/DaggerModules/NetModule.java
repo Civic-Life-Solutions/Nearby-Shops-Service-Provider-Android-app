@@ -13,6 +13,7 @@ import org.nearbyshops.serviceprovider.RetrofitRESTContract.AdminService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.DistributorAccountService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContract.ItemCategoryService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemImageService;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemImageSubmissionService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecItemService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSpecNameService;
@@ -310,6 +311,14 @@ public class NetModule {
     {
         return retrofit.create(ItemSubmissionService.class);
     }
+
+
+    @Provides
+    ItemImageSubmissionService provideItemImageSubmission(@Named("normal")Retrofit retrofit)
+    {
+        return retrofit.create(ItemImageSubmissionService.class);
+    }
+
 
 
 

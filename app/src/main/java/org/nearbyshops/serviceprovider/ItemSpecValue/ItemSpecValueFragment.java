@@ -176,8 +176,8 @@ public class ItemSpecValueFragment extends Fragment implements SwipeRefreshLayou
 
 
 
-    boolean getRowCount = true;
 
+    boolean getRowCount = true;
 
     void makeNetworkCall(final boolean clearDataset, boolean resetOffset, final boolean resetGetRowCount)
     {
@@ -195,7 +195,7 @@ public class ItemSpecValueFragment extends Fragment implements SwipeRefreshLayou
         itemSpecNameID = getActivity().getIntent().getIntExtra(ITEM_SPEC_NAME_INTENT_KEY,0);
 
         Call<ItemSpecValueEndPoint> call = itemSpecValueService.getItemSpecName(
-          itemSpecNameID,null,null,limit,offset,getRowCount
+          itemSpecNameID,null,ItemSpecificationValue.TITLE,limit,offset,getRowCount
         );
 
 
@@ -319,9 +319,11 @@ public class ItemSpecValueFragment extends Fragment implements SwipeRefreshLayou
 //        intent.putExtra(EditItemSpecValueFragment.ITEM_SPEC_NAME_INTENT_KEY,itemSpecName.getId());
         UtilityItemSpecValue.saveItemSpecValue(itemSpecName,getActivity());
         startActivity(intent);
-
-
     }
+
+
+
+
 
     @Override
     public void removeItemSpecName(ItemSpecificationValue itemSpecName, int position) {

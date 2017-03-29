@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/list_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="2.5dp"
+    app:cardCornerRadius="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+
+<android.support.constraint.ConstraintLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:id="@+id/profile_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:adjustViewBounds="false"
+        android:background="@color/buttonColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:id="@+id/vertical_guide"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintGuide_percent="0.4"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp" />-->
+
+
+
+    <TextView
+        android:id="@+id/caption"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:background="#55000000"
+        android:text="Captions"
+        app:layout_constraintRight_toRightOf="@id/profile_image"
+        app:layout_constraintLeft_toLeftOf="@id/profile_image"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+
+</android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

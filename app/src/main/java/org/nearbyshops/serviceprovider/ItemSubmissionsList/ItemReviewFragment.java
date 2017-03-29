@@ -26,6 +26,7 @@ import org.nearbyshops.serviceprovider.ModelEndPoints.ItemEndPoint;
 import org.nearbyshops.serviceprovider.ModelItemSubmission.Endpoints.ItemSubmissionEndPoint;
 import org.nearbyshops.serviceprovider.ModelItemSubmission.ItemSubmission;
 import org.nearbyshops.serviceprovider.R;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemImageSubmissionService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSubmissionService;
 
 import java.util.ArrayList;
@@ -55,6 +56,12 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
     int offset_item_updated = 0;
     public int item_count_item_updated = 10;
 
+
+    private int limit_images_updated = 10;
+    int offset_images_updated = 0;
+    public int item_count_images_updated = 10;
+
+
     // flags
     boolean getRowCountItemsAdded = false;
     boolean resetOffsetItemsAdded = false;
@@ -62,6 +69,12 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
 
     boolean getRowCountItemsUpdated = false;
     boolean resetOffsetItemsUpdated = false;
+
+    boolean getRowCountImagesUpdated = false;
+    boolean resetOffsetImagesUpdated = false;
+
+
+
 
     @Bind(R.id.swipe_container) SwipeRefreshLayout swipeContainer;
     @Bind(R.id.recycler_view) RecyclerView recyclerView;
@@ -77,6 +90,7 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
 
 
     @Inject ItemSubmissionService itemSubmissionService;
+    @Inject ItemImageSubmissionService imageSubmissionService;
 
 
     public ItemReviewFragment() {
@@ -186,6 +200,11 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
                         offset_item_updated = offset_item_updated + limit_item_updated;
                         makeRequestItemsUpdated();
                     }
+                    else if((offset_images_updated + limit_images_updated)<=item_count_images_updated)
+                    {
+                        offset_images_updated = offset_images_updated + limit_images_updated;
+                        makeRequestItemsWithImagesUpdated();
+                    }
 
 
                 }
@@ -252,6 +271,10 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
 
         getRowCountItemsUpdated = true;
         resetOffsetItemsUpdated = true;
+
+        getRowCountImagesUpdated = true;
+        resetOffsetImagesUpdated = true;
+
 
         makeRequestItemsAdded();
     }
@@ -402,7 +425,12 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
                 }
 
 
-                swipeContainer.setRefreshing(false);
+
+
+                if((offset_item_updated+limit_item_updated)>item_count_item_updated)
+                {
+                    makeRequestItemsWithImagesUpdated();
+                }
 
             }
 
@@ -419,6 +447,80 @@ public class ItemReviewFragment extends Fragment implements Adapter.Notification
             }
         });
     }
+
+
+
+
+    void makeRequestItemsWithImagesUpdated()
+    {
+
+        if(resetOffsetImagesUpdated)
+        {
+            offset_images_updated = 0;
+            resetOffsetImagesUpdated = false;
+        }
+
+
+        Call<ItemEndPoint> call = imageSubmissionService.getItemsUpdated(
+                null,"time_latest",limit_images_updated,offset_images_updated,getRowCountImagesUpdated
+        );
+
+
+        call.enqueue(new Callback<ItemEndPoint>() {
+            @Override
+            public void onResponse(Call<ItemEndPoint> call, Response<ItemEndPoint> response) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+                if(response.code() == 200 && response.body()!=null)
+                {
+
+                    if(getRowCountImagesUpdated)
+                    {
+                        item_count_images_updated = response.body().getItemCount();
+                        getRowCountImagesUpdated = false;
+                        dataset.add(new HeaderTitle("Items with Images Updated"));
+                    }
+
+
+                    dataset.addAll(response.body().getResults());
+
+                    listAdapter.notifyDataSetChanged();
+                }
+                else
+                {
+                    showToastMessage("Failed code : " + String.valueOf(response.code()));
+                }
+
+
+                swipeContainer.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Call<ItemEndPoint> call, Throwable t) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+                showToastMessage("Failed ! ");
+
+                swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
+
+
+
+
 
 
     void showToastMessage(String message)

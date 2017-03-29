@@ -129,7 +129,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             if(fragment instanceof ItemReviewFragment)
             {
-                itemCount = (((ItemReviewFragment) fragment).item_count_item_added + ((ItemReviewFragment) fragment).item_count_item_updated + 2);
+                itemCount = (((ItemReviewFragment) fragment).item_count_item_added + ((ItemReviewFragment) fragment).item_count_item_updated + ((ItemReviewFragment) fragment).item_count_images_updated+ 3);
             }
 
 

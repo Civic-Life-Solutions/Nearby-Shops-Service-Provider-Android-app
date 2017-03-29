@@ -18,12 +18,19 @@ import com.google.gson.Gson;
 
 import org.nearbyshops.serviceprovider.DaggerComponentBuilder;
 import org.nearbyshops.serviceprovider.ItemSubmissionsList.HeaderTitle;
+import org.nearbyshops.serviceprovider.ItemSubmissionsList.ImageUpdates.ImageUpdates;
+import org.nearbyshops.serviceprovider.ItemSubmissionsList.ImageUpdates.ImageUpdatesFragment;
 import org.nearbyshops.serviceprovider.ItemSubmissionsList.SubmissionDetails.SubmissionDetails;
 import org.nearbyshops.serviceprovider.ItemSubmissionsList.SubmissionDetails.SubmissionDetailsFragment;
 import org.nearbyshops.serviceprovider.Model.Item;
+import org.nearbyshops.serviceprovider.Model.ItemImage;
+import org.nearbyshops.serviceprovider.ModelItemSpecification.EndPoints.ItemImageEndPoint;
+import org.nearbyshops.serviceprovider.ModelItemSubmission.Endpoints.ItemImageSubmissionEndPoint;
 import org.nearbyshops.serviceprovider.ModelItemSubmission.Endpoints.ItemSubmissionEndPoint;
+import org.nearbyshops.serviceprovider.ModelItemSubmission.ItemImageSubmission;
 import org.nearbyshops.serviceprovider.ModelItemSubmission.ItemSubmission;
 import org.nearbyshops.serviceprovider.R;
+import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemImageSubmissionService;
 import org.nearbyshops.serviceprovider.RetrofitRESTContractItem.ItemSubmissionService;
 
 import java.util.ArrayList;
@@ -50,6 +57,9 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
 
 
     @Inject ItemSubmissionService itemSubmissionService;
+    @Inject ItemImageSubmissionService imageSubmissionService;
+
+
 
     GridLayoutManager layoutManager;
     Adapter listAdapter;
@@ -62,9 +72,31 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
 
 
     // flags
+
+    boolean clearDataset = false;
+
+    boolean getRowCountImagesAdded = false;
+    boolean resetOffsetImagesAdded = false;
+
+
+    boolean getRowCountImagesUpdated = false;
+    boolean resetOffsetImagesUpdated = false;
+
+
     boolean getRowCountItemUpdates = false;
     boolean resetOffsetItemUpdates = false;
-    boolean clearDatasetItemUpdates = false;
+
+
+
+
+    private int limit_images_added = 10;
+    int offset_images_added = 0;
+    public int item_count_images_added = 0;
+
+
+    private int limit_images_updated = 10;
+    int offset_images_updated = 0;
+    public int item_count_images_updated = 0;
 
 
     private int limit_item_updates = 10;
@@ -149,14 +181,39 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
 
 
 
+
     void setupRecyclerView()
     {
 
         listAdapter = new Adapter(dataset,getActivity(),this,this);
         recyclerView.setAdapter(listAdapter);
 
-        layoutManager = new GridLayoutManager(getActivity(),1, LinearLayoutManager.VERTICAL,false);
+        layoutManager = new GridLayoutManager(getActivity(),6, LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+                if(dataset!=null && dataset.size()>0 && position < dataset.size())
+                {
+                    if(dataset.get(position) instanceof ItemImageSubmission)
+                    {
+                        return 3;
+                    }
+                    else if(dataset.get(position) instanceof ItemImage)
+                    {
+                        return 3;
+                    }
+                    else
+                    {
+                        return 6;
+                    }
+                }
+
+                return 6;
+            }
+        });
 
 
         final DisplayMetrics metrics = new DisplayMetrics();
@@ -181,10 +238,25 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
 
                     // trigger fetch next page
 
-                    if((offset_item_updates+limit_item_updates)<=item_count_item_updates)
+
+                    if((offset_images_added+limit_images_added)<=item_count_images_added)
+                    {
+                        offset_images_added = offset_images_added + limit_images_added;
+
+                        makeRequestImagesAdded();
+                    }
+                    else if((offset_images_updated+limit_images_updated)<=item_count_images_updated)
+                    {
+                        offset_images_updated = offset_images_updated + limit_images_updated;
+
+                        makeRequestImagesUpdated();
+                    }
+
+                    else if((offset_item_updates+limit_item_updates)<=item_count_item_updates)
                     {
                         offset_item_updates = offset_item_updates + limit_item_updates;
 
+                        makeRequestItemUpdates();
                     }
 
 
@@ -197,6 +269,154 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
 
     }
 
+
+    void makeRequestImagesAdded()
+    {
+        if(resetOffsetImagesAdded)
+        {
+            offset_images_added = 0;
+            resetOffsetImagesAdded = false;
+        }
+
+
+        Call<ItemImageSubmissionEndPoint> call = imageSubmissionService.getImagesAdded(
+          null,1,true,null,currentItem.getItemID(),null,limit_images_added,offset_images_added,getRowCountImagesAdded
+        );
+
+
+
+        call.enqueue(new Callback<ItemImageSubmissionEndPoint>() {
+            @Override
+            public void onResponse(Call<ItemImageSubmissionEndPoint> call, Response<ItemImageSubmissionEndPoint> response) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+                if(response.code() == 200 && response.body()!=null)
+                {
+
+                    if(clearDataset)
+                    {
+                        dataset.clear();
+                        clearDataset = false;
+
+                        dataset.add(new HeaderTitle("Current Item"));
+                        dataset.add(currentItem);
+                    }
+
+                    if(response.code()==200 && response.body()!=null)
+                    {
+                        if(getRowCountImagesAdded)
+                        {
+                            item_count_images_added = response.body().getItemCount();
+                            getRowCountImagesAdded = false;
+
+                            dataset.add(new HeaderTitle("Images Added"));
+                        }
+
+
+                        dataset.addAll(response.body().getResults());
+                        listAdapter.notifyDataSetChanged();
+                    }
+
+
+
+
+                    if(offset_images_added + limit_images_added > item_count_images_added)
+                    {
+                        makeRequestImagesUpdated();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ItemImageSubmissionEndPoint> call, Throwable t) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+                showToastMessage("Network Connection Failed !");
+
+                swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
+
+
+
+    void makeRequestImagesUpdated()
+    {
+        if(resetOffsetImagesUpdated)
+        {
+            offset_images_updated = 0;
+            resetOffsetImagesUpdated = false;
+        }
+
+
+        Call<ItemImageEndPoint> call = imageSubmissionService.getImagesUpdated(
+                null,1,currentItem.getItemID(),null,limit_images_updated,offset_images_updated,getRowCountImagesUpdated
+        );
+
+
+        call.enqueue(new Callback<ItemImageEndPoint>() {
+            @Override
+            public void onResponse(Call<ItemImageEndPoint> call, Response<ItemImageEndPoint> response) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+                if(response.code()==200 && response.body()!=null)
+                {
+                    if(getRowCountImagesUpdated)
+                    {
+                        item_count_images_updated = response.body().getItemCount();
+                        getRowCountImagesUpdated = false;
+
+                        dataset.add(new HeaderTitle("Images Updated"));
+                    }
+
+
+                    dataset.addAll(response.body().getResults());
+                    listAdapter.notifyDataSetChanged();
+
+                }
+
+
+
+                if(offset_images_updated + limit_images_updated > item_count_images_updated)
+                {
+                    makeRequestItemUpdates();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ItemImageEndPoint> call, Throwable t) {
+
+
+                if(isDestroyed)
+                {
+                    return;
+                }
+
+
+                showToastMessage("Network Connection Failed !");
+
+                swipeContainer.setRefreshing(false);
+            }
+        });
+    }
 
 
 
@@ -229,14 +449,6 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
                 if(response.code() == 200 && response.body()!=null)
                 {
 
-                    if(clearDatasetItemUpdates)
-                    {
-                        dataset.clear();
-                        clearDatasetItemUpdates = false;
-
-                        dataset.add(new HeaderTitle("Current Item"));
-                        dataset.add(currentItem);
-                    }
 
                     if(getRowCountItemUpdates)
                     {
@@ -311,11 +523,19 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
 
+
+        clearDataset = true;
         getRowCountItemUpdates = true;
-        clearDatasetItemUpdates = true;
         resetOffsetItemUpdates = true;
 
-        makeRequestItemUpdates();
+        getRowCountImagesAdded = true;
+        resetOffsetImagesAdded = true;
+
+        getRowCountImagesUpdated = true;
+        resetOffsetImagesUpdated = true;
+
+        makeRequestImagesAdded();
+//        makeRequestItemUpdates();
     }
 
 
@@ -362,6 +582,17 @@ public class ItemUpdatesFragment extends Fragment implements SwipeRefreshLayout.
         startActivity(intent);
     }
 
+    @Override
+    public void imageUpdatedClick(ItemImage itemImage, int position) {
+
+
+        Gson gson = new Gson();
+        String json = gson.toJson(itemImage);
+
+        Intent intent = new Intent(getActivity(),ImageUpdates.class);
+        intent.putExtra(ImageUpdatesFragment.CURRENT_IMAGE_INTENT_KEY,json);
+        startActivity(intent);
+    }
 
 
 }
